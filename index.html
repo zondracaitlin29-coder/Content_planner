@@ -6,194 +6,171 @@
     <meta name="theme-color" content="#E8956B">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Daily Content Tracker</title>
+    <title>30-Day Confident Creator</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
-            padding: 12px;
-            min-height: 100vh;
             color: #333;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding-bottom: 20px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px;
+            padding-bottom: 180px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 16px;
-            margin-top: 12px;
+            margin-bottom: 14px;
         }
 
         .header h1 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 2px;
         }
 
         .header p {
-            font-size: 14px;
-            color: #666;
+            font-size: 13px;
+            color: #999;
         }
 
-        .niche-controls {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .niche-toggle {
-            display: flex;
-            gap: 8px;
-            flex: 1;
-            min-width: 240px;
-        }
-
-        .toggle-btn {
-            flex: 1;
-            padding: 12px 16px;
-            font-size: 15px;
-            font-weight: 700;
-            border: 2px solid #ddd;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #666;
-        }
-
-        .toggle-btn:active {
-            transform: scale(0.98);
-        }
-
-        .toggle-btn.active {
-            background: #E8956B;
-            color: white;
-            border-color: #E8956B;
-        }
-
-        .toggle-btn.business {
-            color: #666;
-        }
-
-        .toggle-btn.business.active {
-            background: #9BA89A;
-            border-color: #9BA89A;
-        }
-
-        .shuffle-btn {
-            padding: 12px 14px;
-            font-size: 14px;
-            font-weight: 700;
-            background: #f0f0f0;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-width: 50px;
-            text-align: center;
-        }
-
-        .shuffle-btn:active {
-            transform: scale(0.95);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .get-today-btn {
-            flex: 1;
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 700;
+        .day-display {
             background: linear-gradient(135deg, #E8956B 0%, #d97d4a 100%);
             color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 14px;
+            text-align: center;
             box-shadow: 0 4px 12px rgba(232, 149, 107, 0.3);
         }
 
-        .get-today-btn.business {
-            background: linear-gradient(135deg, #9BA89A 0%, #7d8d7f 100%);
-            box-shadow: 0 4px 12px rgba(155, 168, 154, 0.3);
+        .day-display h2 {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 4px;
         }
 
-        .get-today-btn:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        .day-display p {
+            font-size: 15px;
+            opacity: 0.95;
+            margin-bottom: 10px;
         }
 
-        .day-selector {
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: white;
+            transition: width 0.3s;
+            border-radius: 4px;
+        }
+
+        .niche-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .niche-btn {
+            padding: 16px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #999;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            min-height: 50px;
             display: flex;
-            gap: 6px;
-            margin-bottom: 16px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .niche-btn.active {
+            background: #E8956B;
+            color: white;
+            border-color: #E8956B;
+            box-shadow: 0 4px 8px rgba(232, 149, 107, 0.3);
+        }
+
+        .niche-btn:active {
+            transform: scale(0.96);
+        }
+
+        .quick-nav-scroll {
             overflow-x: auto;
-            padding: 4px 0;
             scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 14px;
+            padding-bottom: 4px;
         }
 
-        .day-selector::-webkit-scrollbar {
-            height: 4px;
+        .quick-nav-scroll::-webkit-scrollbar {
+            height: 3px;
         }
 
-        .day-selector::-webkit-scrollbar-track {
-            background: #f0f0f0;
-            border-radius: 2px;
-        }
-
-        .day-selector::-webkit-scrollbar-thumb {
+        .quick-nav-scroll::-webkit-scrollbar-thumb {
             background: #ddd;
             border-radius: 2px;
         }
 
-        .day-num {
-            min-width: 42px;
-            height: 42px;
+        .day-nav {
+            display: flex;
+            gap: 8px;
+            padding: 0 4px;
+        }
+
+        .day-quick {
+            min-width: 44px;
+            height: 44px;
             border: 2px solid #ddd;
             background: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 600;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
+            flex-shrink: 0;
             position: relative;
         }
 
-        .day-num:active {
-            transform: scale(0.92);
-        }
-
-        .day-num.active {
+        .day-quick.active {
             background: #E8956B;
             color: white;
             border-color: #E8956B;
         }
 
-        .day-num.active.business {
-            background: #9BA89A;
-            border-color: #9BA89A;
-        }
-
-        .day-num.checked::after {
+        .day-quick.completed::after {
             content: "✓";
             position: absolute;
             top: -8px;
@@ -203,824 +180,532 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
+            font-size: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
             font-weight: bold;
         }
 
         .content-card {
             background: white;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             border-left: 4px solid #E8956B;
         }
 
-        .content-card.business {
-            border-left-color: #9BA89A;
+        .card-platform {
+            font-size: 18px;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 10px;
         }
 
-        .card-top {
+        .badges {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
         }
 
-        .day-label {
-            font-size: 12px;
-            color: #999;
+        .badge {
+            display: inline-block;
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .day-checkbox {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
-        .platform-badge {
-            display: inline-block;
-            font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            margin-bottom: 12px;
+        .badge-niche {
             background: #f0f0f0;
+            color: #333;
         }
 
-        .platform-badge.instagram { background: linear-gradient(135deg, #feda75 0%, #fa7e1e 100%); color: white; }
-        .platform-badge.tiktok { background: #000; color: white; }
-        .platform-badge.facebook { background: #1877f2; color: white; }
-        .platform-badge.threads { background: #000; color: white; }
-        .platform-badge.pinterest { background: #e60023; color: white; }
-
-        .goal-badge {
-            display: inline-block;
-            font-size: 10px;
-            padding: 3px 10px;
-            border-radius: 12px;
-            margin-left: 8px;
-            font-weight: 600;
+        .badge-goal {
+            background: #fff3cd;
+            color: #856404;
         }
 
-        .goal-badge.engagement {
-            background: #e8f5e9;
-            color: #2e7d32;
+        .badge-engagement {
+            background: #d4edda;
+            color: #155724;
         }
 
-        .goal-badge.promotional {
-            background: #fff3e0;
-            color: #e65100;
-        }
-
-        .topic {
-            font-size: 18px;
-            font-weight: 700;
+        .content-section {
             margin-bottom: 12px;
-            color: #222;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            margin-bottom: 6px;
         }
 
         .hook {
-            font-size: 14px;
+            font-size: 16px;
             font-style: italic;
+            font-weight: 600;
             color: #E8956B;
-            margin-bottom: 12px;
-            padding: 8px 0;
-            border-bottom: 2px solid #f5e6e0;
+            line-height: 1.4;
+            margin-bottom: 8px;
         }
 
-        .content-card.business .hook {
-            color: #9BA89A;
-            border-bottom-color: #e8ede8;
-        }
-
-        .content-body {
-            font-size: 14px;
+        .section-content {
+            font-size: 15px;
             line-height: 1.6;
             color: #555;
-            margin-bottom: 12px;
         }
 
-        .format-type {
-            font-size: 12px;
-            color: #999;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .cta-button {
-            background: #E8956B;
-            color: white;
-            padding: 12px 16px;
+        .times-section {
+            background: #f0f8ff;
+            padding: 14px;
             border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 8px;
-            text-decoration: none;
-            display: block;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            border-left: 4px solid #9BA89A;
+            margin: 12px 0;
         }
 
-        .cta-button:active {
-            transform: scale(0.98);
+        .tasks-section {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 14px;
         }
 
-        .cta-button.business {
-            background: #9BA89A;
-        }
-
-        .cta-button.empty {
-            background: #f0f0f0;
-            color: #999;
-            cursor: default;
-        }
-
-        .cta-button.empty:active {
-            transform: none;
-        }
-
-        .time {
-            font-size: 12px;
-            color: #999;
-            text-align: right;
-        }
-
-        .niche-label {
-            font-size: 12px;
-            color: #999;
+        .task-title {
+            font-size: 16px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 8px;
+            color: #333;
+            margin-bottom: 14px;
         }
 
-        .content-card.business .niche-label {
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 12px;
+            padding: 14px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border-left: 4px solid #E8956B;
+        }
+
+        .task-checkbox {
+            width: 26px;
+            height: 26px;
+            min-width: 26px;
+            cursor: pointer;
+            accent-color: #E8956B;
+            margin-top: 2px;
+        }
+
+        .task-text {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #555;
+            flex: 1;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #eee;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            padding: 0;
+            z-index: 100;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        .nav-btn {
+            padding: 14px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: #999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-height: 60px;
+            justify-content: center;
+        }
+
+        .nav-btn.active {
+            background: #fff9f5;
+            color: #E8956B;
+            border-bottom: 3px solid #E8956B;
+        }
+
+        .nav-emoji {
+            font-size: 22px;
         }
 
         @media (max-width: 480px) {
             body {
-                padding: 8px;
-            }
-
-            .container {
-                padding-bottom: 16px;
-            }
-
-            .header h1 {
-                font-size: 24px;
-            }
-
-            .header {
-                margin-bottom: 12px;
-            }
-
-            .niche-controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .niche-toggle {
-                width: 100%;
-                min-width: unset;
-            }
-
-            .toggle-btn {
-                padding: 12px 14px;
-                font-size: 14px;
-            }
-
-            .get-today-btn {
-                padding: 12px 14px;
-                font-size: 14px;
-            }
-
-            .day-num {
-                min-width: 38px;
-                height: 38px;
-                font-size: 12px;
-            }
-
-            .topic {
                 font-size: 16px;
             }
-
-            .content-card {
-                padding: 16px;
-                margin-bottom: 12px;
-            }
-
-            .action-buttons {
-                gap: 6px;
-            }
-
-            .shuffle-btn {
-                padding: 12px 10px;
-                font-size: 13px;
-                min-width: 44px;
-            }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
-        }
-
-        .empty-state p {
-            font-size: 14px;
-            line-height: 1.6;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📅 Content Tracker</h1>
-            <p id="dateDisplay"></p>
+            <h1>30-Day Creator</h1>
+            <p>Build confidence. Post daily.</p>
         </div>
 
-        <div class="niche-controls">
-            <div class="niche-toggle">
-                <button class="toggle-btn active" onclick="switchNiche('mom')">👩‍👧 Mom</button>
-                <button class="toggle-btn business" onclick="switchNiche('business')">💼 Business</button>
+        <div class="day-display">
+            <h2 id="dayNumber">1</h2>
+            <p id="dayGoal">of 30 days</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="mainProgress" style="width: 0%"></div>
             </div>
-            <button class="shuffle-btn" onclick="shuffleContent()" title="Shuffle order">🔀</button>
         </div>
 
-        <div class="action-buttons">
-            <button class="get-today-btn" onclick="goToToday()">📌 Today</button>
+        <div class="niche-toggle">
+            <button class="niche-btn active" onclick="setNiche('mom')">👩‍👧 Mom</button>
+            <button class="niche-btn" onclick="setNiche('building')">🏗️ Build</button>
+            <button class="niche-btn" onclick="setNiche('inbox')">💼 Inbox</button>
         </div>
 
-        <div class="day-selector" id="daySelector"></div>
+        <div class="quick-nav-scroll">
+            <div class="day-nav" id="dayNav"></div>
+        </div>
 
         <div id="contentDisplay"></div>
+
+        <div class="tasks-section">
+            <div class="task-title">📋 Today's Outreach</div>
+            <div class="task-item">
+                <input type="checkbox" class="task-checkbox" id="task1" onchange="updateProgress()">
+                <div class="task-text">Engage on 2-3 creator posts (comment genuinely)</div>
+            </div>
+            <div class="task-item">
+                <input type="checkbox" class="task-checkbox" id="task2" onchange="updateProgress()">
+                <div class="task-text">Send 1 DM to a business owner</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="nav-btn active" onclick="goToToday()">
+            <span class="nav-emoji">📍</span>
+            <span>Today</span>
+        </button>
+        <button class="nav-btn" onclick="shuffleDay()">
+            <span class="nav-emoji">🔀</span>
+            <span>Shuffle</span>
+        </button>
     </div>
 
     <script>
-        const contentData = [
-            {
-                day: 1,
-                niches: {
-                    mom: {
-                        platform: "Instagram Feed",
-                        goal: "Engagement",
-                        topic: "Toddler Snack Wins",
-                        hook: "What's one snack your toddler never refuses?",
-                        body: "Share 5 realistic healthy snacks that work for busy moms and ask followers to add theirs in comments.",
-                        cta: { text: "None", url: null },
-                        time: "7:30 PM",
-                        format: "Carousel"
-                    },
-                    business: {
-                        platform: "TikTok/Reels",
-                        goal: "Engagement",
-                        topic: "Inbox Chaos",
-                        hook: "If your DMs look like this, you're losing sales.",
-                        body: "Show a quick before-and-after inbox organization transformation.",
-                        cta: { text: "None", url: null },
-                        time: "12:00 PM",
-                        format: "Video"
-                    }
-                }
-            },
-            {
-                day: 2,
-                niches: {
-                    mom: {
-                        platform: "Facebook",
-                        goal: "Promotional",
-                        topic: "Mealtime Struggles",
-                        hook: "Tired of making 3 different meals every night?",
-                        body: "Share a personal story about overcoming picky eating and introducing simple nutrition strategies.",
-                        cta: { text: "Get the Nurturing Little Eaters Guide", url: "https://nurturinglittleeaters.com/guide" },
-                        time: "8:00 PM",
-                        format: "Text Post"
-                    },
-                    business: {
-                        platform: "Threads",
-                        goal: "Engagement",
-                        topic: "Client Communication",
-                        hook: "Hot take: Fast replies beat perfect replies.",
-                        body: "Share a short opinion and invite discussion about customer response times.",
-                        cta: { text: "None", url: null },
-                        time: "9:00 AM",
-                        format: "Text Post"
-                    }
-                }
-            },
-            {
-                day: 3,
-                niches: {
-                    mom: {
-                        platform: "Pinterest",
-                        goal: "Engagement",
-                        topic: "Balanced Toddler Plates",
-                        hook: "Easy toddler lunch ideas you'll actually use.",
-                        body: "Create pin content featuring balanced meal examples and simple nutrition tips.",
-                        cta: { text: "None", url: null },
-                        time: "8:00 PM",
-                        format: "Carousel"
-                    },
-                    business: {
-                        platform: "Instagram Feed",
-                        goal: "Promotional",
-                        topic: "Template Power",
-                        hook: "This one message template saved me hours.",
-                        body: "Showcase a common customer inquiry and how a template speeds up responses.",
-                        cta: { text: "Buy the Reply Vault", url: "https://selar.co/replyvault" },
-                        time: "1:00 PM",
-                        format: "Carousel"
-                    }
-                }
-            },
-            {
-                day: 4,
-                niches: {
-                    mom: {
-                        platform: "TikTok/Reels",
-                        goal: "Engagement",
-                        topic: "Grocery Haul",
-                        hook: "Come grocery shopping with a mom of picky eaters.",
-                        body: "Walk through healthy food choices and practical mom-life tips.",
-                        cta: { text: "None", url: null },
-                        time: "6:00 PM",
-                        format: "Video"
-                    },
-                    business: {
-                        platform: "Facebook",
-                        goal: "Engagement",
-                        topic: "Customer Service Mistakes",
-                        hook: "The DM mistake that silently costs sales.",
-                        body: "Explain one common inbox management mistake and ask followers if they've experienced it.",
-                        cta: { text: "None", url: null },
-                        time: "7:00 PM",
-                        format: "Text Post"
-                    }
-                }
-            },
-            {
-                day: 5,
-                niches: {
-                    mom: {
-                        platform: "Instagram Feed",
-                        goal: "Promotional",
-                        topic: "Picky Eating Help",
-                        hook: "What if mealtimes didn't feel like a battle?",
-                        body: "Share results moms can expect from implementing structured nutrition habits.",
-                        cta: { text: "Get the Nurturing Little Eaters Guide", url: "https://nurturinglittleeaters.com/guide" },
-                        time: "7:30 PM",
-                        format: "Carousel"
-                    },
-                    business: {
-                        platform: "Threads",
-                        goal: "Engagement",
-                        topic: "Business Systems",
-                        hook: "What's the most repetitive message you send every day?",
-                        body: "Start a conversation around recurring customer questions.",
-                        cta: { text: "None", url: null },
-                        time: "10:00 AM",
-                        format: "Text Post"
-                    }
-                }
-            },
-            {
-                day: 6,
-                niches: {
-                    mom: {
-                        platform: "Pinterest",
-                        goal: "Engagement",
-                        topic: "Meal Planning",
-                        hook: "7 toddler breakfasts to save this week.",
-                        body: "Share visually appealing breakfast ideas optimized for Pinterest discovery.",
-                        cta: { text: "None", url: null },
-                        time: "8:00 PM",
-                        format: "Carousel"
-                    },
-                    business: {
-                        platform: "TikTok/Reels",
-                        goal: "Promotional",
-                        topic: "Inbox Audit",
-                        hook: "I can spot your biggest inbox problem in 5 minutes.",
-                        body: "Explain what happens during a free inbox audit and who benefits.",
-                        cta: { text: "Get your free audit", url: "https://inboxaidepage.netlify.app" },
-                        time: "1:00 PM",
-                        format: "Video"
-                    }
-                }
-            },
-            {
-                day: 7,
-                niches: {
-                    mom: {
-                        platform: "Instagram Feed",
-                        goal: "Engagement",
-                        topic: "Mom Reality",
-                        hook: "Can we normalize unfinished coffee?",
-                        body: "Share a relatable mom-life moment and encourage comments.",
-                        cta: { text: "None", url: null },
-                        time: "8:00 PM",
-                        format: "Carousel"
-                    },
-                    business: {
-                        platform: "Facebook",
-                        goal: "Engagement",
-                        topic: "Lead Conversion",
-                        hook: "How many sales are hiding in your unread messages?",
-                        body: "Discuss missed opportunities sitting in neglected inboxes.",
-                        cta: { text: "None", url: null },
-                        time: "7:00 PM",
-                        format: "Text Post"
-                    }
-                }
-            },
-            {
-                day: 8,
-                niches: {
-                    mom: {
-                        platform: "TikTok/Reels",
-                        goal: "Promotional",
-                        topic: "Guide Results",
-                        hook: "3 things changed after fixing my toddler's eating habits.",
-                        body: "Highlight practical outcomes from the guide.",
-                        cta: { text: "Get the Nurturing Little Eaters Guide", url: "https://nurturinglittleeaters.com/guide" },
-                        time: "6:00 PM",
-                        format: "Video"
-                    },
-                    business: {
-                        platform: "Threads",
-                        goal: "Engagement",
-                        topic: "Quick Poll",
-                        hook: "Do you answer DMs immediately or batch them?",
-                        body: "Run a simple engagement question and respond to replies.",
-                        cta: { text: "None", url: null },
-                        time: "9:00 AM",
-                        format: "Text Post"
-                    }
-                }
-            },
-            {
-                day: 9,
-                niches: {
-                    mom: {
-                        platform: "Pinterest",
-                        goal: "Engagement",
-                        topic: "Healthy Snacks",
-                        hook: "Snack ideas for toddlers that aren't crackers.",
-                        body: "Share evergreen snack inspiration with nutrition tips.",
-                        cta: { text: "None", url: null },
-                        time: "8:00 PM",
-                        format: "Carousel"
-                    },
-                    business: {
-                        platform: "Instagram Feed",
-                        goal: "Promotional",
-                        topic: "Reply Vault Showcase",
-                        hook: "Imagine never rewriting the same response again.",
-                        body: "Feature several templates solving common customer inquiries.",
-                        cta: { text: "Buy the Reply Vault", url: "https://selar.co/replyvault" },
-                        time: "1:00 PM",
-                        format: "Carousel"
-                    }
-                }
-            },
-            {
-                day: 10,
-                niches: {
-                    mom: {
-                        platform: "Facebook",
-                        goal: "Engagement",
-                        topic: "Family Mealtime",
-                        hook: "What's the one meal your whole family actually agrees on?",
-                        body: "Invite conversation while sharing one family-friendly recipe.",
-                        cta: { text: "None", url: null },
-                        time: "8:00 PM",
-                        format: "Text Post"
-                    },
-                    business: {
-                        platform: "TikTok/Reels",
-                        goal: "Engagement",
-                        topic: "DM Audit Example",
-                        hook: "Watch me improve this inbox in 60 seconds.",
-                        body: "Demonstrate quick inbox management improvements.",
-                        cta: { text: "None", url: null },
-                        time: "12:00 PM",
-                        format: "Video"
-                    }
-                }
-            },
-            {
-                day: 11,
-                niches: {
-                    mom: {
-                        platform: "Instagram Feed",
-                        goal: "Promotional",
-                        topic: "Nutrition Confidence",
-                        hook: "You don't need to be a nutritionist to feed your child well.",
-                        body: "Explain how the guide simplifies healthy eating decisions.",
-                        cta: { text: "Get the Nurturing Little Eaters Guide", url: "https://nurturinglittleeaters.com/guide" },
-                        time: "7:00 PM",
-                        format: "Carousel"
-                    },
-                    business: {
-                        platform: "Threads",
-                        goal: "Engagement",
-                        topic: "Entrepreneur Life",
-                        hook: "The hidden cost of being always available.",
-                        body: "Discuss communication boundaries and productivity.",
-                        cta: { text: "None", url: null },
-                        time: "10:00 AM",
-                        format: "Text Post"
-                    }
-                }
-            },
-            {
-                day: 12,
-                niches: {
-                    mom: {
-                        platform: "Pinterest",
-                        goal: "Engagement",
-                        topic: "Lunchbox Inspiration",
-                        hook: "Toddler lunchbox ideas that take under 10 minutes.",
-                        body: "Create searchable, evergreen lunch inspiration content.",
-                        cta: { text: "None", url: null },
-                        time: "8:00 PM",
-                        format: "Carousel"
-                    },
-                    business: {
-                        platform: "Facebook",
-                        goal: "Promotional",
-                        topic: "Inbox Service",
-                        hook: "Still answering every message yourself?",
-                        body: "Explain how premium inbox management frees up business owners' time.",
-                        cta: { text: "Book Premium Inbox Management", url: "https://inboxaidepage.netlify.app/book" },
-                        time: "7:00 PM",
-                        format: "Text Post"
-                    }
-                }
-            },
-            {
-                day: 13,
-                niches: {
-                    mom: {
-                        platform: "TikTok/Reels",
-                        goal: "Engagement",
-                        topic: "Day in the Life",
-                        hook: "A realistic day of feeding a toddler.",
-                        body: "Show authentic mom-life moments and nutrition choices.",
-                        cta: { text: "None", url: null },
-                        time: "6:00 PM",
-                        format: "Video"
-                    },
-                    business: {
-                        platform: "Instagram Feed",
-                        goal: "Engagement",
-                        topic: "Customer Questions",
-                        hook: "What's the hardest customer message to answer?",
-                        body: "Invite business owners to share their biggest communication challenges.",
-                        cta: { text: "None", url: null },
-                        time: "1:00 PM",
-                        format: "Carousel"
-                    }
-                }
-            },
-            {
-                day: 14,
-                niches: {
-                    mom: {
-                        platform: "Facebook",
-                        goal: "Promotional",
-                        topic: "Success Story",
-                        hook: "One mom used these strategies and transformed mealtime.",
-                        body: "Share a relatable case study or testimonial.",
-                        cta: { text: "Get the Nurturing Little Eaters Guide", url: "https://nurturinglittleeaters.com/guide" },
-                        time: "8:00 PM",
-                        format: "Text Post"
-                    },
-                    business: {
-                        platform: "Threads",
-                        goal: "Promotional",
-                        topic: "Free Audit Reminder",
-                        hook: "Most businesses don't realize what's hurting their response rates.",
-                        body: "Explain the value of uncovering inbox bottlenecks.",
-                        cta: { text: "Get your free audit", url: "https://inboxaidepage.netlify.app" },
-                        time: "9:00 AM",
-                        format: "Text Post"
-                    }
-                }
-            },
-            {
-                day: 15,
-                niches: {
-                    mom: {
-                        platform: "Pinterest",
-                        goal: "Engagement",
-                        topic: "Meal Prep Tips",
-                        hook: "Meal prep shortcuts every busy mom should know.",
-                        body: "Share practical systems for reducing daily stress around meals.",
-                        cta: { text: "None", url: null },
-                        time: "8:00 PM",
-                        format: "Carousel"
-                    },
-                    business: {
-                        platform: "TikTok/Reels",
-                        goal: "Promotional",
-                        topic: "Reply Vault Demo",
-                        hook: "Here's how one template can turn inquiries into customers.",
-                        body: "Demonstrate a real-world template example and outcome.",
-                        cta: { text: "Buy the Reply Vault", url: "https://selar.co/replyvault" },
-                        time: "12:00 PM",
-                        format: "Video"
-                    }
-                }
-            }
+        let currentNiche = 'mom';
+        let currentDay = 1;
+        let todayDate = new Date().toDateString();
+
+        const hooks = [
+            "Here's something I wish I knew earlier",
+            "This story is the truth of where I started",
+            "This is one of my best tips",
+            "Wanna know something weird?",
+            "You're gonna want to hear this",
+            "Anyone else feeling tired of _? Lemme help",
+            "_ is the biggest challenge you're actually facing, here's why",
+            "You're not gonna believe what I'm about to tell you",
+            "Something people have been asking me lately",
+            "This is a really crazy tip that you're gonna love",
+            "I can't believe I'm about to say this",
+            "Someone just gave me this great idea",
+            "You should use this technique if you _",
+            "Knowing the secret I'm about to tell you will change _",
+            "I'm going to help you master the art of _ with this video",
+            "This video is going to change the way you _",
+            "You're gonna want to hear this",
+            "You need to know what I'm about to share",
+            "Something I was just thinking about is _",
+            "Try this if you only have minutes",
+            "Here's something you won't believe"
         ];
 
-        let currentDay = 1;
-        let currentNiche = 'mom';
-        let dayOrder = null;
+        const contentPlans = {
+            mom: [
+                { day: 1, platform: 'Instagram Feed', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Toddler Snack Wins', hook: hooks[0], structure: 'Share 5 realistic healthy snacks that work for busy moms. Ask followers to add theirs in comments.', times: '7:30 PM' },
+                { day: 2, platform: 'Facebook', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Mealtime Struggles', hook: hooks[1], structure: 'Share a personal story about overcoming picky eating. Introduce simple nutrition strategies. Ask: What\'s your biggest mealtime challenge?', times: '8:00 PM' },
+                { day: 3, platform: 'Pinterest', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Balanced Toddler Plates', hook: hooks[2], structure: 'Create pin content featuring 5 balanced meal examples. Include simple nutrition tips. Optimize for: "easy toddler lunch ideas"', times: '8:00 PM' },
+                { day: 4, platform: 'Instagram Feed', format: 'Video', niche: 'Mom', goal: 'Engagement', topic: 'Grocery Haul', hook: hooks[3], structure: 'Walk through your grocery cart. Show healthy food choices. Share mom-life tips. Keep it real and relatable.', times: '6:00 PM' },
+                { day: 5, platform: 'Threads', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Mom Reality', hook: hooks[4], structure: 'Share a relatable mom-life moment (coffee, chaos, wins). Encourage replies. Ask: What\'s your version of this?', times: '9:00 AM' },
+                { day: 6, platform: 'Pinterest', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Meal Planning', hook: hooks[5], structure: 'Share 7 toddler breakfast ideas optimized for Pinterest discovery. Include prep tips and nutrition info.', times: '8:00 PM' },
+                { day: 7, platform: 'Facebook', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Family Mealtime', hook: hooks[6], structure: 'Invite conversation: "What\'s the one meal your whole family actually agrees on?" Share one family recipe.', times: '8:00 PM' },
+                { day: 8, platform: 'Instagram Feed', format: 'Carousel', niche: 'Mom', goal: 'Promotional', topic: 'Picky Eating Help', hook: hooks[7], structure: 'Share results moms can expect from structured nutrition habits. Show before/after mindset shifts.', times: '7:30 PM', cta: 'Get the Nurturing Little Eaters Guide' },
+                { day: 9, platform: 'Threads', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Snack Ideas', hook: hooks[8], structure: 'Ask: "What\'s one snack your toddler never refuses?" Share YOUR go-to snack and why it works.', times: '10:00 AM' },
+                { day: 10, platform: 'Pinterest', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Healthy Snacks', hook: hooks[9], structure: 'Share 10 toddler snack ideas that aren\'t crackers. Include nutrition facts. Optimize for Pinterest SEO.', times: '8:00 PM' },
+                { day: 11, platform: 'Instagram Feed', format: 'Carousel', niche: 'Mom', goal: 'Promotional', topic: 'Nutrition Confidence', hook: hooks[10], structure: 'Explain: You don\'t need to be a nutritionist to feed your child well. Share 3 simple principles that change everything.', times: '7:00 PM', cta: 'Get the Nurturing Little Eaters Guide' },
+                { day: 12, platform: 'Facebook', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Quick Tips', hook: hooks[11], structure: 'Share one small nutrition hack that saves time. Ask: What quick win have YOU discovered?', times: '8:00 PM' },
+                { day: 13, platform: 'Threads', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Feeding Reality', hook: hooks[12], structure: 'Hot take on parenting/feeding. Keep it real, relatable. Invite discussion on your perspective.', times: '9:00 AM' },
+                { day: 14, platform: 'Pinterest', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Lunchbox Inspiration', hook: hooks[13], structure: 'Share 8 toddler lunchbox ideas that take under 10 minutes. Create evergreen, searchable content.', times: '8:00 PM' },
+                { day: 15, platform: 'Instagram Feed', format: 'Video', niche: 'Mom', goal: 'Engagement', topic: 'Day in the Life', hook: hooks[14], structure: 'Show a realistic day of feeding a toddler. Capture authentic moments. Include 1-2 nutrition insights.', times: '6:00 PM' },
+                { day: 16, platform: 'Facebook', format: 'Text Post', niche: 'Mom', goal: 'Promotional', topic: 'Success Story', hook: hooks[15], structure: 'Share a relatable case study or testimonial. Show how one strategy transformed mealtime for someone.', times: '8:00 PM', cta: 'Get the Nurturing Little Eaters Guide' },
+                { day: 17, platform: 'Threads', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Parenting Wins', hook: hooks[16], structure: 'Celebrate a small parenting win. Ask followers what they\'re proud of this week. Keep it encouraging.', times: '10:00 AM' },
+                { day: 18, platform: 'Instagram Feed', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Realistic Expectations', hook: hooks[17], structure: 'Set realistic expectations around feeding. Share what "good enough" actually looks like for busy moms.', times: '7:00 PM' },
+                { day: 19, platform: 'Pinterest', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Meal Prep Shortcuts', hook: hooks[18], structure: 'Share practical meal prep systems to reduce daily stress. Include time-saving hacks and simple templates.', times: '8:00 PM' },
+                { day: 20, platform: 'Facebook', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Feeding Myth Busting', hook: hooks[19], structure: 'Bust one common feeding myth. Explain the truth. Ask: What feeding myths are YOU tired of hearing?', times: '8:00 PM' },
+                { day: 21, platform: 'Instagram Feed', format: 'Video', niche: 'Mom', goal: 'Promotional', topic: 'Guide Results', hook: hooks[20], structure: 'Highlight 3 practical outcomes from the guide. Show how structured nutrition changes things for moms.', times: '6:00 PM', cta: 'Get the Nurturing Little Eaters Guide' },
+                { day: 22, platform: 'Threads', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Feeding Challenges', hook: hooks[0], structure: 'Ask: "What\'s your biggest feeding challenge right now?" Share YOUR challenge and ask for community support.', times: '9:00 AM' },
+                { day: 23, platform: 'Pinterest', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Budget-Friendly Nutrition', hook: hooks[1], structure: 'Share 7 ways to feed your toddler well on a budget. Include affordable healthy snacks and meal ideas.', times: '8:00 PM' },
+                { day: 24, platform: 'Instagram Feed', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Allergy-Friendly Ideas', hook: hooks[2], structure: 'Share meal ideas that work for common toddler allergies. Normalize dietary restrictions and inclusive feeding.', times: '7:30 PM' },
+                { day: 25, platform: 'Facebook', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Texture Progression', hook: hooks[3], structure: 'Explain texture progression from purees to finger foods. Share YOUR experience and ask others about theirs.', times: '8:00 PM' },
+                { day: 26, platform: 'Threads', format: 'Text Post', niche: 'Mom', goal: 'Promotional', topic: 'Confidence Building', hook: hooks[4], structure: 'Explain how the guide builds feeding confidence. Share the mindset shift that makes feeding feel less stressful.', times: '10:00 AM', cta: 'Get the Nurturing Little Eaters Guide' },
+                { day: 27, platform: 'Instagram Feed', format: 'Video', niche: 'Mom', goal: 'Engagement', topic: 'What Moms Really Want', hook: hooks[5], structure: 'Ask: "If you could change ONE thing about feeding your toddler, what would it be?" Share YOUR answer.', times: '6:00 PM' },
+                { day: 28, platform: 'Pinterest', format: 'Carousel', niche: 'Mom', goal: 'Engagement', topic: 'Seasonal Eating', hook: hooks[6], structure: 'Share seasonal toddler meal ideas and ingredients. Create evergreen content that stays relevant by season.', times: '8:00 PM' },
+                { day: 29, platform: 'Facebook', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: 'Food Introduction Journey', hook: hooks[7], structure: 'Share your toddler\'s food introduction journey. Celebrate the wins, normalize the struggles. Ask: How\'s YOUR journey going?', times: '8:00 PM' },
+                { day: 30, platform: 'Threads', format: 'Text Post', niche: 'Mom', goal: 'Engagement', topic: '30-Day Reflection', hook: hooks[8], structure: 'Reflect on feeding/parenting growth. Ask followers: What feeding win are you celebrating this month?', times: '10:00 AM' }
+            ],
+            building: [
+                { day: 1, platform: 'Threads', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Tools & Systems', hook: hooks[0], structure: 'Share one tool you\'re building or testing right now. Ask: What tool would make YOUR workflow better?', times: '9:00 AM' },
+                { day: 2, platform: 'Instagram Feed', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'Behind-the-Scenes Build', hook: hooks[1], structure: 'Show screenshots of what you\'re building. Include code, design, or iteration decisions. Keep it real.', times: '7:00 PM' },
+                { day: 3, platform: 'Facebook', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Problem You Solved', hook: hooks[2], structure: 'Share a problem you experienced and how you built a solution. Ask: What problem are YOU trying to solve?', times: '8:00 PM' },
+                { day: 4, platform: 'Pinterest', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'Dev Tips', hook: hooks[3], structure: 'Share a coding or design tip you learned. Make it actionable and searchable for other builders.', times: '8:00 PM' },
+                { day: 5, platform: 'Threads', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Failed Experiment', hook: hooks[4], structure: 'Share something you tried that didn\'t work. Explain what you learned. Ask: What\'s YOUR biggest building fail?', times: '10:00 AM' },
+                { day: 6, platform: 'Instagram Feed', format: 'Video', niche: 'Building', goal: 'Engagement', topic: 'App Demo', hook: hooks[5], structure: 'Show a quick demo of a feature you built. Explain the "why" behind your decision.', times: '6:00 PM' },
+                { day: 7, platform: 'Facebook', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Technical Challenge', hook: hooks[6], structure: 'Share a technical challenge you overcame. Explain the before/after. Ask: What bugs have YOU squashed lately?', times: '8:00 PM' },
+                { day: 8, platform: 'Threads', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Building Publicly', hook: hooks[7], structure: 'Discuss why building in public matters to you. Ask: Why do YOU share your building journey?', times: '9:00 AM' },
+                { day: 9, platform: 'Pinterest', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'UI/UX Lesson', hook: hooks[8], structure: 'Share a UI/UX decision and why you made it. Include design principles or user feedback that informed it.', times: '8:00 PM' },
+                { day: 10, platform: 'Instagram Feed', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'Feature Release', hook: hooks[9], structure: 'Announce a new feature you shipped. Explain the problem it solves. Ask users for feedback.', times: '7:30 PM' },
+                { day: 11, platform: 'Facebook', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Building on Phone', hook: hooks[10], structure: 'Share how you build apps entirely on your phone. Ask: What\'s YOUR constraint that forces creativity?', times: '8:00 PM' },
+                { day: 12, platform: 'Threads', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Tech Stack Decision', hook: hooks[11], structure: 'Explain a tech choice you made and why. Ask: What tech decisions are YOU wrestling with right now?', times: '10:00 AM' },
+                { day: 13, platform: 'Instagram Feed', format: 'Video', niche: 'Building', goal: 'Engagement', topic: 'Speed Build', hook: hooks[12], structure: 'Show a quick speed-run of building a feature. Keep it fun and fast. Explain your thinking.', times: '6:00 PM' },
+                { day: 14, platform: 'Pinterest', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'Debugging Story', hook: hooks[13], structure: 'Share a funny or frustrating debugging story. Make it relatable for other builders.', times: '8:00 PM' },
+                { day: 15, platform: 'Facebook', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'User Feedback Loop', hook: hooks[14], structure: 'Share how user feedback changed your app. Ask: How do YOU incorporate user feedback?', times: '8:00 PM' },
+                { day: 16, platform: 'Threads', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Open Source Idea', hook: hooks[15], structure: 'Share something you\'re considering open-sourcing. Ask: What code would YOU open-source?', times: '9:00 AM' },
+                { day: 17, platform: 'Instagram Feed', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'Design System', hook: hooks[16], structure: 'Show your design system or component library. Explain how it saves you time and keeps things consistent.', times: '7:30 PM' },
+                { day: 18, platform: 'Pinterest', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'Performance Tips', hook: hooks[17], structure: 'Share a performance optimization you made. Include before/after metrics if you have them.', times: '8:00 PM' },
+                { day: 19, platform: 'Facebook', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Shipping Wins', hook: hooks[18], structure: 'Celebrate something you just shipped. Ask: What are YOU shipping this week?', times: '8:00 PM' },
+                { day: 20, platform: 'Threads', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Building Mistakes', hook: hooks[19], structure: 'Share a building mistake and what you learned. Normalize the messy process of creation.', times: '10:00 AM' },
+                { day: 21, platform: 'Instagram Feed', format: 'Video', niche: 'Building', goal: 'Engagement', topic: 'User Story', hook: hooks[20], structure: 'Share a user\'s story of how they\'re using your app. Show real-world impact.', times: '6:00 PM' },
+                { day: 22, platform: 'Pinterest', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'Code Refactor Journey', hook: hooks[0], structure: 'Show before/after code refactoring. Explain why it matters and what you learned.', times: '8:00 PM' },
+                { day: 23, platform: 'Threads', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Iteration Philosophy', hook: hooks[1], structure: 'Share your philosophy on iteration. Ask: How do YOU balance shipping fast vs. shipping perfect?', times: '9:00 AM' },
+                { day: 24, platform: 'Facebook', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Version Updates', hook: hooks[2], structure: 'Explain what changed in a recent version. Ask for feedback and celebrate improvements with your users.', times: '8:00 PM' },
+                { day: 25, platform: 'Instagram Feed', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'Next-Level Feature', hook: hooks[3], structure: 'Tease a feature you\'re working on. Build anticipation. Ask: What feature are YOU hoping for?', times: '7:00 PM' },
+                { day: 26, platform: 'Threads', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Learning Path', hook: hooks[4], structure: 'Share what you\'re learning to level up your building skills. Ask: What are YOU learning right now?', times: '10:00 AM' },
+                { day: 27, platform: 'Pinterest', format: 'Carousel', niche: 'Building', goal: 'Engagement', topic: 'Architecture Breakdown', hook: hooks[5], structure: 'Explain the architecture of one of your apps simply. Make it accessible to non-technical people too.', times: '8:00 PM' },
+                { day: 28, platform: 'Instagram Feed', format: 'Video', niche: 'Building', goal: 'Engagement', topic: 'Building Tools Review', hook: hooks[6], structure: 'Review or recommend a building tool you love. Explain why it changed your workflow.', times: '6:00 PM' },
+                { day: 29, platform: 'Facebook', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Year in Building', hook: hooks[7], structure: 'Reflect on what you\'ve built and learned. Ask: What\'s your biggest building win this year?', times: '8:00 PM' },
+                { day: 30, platform: 'Threads', format: 'Text Post', niche: 'Building', goal: 'Engagement', topic: 'Next Chapter', hook: hooks[8], structure: 'Share what\'s next for your building journey. Ask: What are YOU building next?', times: '10:00 AM' }
+            ],
+            inbox: [
+                { day: 1, platform: 'Threads', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'DM Overwhelm', hook: hooks[0], structure: 'Share: "If your DMs look like this, you\'re losing sales." Ask: How many unread messages are you ignoring right now?', times: '9:00 AM' },
+                { day: 2, platform: 'Instagram Feed', format: 'Carousel', niche: 'Inbox', goal: 'Engagement', topic: 'Before/After Inbox', hook: hooks[1], structure: 'Show a quick before-and-after inbox transformation. Highlight the chaos vs. the system.', times: '7:30 PM' },
+                { day: 3, platform: 'Facebook', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Reply Speed Myth', hook: hooks[2], structure: 'Share hot take: "Fast replies beat perfect replies." Ask: How quickly do you respond to DMs?', times: '8:00 PM' },
+                { day: 4, platform: 'Pinterest', format: 'Carousel', niche: 'Inbox', goal: 'Engagement', topic: 'Customer Service Mistakes', hook: hooks[3], structure: 'Explain the #1 DM mistake that costs sales silently. Ask: Are YOU making this mistake?', times: '8:00 PM' },
+                { day: 5, platform: 'Threads', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Template Power', hook: hooks[4], structure: 'Ask: "What\'s the most repetitive message you send every day?" Share YOUR example and save time.', times: '10:00 AM' },
+                { day: 6, platform: 'Instagram Feed', format: 'Carousel', niche: 'Inbox', goal: 'Promotional', topic: 'Reply Vault Showcase', hook: hooks[5], structure: 'Feature several templates solving common customer inquiries. Show time savings and consistency.', times: '1:00 PM', cta: 'Buy the Reply Vault' },
+                { day: 7, platform: 'Facebook', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Lead Conversion', hook: hooks[6], structure: 'Ask: "How many sales are hiding in your unread messages?" Share the story of a missed opportunity.', times: '7:00 PM' },
+                { day: 8, platform: 'Threads', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Batch Processing', hook: hooks[7], structure: 'Share your DM batching strategy. Ask: Do you answer DMs immediately or batch them?', times: '9:00 AM' },
+                { day: 9, platform: 'Pinterest', format: 'Carousel', niche: 'Inbox', goal: 'Engagement', topic: 'Inbox Audit Insights', hook: hooks[8], structure: 'Share common inbox audit findings. Help people spot their own problems before they lose more sales.', times: '8:00 PM' },
+                { day: 10, platform: 'Instagram Feed', format: 'Video', niche: 'Inbox', goal: 'Engagement', topic: 'Audit Demo', hook: hooks[9], structure: 'Walk through a quick inbox improvement. Show before/after of one message handling strategy.', times: '1:00 PM' },
+                { day: 11, platform: 'Facebook', format: 'Text Post', niche: 'Inbox', goal: 'Promotional', topic: 'Inbox Service', hook: hooks[10], structure: 'Explain: "Still answering every message yourself?" Share the freedom of having someone handle your inbox.', times: '7:00 PM', cta: 'Book Premium Inbox Management' },
+                { day: 12, platform: 'Threads', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Communication Boundaries', hook: hooks[11], structure: 'Share your take on reply time expectations. Ask: What communication expectations do YOU struggle with?', times: '10:00 AM' },
+                { day: 13, platform: 'Instagram Feed', format: 'Carousel', niche: 'Inbox', goal: 'Engagement', topic: 'Message Categorization', hook: hooks[12], structure: 'Show how to categorize messages for faster processing. Share your system and ask for theirs.', times: '7:30 PM' },
+                { day: 14, platform: 'Pinterest', format: 'Carousel', niche: 'Inbox', goal: 'Engagement', topic: 'Template Examples', hook: hooks[13], structure: 'Share 5 template ideas for common customer questions. Make them actionable and copyable.', times: '8:00 PM' },
+                { day: 15, platform: 'Facebook', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Response Rate Impact', hook: hooks[14], structure: 'Share data or story: How better inbox management increased response rates. Ask: What\'s YOUR response rate?', times: '7:00 PM' },
+                { day: 16, platform: 'Threads', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Frequently Asked', hook: hooks[15], structure: 'Ask: "What customer question do you answer 10x a week?" Share YOUR pain point.', times: '9:00 AM' },
+                { day: 17, platform: 'Instagram Feed', format: 'Video', niche: 'Inbox', goal: 'Engagement', topic: 'Organization Hack', hook: hooks[16], structure: 'Show a quick inbox organization trick. Keep it practical and implement-able in minutes.', times: '1:00 PM' },
+                { day: 18, platform: 'Pinterest', format: 'Carousel', niche: 'Inbox', goal: 'Promotional', topic: 'Free Audit Value', hook: hooks[17], structure: 'Explain what a free inbox audit reveals. Show the ROI of fixing inbox problems early.', times: '8:00 PM', cta: 'Get your free audit' },
+                { day: 19, platform: 'Facebook', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Customer Expectations', hook: hooks[18], structure: 'Discuss: "How many hours per week do you spend on customer messages?" Ask followers their reality.', times: '7:00 PM' },
+                { day: 20, platform: 'Threads', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Always Available Myth', hook: hooks[19], structure: 'Hot take on the pressure to be always available. Ask: How\'s THAT working out for YOU?', times: '10:00 AM' },
+                { day: 21, platform: 'Instagram Feed', format: 'Carousel', niche: 'Inbox', goal: 'Promotional', topic: 'Client Case Study', hook: hooks[20], structure: 'Share a real example of how inbox management transformed a business. Show measurable outcomes.', times: '7:30 PM', cta: 'Get your free audit' },
+                { day: 22, platform: 'Pinterest', format: 'Carousel', niche: 'Inbox', goal: 'Engagement', topic: 'DM Tone Tips', hook: hooks[0], structure: 'Share tips for writing DMs that get responses. Include tone examples that convert.', times: '8:00 PM' },
+                { day: 23, platform: 'Threads', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Personalization Strategy', hook: hooks[1], structure: 'Ask: "How personalized are YOUR customer messages?" Share your approach to standing out in DMs.', times: '9:00 AM' },
+                { day: 24, platform: 'Facebook', format: 'Text Post', niche: 'Inbox', goal: 'Promotional', topic: 'Inbox Management System', hook: hooks[2], structure: 'Explain the system behind professional inbox management. Show structure beats chaos every time.', times: '7:00 PM', cta: 'Book Premium Inbox Management' },
+                { day: 25, platform: 'Instagram Feed', format: 'Video', niche: 'Inbox', goal: 'Engagement', topic: 'Speed Sorting', hook: hooks[3], structure: 'Show how to quickly categorize and prioritize inbox messages. Make it look easy.', times: '1:00 PM' },
+                { day: 26, platform: 'Threads', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Customer Communication Wins', hook: hooks[4], structure: 'Celebrate a customer interaction that went well. Ask: What\'s YOUR favorite customer moment?', times: '10:00 AM' },
+                { day: 27, platform: 'Pinterest', format: 'Carousel', niche: 'Inbox', goal: 'Engagement', topic: 'Time Saving Tips', hook: hooks[5], structure: 'Share 7 ways to cut inbox time in half. Make each actionable and implement today.', times: '8:00 PM' },
+                { day: 28, platform: 'Instagram Feed', format: 'Carousel', niche: 'Inbox', goal: 'Promotional', topic: 'Reply Vault Features', hook: hooks[6], structure: 'Showcase Reply Vault templates in action. Show how many hours templates save per week.', times: '7:30 PM', cta: 'Buy the Reply Vault' },
+                { day: 29, platform: 'Facebook', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: 'Growth Through Communication', hook: hooks[7], structure: 'Share how better inbox management led to business growth. Ask: How has communication impacted YOUR growth?', times: '7:00 PM' },
+                { day: 30, platform: 'Threads', format: 'Text Post', niche: 'Inbox', goal: 'Engagement', topic: '30-Day Inbox Reflection', hook: hooks[8], structure: 'Reflect on inbox transformation journey. Ask: What inbox win are YOU celebrating?', times: '9:00 AM' }
+            ]
+        };
 
-        function loadShuffledOrder() {
-            const stored = localStorage.getItem(`dayOrder_${currentNiche}`);
-            if (stored) {
-                dayOrder = JSON.parse(stored);
-            } else {
-                dayOrder = Array.from({ length: 15 }, (_, i) => i + 1);
-            }
-        }
+        const platformEmoji = {
+            'Instagram Feed': '📷',
+            'Threads': '🧵',
+            'Facebook': '📱',
+            'Pinterest': '📌',
+            'LinkedIn': '💼'
+        };
 
-        function saveShuffledOrder() {
-            localStorage.setItem(`dayOrder_${currentNiche}`, JSON.stringify(dayOrder));
-        }
-
-        function getContentByDisplayDay(displayDay) {
-            const actualDay = dayOrder[displayDay - 1];
-            return contentData[actualDay - 1];
-        }
-
-        function shuffleContent() {
-            // Fisher-Yates shuffle
-            const array = [...dayOrder];
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            dayOrder = array;
-            saveShuffledOrder();
-            displayContent(1);
-        }
-
-        function getPlatformClass(platform) {
-            const name = platform.toLowerCase();
-            if (name.includes("instagram")) return "instagram";
-            if (name.includes("tiktok") || name.includes("reels")) return "tiktok";
-            if (name.includes("facebook")) return "facebook";
-            if (name.includes("threads")) return "threads";
-            if (name.includes("pinterest")) return "pinterest";
-            return "";
-        }
-
-        function switchNiche(niche) {
+        function setNiche(niche) {
             currentNiche = niche;
-            loadShuffledOrder();
-            updateToggleButtons();
-            goToToday();
+            document.querySelectorAll('.niche-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            currentDay = 1;
+            localStorage.setItem('zondra_niche', niche);
+            localStorage.setItem('zondra_day', '1');
+            renderDayNav();
+            renderDay(1);
         }
 
-        function updateToggleButtons() {
-            const momBtn = document.querySelector('.toggle-btn:not(.business)');
-            const bizBtn = document.querySelector('.toggle-btn.business');
-            
-            if (currentNiche === 'mom') {
-                momBtn.classList.add('active');
-                bizBtn.classList.remove('active');
-                document.querySelector('.get-today-btn').classList.remove('business');
-            } else {
-                momBtn.classList.remove('active');
-                bizBtn.classList.add('active');
-                document.querySelector('.get-today-btn').classList.add('business');
+        function initApp() {
+            const savedNiche = localStorage.getItem('zondra_niche') || 'mom';
+            const savedDay = localStorage.getItem('zondra_day') || '1';
+            const lastDate = localStorage.getItem('zondra_lastDate');
+            const today = new Date().toDateString();
+
+            currentNiche = savedNiche;
+            currentDay = parseInt(savedDay);
+
+            if (lastDate && lastDate !== today && currentDay < 30) {
+                currentDay += 1;
+            }
+
+            localStorage.setItem('zondra_lastDate', today);
+            localStorage.setItem('zondra_day', currentDay.toString());
+
+            document.querySelectorAll('.niche-btn').forEach((btn, idx) => {
+                btn.classList.remove('active');
+                if ((idx === 0 && savedNiche === 'mom') || 
+                    (idx === 1 && savedNiche === 'building') || 
+                    (idx === 2 && savedNiche === 'inbox')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            renderDayNav();
+            renderDay(currentDay);
+            restoreTaskProgress();
+        }
+
+        function renderDayNav() {
+            const nav = document.getElementById('dayNav');
+            nav.innerHTML = '';
+            for (let i = 1; i <= 30; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'day-quick';
+                if (i === currentDay) btn.classList.add('active');
+                if (localStorage.getItem(`zondra_day${i}_completed`)) btn.classList.add('completed');
+                btn.innerText = i;
+                btn.onclick = () => {
+                    currentDay = i;
+                    renderDayNav();
+                    renderDay(i);
+                    updateProgress();
+                    restoreTaskProgress();
+                };
+                nav.appendChild(btn);
             }
         }
 
-        function getTodayDay() {
-            const today = new Date();
-            const dayOfMonth = today.getDate();
-            return ((dayOfMonth - 1) % 15) + 1;
-        }
+        function renderDay(dayNum) {
+            const plan = contentPlans[currentNiche][dayNum - 1];
+            const display = document.getElementById('contentDisplay');
 
-        function getCheckboxKey(displayDay) {
-            return `checked_${currentNiche}_${displayDay}`;
-        }
+            let goalBadgeClass = plan.goal === 'Promotional' ? 'badge-goal' : 'badge-engagement';
+            let content = `
+                <div class="content-card">
+                    <div class="card-platform">${platformEmoji[plan.platform] || '📱'} ${plan.platform}</div>
 
-        function isChecked(displayDay) {
-            return localStorage.getItem(getCheckboxKey(displayDay)) === 'true';
-        }
-
-        function toggleCheck(displayDay) {
-            const key = getCheckboxKey(displayDay);
-            const checked = isChecked(displayDay);
-            localStorage.setItem(key, String(!checked));
-            displayContent(displayDay);
-        }
-
-        function displayContent(displayDay) {
-            currentDay = displayDay;
-            const content = getContentByDisplayDay(displayDay);
-            if (!content) return;
-
-            const nicheContent = content.niches[currentNiche];
-            const platformClass = getPlatformClass(nicheContent.platform);
-            const isCtaEmpty = nicheContent.cta.text === "None";
-            const checked = isChecked(displayDay);
-            const nicheClass = currentNiche === 'mom' ? '' : 'business';
-
-            let ctaHtml = '';
-            if (isCtaEmpty) {
-                ctaHtml = `<div class="cta-button ${nicheClass} empty">${nicheContent.cta.text}</div>`;
-            } else if (nicheContent.cta.url) {
-                ctaHtml = `<a href="${nicheContent.cta.url}" target="_blank" class="cta-button ${nicheClass}">${nicheContent.cta.text}</a>`;
-            } else {
-                ctaHtml = `<div class="cta-button ${nicheClass}">${nicheContent.cta.text}</div>`;
-            }
-
-            const html = `
-                <div class="content-card ${nicheClass}">
-                    <div class="card-top">
-                        <div>
-                            <div class="day-label">Day ${content.day}</div>
-                            <div class="niche-label">${currentNiche === 'mom' ? '👩‍👧 Mom Content' : '💼 Business Content'}</div>
-                        </div>
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="day-checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck(${displayDay})">
-                        </div>
+                    <div class="badges">
+                        <span class="badge badge-niche">${plan.niche}</span>
+                        <span class="badge ${goalBadgeClass}">${plan.goal}</span>
                     </div>
-                    <div>
-                        <span class="platform-badge ${platformClass}">${nicheContent.platform}</span>
-                        <span class="goal-badge ${nicheContent.goal.toLowerCase()}">${nicheContent.goal}</span>
+
+                    <div class="content-section">
+                        <div class="section-label">💡 Hook</div>
+                        <div class="hook">"${plan.hook}"</div>
                     </div>
-                    <div class="topic">${nicheContent.topic}</div>
-                    <div class="hook">"${nicheContent.hook}"</div>
-                    <div class="content-body">${nicheContent.body}</div>
-                    <div class="format-type">📱 ${nicheContent.format}</div>
-                    ${ctaHtml}
-                    <div class="time">⏰ ${nicheContent.time}</div>
+
+                    <div class="content-section">
+                        <div class="section-label">📝 Topic</div>
+                        <div class="section-content">${plan.topic}</div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-label">🎬 What To Post</div>
+                        <div class="section-content">${plan.structure}</div>
+                    </div>
+
+                    <div class="times-section">⏰ Best Time: ${plan.times}</div>
+
+                    <div class="content-section">
+                        <div class="section-label">📋 Format</div>
+                        <div class="section-content">${plan.format}</div>
+                    </div>
+
+                    ${plan.cta ? `<div class="content-section"><div class="section-label">🎯 If Promotional</div><div class="section-content">${plan.cta}</div></div>` : ''}
                 </div>
             `;
-
-            document.getElementById("contentDisplay").innerHTML = html;
-            updateDaySelector();
+            
+            display.innerHTML = content;
+            document.getElementById('dayNumber').innerText = dayNum;
+            updateProgress();
         }
 
-        function updateDaySelector() {
-            let html = "";
-            for (let i = 1; i <= 15; i++) {
-                const isActive = i === currentDay ? "active" : "";
-                const isToday = i === getTodayDay() ? "today" : "";
-                const checked = isChecked(i) ? "checked" : "";
-                const nicheClass = currentNiche === 'mom' ? '' : 'business';
-                html += `<div class="day-num ${isActive} ${isToday} ${checked} ${nicheClass}" onclick="displayContent(${i})">${i}</div>`;
-            }
-            document.getElementById("daySelector").innerHTML = html;
-            
-            const selector = document.getElementById("daySelector");
-            const activeBtn = selector.querySelector(".day-num.active");
-            if (activeBtn) {
-                setTimeout(() => {
-                    activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-                }, 100);
-            }
+        function updateProgress() {
+            const percent = Math.round((currentDay / 30) * 100);
+            document.getElementById('mainProgress').style.width = percent + '%';
         }
 
         function goToToday() {
-            const today = getTodayDay();
-            displayContent(today);
+            currentDay = parseInt(localStorage.getItem('zondra_day') || '1');
+            renderDayNav();
+            renderDay(currentDay);
+            document.querySelector('.container').scrollTop = 0;
         }
 
-        function updateDateDisplay() {
-            const today = new Date();
-            const options = { weekday: "short", month: "short", day: "numeric" };
-            const dateStr = today.toLocaleDateString("en-US", options);
-            document.getElementById("dateDisplay").textContent = `Today: ${dateStr}`;
+        function shuffleDay() {
+            const randomDay = Math.floor(Math.random() * 30) + 1;
+            currentDay = randomDay;
+            renderDayNav();
+            renderDay(randomDay);
+            document.querySelector('.container').scrollTop = 0;
         }
 
-        // Initialize
-        loadShuffledOrder();
-        updateToggleButtons();
-        updateDateDisplay();
-        goToToday();
+        function restoreTaskProgress() {
+            const task1Done = localStorage.getItem(`zondra_day${currentDay}_task1`);
+            const task2Done = localStorage.getItem(`zondra_day${currentDay}_task2`);
+            document.getElementById('task1').checked = task1Done === 'true';
+            document.getElementById('task2').checked = task2Done === 'true';
+        }
+
+        document.getElementById('task1').addEventListener('change', function() {
+            localStorage.setItem(`zondra_day${currentDay}_task1`, this.checked);
+            if (this.checked && document.getElementById('task2').checked) {
+                localStorage.setItem(`zondra_day${currentDay}_completed`, 'true');
+                renderDayNav();
+            }
+        });
+
+        document.getElementById('task2').addEventListener('change', function() {
+            localStorage.setItem(`zondra_day${currentDay}_task2`, this.checked);
+            if (this.checked && document.getElementById('task1').checked) {
+                localStorage.setItem(`zondra_day${currentDay}_completed`, 'true');
+                renderDayNav();
+            }
+        });
+
+        initApp();
     </script>
 </body>
 </html>
