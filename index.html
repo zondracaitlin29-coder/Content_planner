@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FAFAF8">
+<title>30-Day Content Challenge</title>
+<style>
+:root{
+  --indigo:#4F46E5; --indigo-soft:#EEF2FF; --indigo-deep:#312E81;
+  --emerald:#10B981; --amber:#F59E0B;
+  --niche-inbox:#0EA5E9; --niche-mom:#EC4899; --niche-build:#8B5CF6;
+  --bg:#F4F7F6; --surface:#FFFFFF; --surface-muted:#F9FAFB;
+  --border:#E5E7EB; --border-soft:#F3F4F6;
+  --text:#111827; --text-body:#374151; --text-muted:#6B7280; --text-faint:#9CA3AF;
+  --radius-sm:8px; --radius-md:12px; --radius-lg:20px; --radius-pill:999px;
+  --shadow-sm:0 2px 6px rgba(17,24,39,0.04); --shadow-md:0 8px 20px rgba(17,24,39,0.06);
+  --shadow-indigo:0 10px 24px rgba(79,70,229,0.18);
+  --tag-facebook:#1877F2; --tag-linkedin:#0A66C2;
+  --tag-instagram:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+  --tag-threads:#000000; --tag-pinterest:#E60023; --tag-default:#6B7280;
+}
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html{ -webkit-text-size-adjust:100%; }
+body{ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--text-body); line-height:1.55; }
+@media (prefers-reduced-motion: reduce){ *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; } }
+.app{ max-width:480px; margin:0 auto; min-height:100vh; background:var(--surface); box-shadow:var(--shadow-md); display:flex; flex-direction:column; }
+
+.topbar{ position:sticky; top:0; z-index:20; background:var(--surface); padding:18px 20px 14px; border-bottom:1px solid var(--border-soft); }
+.topbar-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.brand{ font-size:12px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--text-faint); }
+.date-pill{ font-size:12px; font-weight:600; color:var(--text-muted); }
+.back-btn{ border:none; background:var(--surface-muted); color:var(--text-body); width:36px; height:36px; border-radius:var(--radius-pill); font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.back-btn:active{ transform:scale(0.94); }
+
+.bottom-nav{ position:sticky; bottom:0; z-index:20; display:flex; background:var(--surface); border-top:1px solid var(--border-soft); padding:6px 4px calc(env(safe-area-inset-bottom,0px) + 6px); }
+.nav-btn{ flex:1; border:none; background:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 4px; border-radius:var(--radius-sm); color:var(--text-faint); font-size:10px; font-weight:700; }
+.nav-btn .icon{ font-size:18px; }
+.nav-btn.active{ color:var(--indigo); }
+
+.screen{ display:none; flex:1; padding:20px; padding-bottom:28px; animation:fadeUp 0.25s ease; }
+.screen.active{ display:block; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+.journey-card{ background:linear-gradient(155deg,var(--indigo-soft),#FFFFFF 60%); border:1px solid var(--border-soft); border-radius:var(--radius-lg); padding:22px; box-shadow:var(--shadow-sm); margin-bottom:16px; }
+.journey-top{ display:flex; align-items:center; gap:16px; margin-bottom:4px; }
+.journey-ring{ position:relative; width:72px; height:72px; flex-shrink:0; }
+.journey-ring svg{ transform:rotate(-90deg); }
+.journey-ring .ring-label{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.journey-ring .ring-count{ font-size:15px; font-weight:800; color:var(--indigo-deep); }
+.journey-ring .ring-of{ font-size:8px; color:var(--text-faint); font-weight:700; text-transform:uppercase; }
+.journey-copy .eyebrow{ font-size:11px; font-weight:800; letter-spacing:0.6px; text-transform:uppercase; color:var(--indigo); margin-bottom:4px; }
+.journey-copy .headline{ font-size:18px; font-weight:800; color:var(--text); line-height:1.3; }
+.journey-copy .sub{ font-size:13px; color:var(--text-muted); margin-top:4px; }
+
+.mini-niche-row{ display:flex; gap:8px; margin-top:14px; }
+.mini-niche-card{ flex:1; background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:10px; cursor:pointer; text-align:center; }
+.mini-niche-card:active{ transform:scale(0.97); }
+.mini-niche-card .mn-icon{ font-size:18px; }
+.mini-niche-card .mn-label{ font-size:10px; font-weight:700; color:var(--text-muted); margin-top:2px; }
+
+.chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+.chip{ background:var(--surface-muted); border:1px solid var(--border-soft); padding:7px 14px; border-radius:var(--radius-pill); font-size:12.5px; font-weight:700; color:var(--text-body); }
+.chip.streak{ background:#FFF7ED; border-color:#FED7AA; color:#9A3412; }
+
+.stat-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:22px; }
+.stat-block{ background:var(--surface-muted); border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:14px; text-align:center; }
+.stat-num{ font-size:22px; font-weight:800; color:var(--indigo); }
+.stat-lbl{ font-size:10.5px; font-weight:700; color:var(--text-faint); text-transform:uppercase; margin-top:2px; }
+
+.btn{ display:flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer; font-weight:800; font-size:15px; border-radius:var(--radius-md); padding:16px 20px; width:100%; transition:transform 0.08s ease; }
+.btn:active{ transform:scale(0.98); }
+.btn-primary{ background:var(--indigo); color:#fff; box-shadow:var(--shadow-indigo); }
+.btn-secondary{ background:var(--surface-muted); color:var(--text-body); border:1px solid var(--border); }
+.btn-ghost{ background:none; color:var(--indigo); font-weight:700; padding:10px; }
+.btn-row{ display:flex; gap:10px; }
+.btn-row .btn{ flex:1; }
+
+.section-title{ font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.7px; color:var(--text-faint); margin:26px 0 10px; }
+.section-title:first-child{ margin-top:0; }
+.card-title{ font-size:20px; font-weight:800; color:var(--text); line-height:1.3; margin-bottom:4px; }
+.card-sub{ font-size:13px; color:var(--text-muted); }
+
+.platform-tag{ padding:4px 12px; border-radius:12px; font-size:11px; font-weight:700; color:#fff; display:inline-flex; align-items:center; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+.tag-facebook{ background:var(--tag-facebook); } .tag-linkedin{ background:var(--tag-linkedin); }
+.tag-instagram{ background:var(--tag-instagram); } .tag-threads{ background:var(--tag-threads); }
+.tag-pinterest{ background:var(--tag-pinterest); } .tag-default{ background:var(--tag-default); }
+
+.card{ background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius-md); box-shadow:var(--shadow-sm); padding:18px; margin-bottom:12px; }
+
+.stage-bar{ position:sticky; top:0; z-index:15; background:var(--surface); padding:14px 20px 12px; border-bottom:1px solid var(--border-soft); }
+.stage-bar-top{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.stage-title{ font-size:14px; font-weight:800; color:var(--text); flex:1; }
+.stage-track{ display:flex; gap:5px; }
+.stage-seg{ flex:1; height:5px; border-radius:3px; background:var(--border-soft); overflow:hidden; }
+.stage-seg .fill{ height:100%; width:0%; background:var(--emerald); transition:width 0.3s ease; }
+.stage-labels{ display:flex; justify-content:space-between; margin-top:5px; }
+.stage-labels span{ font-size:8.5px; font-weight:700; color:var(--text-faint); text-transform:uppercase; }
+
+.meta-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; padding-top:14px; border-top:1px solid var(--border-soft); }
+.meta-label{ font-size:10.5px; font-weight:800; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.4px; display:block; margin-bottom:3px; }
+.meta-value{ font-size:13px; font-weight:600; color:var(--text-body); }
+
+.talk-list{ list-style:none; margin-top:8px; }
+.talk-list li{ display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; font-size:14px; color:var(--text-body); }
+.talk-list input[type=checkbox]{ width:20px; height:20px; margin-top:1px; accent-color:var(--indigo); flex-shrink:0; }
+.talk-list label.done{ text-decoration:line-through; color:var(--text-faint); }
+
+.hook-card{ background:var(--indigo-soft); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; font-size:14px; color:var(--indigo-deep); font-weight:600; }
+.hook-formula{ font-size:11.5px; font-weight:700; color:var(--text-faint); text-transform:uppercase; margin-bottom:6px; }
+
+.rep-block{ border:1px solid var(--border-soft); border-radius:var(--radius-md); margin-bottom:10px; overflow:hidden; }
+.rep-head{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer; }
+.rep-body{ display:none; padding:0 16px 16px; }
+.rep-block.open .rep-body{ display:block; }
+.rep-block.open .rep-chevron{ transform:rotate(180deg); }
+.rep-chevron{ font-size:11px; color:var(--text-faint); transition:transform 0.2s; }
+.copy-btn{ background:var(--surface-muted); border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px 12px; font-size:12px; font-weight:700; color:var(--text-body); cursor:pointer; }
+
+.check-row{ display:flex; align-items:center; gap:12px; padding:13px 14px; background:var(--surface-muted); border:1px solid var(--border-soft); border-radius:var(--radius-sm); margin-bottom:8px; font-size:14px; font-weight:600; }
+.check-row input[type=checkbox]{ width:21px; height:21px; accent-color:var(--indigo); flex-shrink:0; cursor:pointer; }
+.check-row.checked{ background:#ECFDF5; border-color:#A7F3D0; }
+.check-row.checked label{ color:#065F46; }
+.check-row label{ flex:1; cursor:pointer; }
+
+.reflect-q{ font-size:13px; font-weight:700; color:var(--text); margin-bottom:6px; }
+textarea.reflect-input{ width:100%; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; font-family:inherit; font-size:14px; resize:vertical; min-height:60px; margin-bottom:16px; color:var(--text-body); }
+textarea.reflect-input:focus{ outline:2px solid var(--indigo); outline-offset:1px; border-color:transparent; }
+
+.celebrate-overlay{ position:fixed; inset:0; background:rgba(17,24,39,0.55); z-index:50; display:none; align-items:center; justify-content:center; padding:24px; }
+.celebrate-overlay.show{ display:flex; }
+.celebrate-card{ background:#fff; border-radius:var(--radius-lg); padding:32px 24px; text-align:center; max-width:340px; animation:pop 0.35s cubic-bezier(.2,1.4,.4,1); }
+@keyframes pop{ from{transform:scale(0.85); opacity:0;} to{transform:scale(1); opacity:1;} }
+.celebrate-emoji{ font-size:48px; margin-bottom:10px; }
+.celebrate-title{ font-size:20px; font-weight:800; color:var(--text); margin-bottom:6px; }
+.celebrate-sub{ font-size:13.5px; color:var(--text-muted); margin-bottom:22px; }
+
+details.day-card{ border:1px solid var(--border-soft); border-radius:var(--radius-md); margin-bottom:10px; box-shadow:var(--shadow-sm); }
+details.day-card[open]{ box-shadow:var(--shadow-md); }
+details.day-card.is-today{ border-left:4px solid var(--indigo); background:var(--indigo-soft); }
+details.day-card.is-reflection{ opacity:0.85; }
+.day-summary{ list-style:none; padding:15px 16px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; }
+.day-summary::-webkit-details-marker{ display:none; }
+.day-summary-left{ display:flex; flex-direction:column; gap:2px; }
+.day-name{ font-size:14px; font-weight:800; color:var(--text); }
+.day-theme{ font-size:11.5px; font-weight:700; color:var(--indigo); }
+.day-body{ padding:0 16px 16px; }
+.day-body .mini-topic{ font-size:12.5px; color:var(--text-body); padding:8px 0; border-top:1px solid var(--border-soft); }
+.day-body .mini-topic:first-child{ border-top:none; }
+.day-body .mini-topic b{ color:var(--text); }
+
+.search-input{ width:100%; border:1px solid var(--border); border-radius:var(--radius-pill); padding:12px 16px; font-size:14px; margin-bottom:16px; font-family:inherit; }
+.search-input:focus{ outline:none; border-color:var(--indigo); box-shadow:0 0 0 3px var(--indigo-soft); }
+
+.platform-card{ background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:18px; margin-bottom:12px; box-shadow:var(--shadow-sm); }
+.platform-card .pname{ margin-bottom:14px; }
+.pdetail{ margin-bottom:12px; }
+.pdetail-label{ font-size:10.5px; font-weight:800; text-transform:uppercase; color:var(--text-faint); letter-spacing:0.4px; margin-bottom:4px; display:block; }
+.pdetail-value{ font-size:13px; color:var(--text-body); font-weight:500; }
+.ptags{ display:flex; flex-wrap:wrap; gap:6px; }
+.ptag{ background:var(--surface-muted); color:var(--text-body); padding:5px 10px; border-radius:10px; font-size:11.5px; font-weight:600; }
+.pstep-list{ list-style:none; margin-top:4px; }
+.pstep-list li{ font-size:13px; color:var(--text-body); padding-left:18px; position:relative; margin-bottom:6px; }
+.pstep-list li:before{ content:"→"; position:absolute; left:0; color:var(--indigo); font-weight:700; }
+
+.toast{ position:fixed; left:50%; bottom:92px; transform:translateX(-50%) translateY(20px); background:var(--text); color:#fff; padding:10px 18px; border-radius:var(--radius-pill); font-size:13px; font-weight:600; opacity:0; pointer-events:none; transition:all 0.25s ease; z-index:60; }
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+.hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-row">
+      <button class="back-btn hidden" id="backBtn" onclick="Nav.back()">‹</button>
+      <div><div class="brand">30-Day Challenge</div></div>
+      <div class="date-pill" id="dateNow">—</div>
+    </div>
+  </div>
+
+  <div class="screen active" id="screen-home"><div id="homeContent"></div></div>
+
+  <div class="screen" id="screen-flow">
+    <div class="stage-bar" id="stageBar">
+      <div class="stage-bar-top"><div class="stage-title" id="flowStepTitle">Today's Content</div></div>
+      <div class="stage-track" id="stageTrack"></div>
+      <div class="stage-labels" id="stageLabels"></div>
+    </div>
+    <div id="flowContent" style="padding-top:18px;"></div>
+  </div>
+
+  <div class="screen" id="screen-reflect-sunday"><div id="sundayContent"></div></div>
+
+  <div class="screen" id="screen-journal">
+    <div class="section-title">Your Reflections</div>
+    <div id="journalContent"></div>
+  </div>
+
+  <div class="screen" id="screen-settings">
+    <div class="section-title">Backup & Restore</div>
+    <div id="settingsContent"></div>
+  </div>
+
+  <div class="screen" id="screen-plan">
+    <div class="section-title">30-Day Plan & History</div>
+    <input type="text" class="search-input" id="planSearch" placeholder="Search topics…" oninput="PlanUI.render()">
+    <div id="planContent"></div>
+  </div>
+
+  <div class="screen" id="screen-platforms">
+    <div class="section-title">Platform Playbook</div>
+    <div id="platformsContent"></div>
+  </div>
+
+  <div class="bottom-nav" id="bottomNav">
+    <button class="nav-btn active" data-screen="home" onclick="Nav.go('home')"><span class="icon">🏠</span>Home</button>
+    <button class="nav-btn" data-screen="plan" onclick="Nav.go('plan')"><span class="icon">📅</span>Plan</button>
+    <button class="nav-btn" data-screen="platforms" onclick="Nav.go('platforms')"><span class="icon">📣</span>Platforms</button>
+  </div>
+</div>
+
+<div class="celebrate-overlay" id="celebrateOverlay">
+  <div class="celebrate-card">
+    <div class="celebrate-emoji" id="celebrateEmoji">🎉</div>
+    <div class="celebrate-title" id="celebrateTitle">Day Complete!</div>
+    <div class="celebrate-sub" id="celebrateSub">Tomorrow's topic is already queued up.</div>
+    <button class="btn btn-primary" onclick="Celebrate.close()">Back to Home</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   30-DAY CONTENT CHALLENGE
+   Fixed, hardcoded 30-day script across 3 niches. No AI, no
+   recommendation engine — every day's plan is pre-written.
+   Loops back to Day 1 after Day 30.
+   ============================================================ */
+
+/* ---------------- STATIC REFERENCE DATA ---------------- */
+const NICHES = ["Building in Public","Inbox Aide","Mom Life"];
+const NICHE_META = {
+  "Inbox Aide": { icon:"💌" },
+  "Mom Life": { icon:"👶" },
+  "Building in Public": { icon:"🚀" }
+};
+const HOOK_FORMULAS = {
+  Instagram: "Bold claim → contradiction → payoff",
+  Threads: "Blunt opinion → 1-line reasoning → invite reply",
+  LinkedIn: "Personal anecdote → the lesson → question for readers",
+  Facebook: "Relatable problem → empathize → soft reveal of solution",
+  Pinterest: 'Search-style promise ("X ways to...") → clear payoff in first line'
+};
+const PRODUCTS = [
+  { id:"inbox", label:"Inbox Aide" },
+  { id:"reply", label:"Reply Vault" },
+  { id:"happy", label:"Happy Spoons" },
+  { id:"nurturing", label:"Little Eaters" }
+];
+
+const PLATFORM_GUIDES = {
+  Instagram: {
+    purpose: "Personal brand, relatability, behind the scenes",
+    frequency: "3–4x weekly",
+    howTo: [
+      "Caption structure: hook line, blank line, body, blank line, CTA",
+      "Put your main hashtags in the caption or first comment, not both",
+      "Reels perform best posted 7–9am or 5–7pm",
+      "Use 3–5 focused hashtags rather than 20 generic ones"
+    ]
+  },
+  Threads: {
+    purpose: "Conversations, raw thoughts, building publicly",
+    frequency: "Daily",
+    howTo: [
+      "Lead with the opinion, not the setup — Threads rewards directness",
+      "Keep it to 2–4 short lines; long posts get skipped",
+      "Reply to your own post with a follow-up thought to boost engagement",
+      "No hashtags needed — they don't help reach here"
+    ]
+  },
+  LinkedIn: {
+    purpose: "Professional authority, thought leadership",
+    frequency: "2–3x weekly",
+    howTo: [
+      "First line is everything — it's all people see before 'see more'",
+      "Short paragraphs (1–2 lines), lots of white space",
+      "End with a genuine question to invite comments",
+      "3–5 relevant hashtags at the very end of the post"
+    ]
+  },
+  Facebook: {
+    purpose: "Business visibility, lead generation, community",
+    frequency: "3–4x weekly",
+    howTo: [
+      "Native text posts and photos outperform links",
+      "Ask a direct question to invite comments early",
+      "Post to Groups relevant to your niche, not just your Page",
+      "Best times: late morning and early evening"
+    ]
+  },
+  Pinterest: {
+    purpose: "Evergreen discovery, search traffic",
+    frequency: "2–3x weekly",
+    howTo: [
+      "Titles should read like a search query: '5 Ways to...' or 'How to...'",
+      "Use vertical images (2:3 ratio) — they get far more reach",
+      "Write a keyword-rich description, not just a caption",
+      "Pins keep working for months — treat them as evergreen, not daily content"
+    ]
+  }
+};
+
+/* ---------------- PROMO DAY SCRIPTS ----------------
+   Every Friday is now a dedicated Promo Day. One product is featured
+   per week (4-week rotation), with a ready-to-post script written
+   for each of the 5 platforms — different angle per platform, not
+   just a re-tone of the same text. No testimonial fill-ins needed. */
+const PROMO_SCRIPTS = {
+  "Inbox Aide Premium": {
+    label: "Inbox Aide Premium — DM Management",
+    offerSummary: "Done-for-you DM management for busy business owners who are missing leads in their inbox.",
+    whatsappScript: "Hey everyone 👋 Quick one — if you're a business owner and your DMs are piling up, I manage inboxes so nothing gets missed (replies going out in minutes, not days). A couple of spots open this month if anyone wants to chat — just message me 'MANAGE'.",
+    platforms: {
+      Instagram: { hookLine:"Your DMs are full of leads you haven't replied to yet.", body:["Running a business means messages pile up fast","Every unanswered DM is a maybe-lost sale","Inbox Aide Premium manages your DMs so nothing slips through","You get replies going out in minutes, not days"], cta:"DM me 'MANAGE' to see if there's a spot open this month.", length:"Caption 80–120 words, pair with a simple graphic or talking-head clip", hashtags:["#InboxAideSA","#DMManagement","#SmallBizSupport"] },
+      Facebook: { hookLine:"Struggling to keep up with your business messages?", body:["The problem: messages come in faster than you can reply","The fix: a system (or a person) managing it for you","What Inbox Aide Premium actually does day to day","Who it's a good fit for"], cta:"Comment 'INFO' and I'll send you the details.", length:"150–200 word post", hashtags:null },
+      LinkedIn: { hookLine:"Slow replies are costing small businesses more than they think.", body:["The business case: response time vs. lead conversion","What I do for clients inside Inbox Aide Premium","A result a client has seen (time saved / leads recovered)","Who this is built for"], cta:"If this sounds like your inbox, send me a message — I'll walk you through it.", length:"150–250 word post", hashtags:null },
+      Threads: { hookLine:"I manage people's DMs for a living. Here's what that actually looks like.", body:["What a typical day managing a client's inbox looks like","The systems I use","Why most businesses need this and don't know it yet"], cta:"Curious if this could work for you? Reply and let's chat.", length:"3–5 short lines", hashtags:null },
+      Pinterest: { hookLine:"Done-For-You DM Management for Busy Business Owners", body:["What Inbox Aide Premium includes","Who it's for","How to get started"], cta:"Learn more and see if there's a spot open", length:"Pin description, keyword-rich, 100–150 words", hashtags:["#SmallBusinessTips","#DMManagement","#BusinessSupport"] }
+    }
+  },
+  "Free Inbox Audit": {
+    label: "Free Inbox Audit — 3 slots/week",
+    offerSummary: "A free audit of a business's DM/inbox setup — capped at 3 per week to keep it a real audit, not a copy-paste report.",
+    whatsappScript: "I'm opening 3 free inbox audits this week 🎁 If you run a business and want a second pair of eyes on how you're handling DMs/leads, drop me a message — first 3 people get it done, no charge.",
+    platforms: {
+      Instagram: { hookLine:"I'm opening 3 free inbox audits this week — here's what's included.", body:["What the audit checks","What you'll walk away knowing","Why only 3 slots (so it stays a real audit)"], cta:"Comment 'AUDIT' or DM me to grab one of the 3 spots.", length:"Caption 60–100 words", hashtags:["#InboxAideSA","#FreeAudit","#SmallBizTips"] },
+      Facebook: { hookLine:"3 free inbox audits open this week — first come, first served.", body:["What the audit looks at","What you get at the end (a short report + one quick fix)","Why I only do 3 a week"], cta:"Comment below or message me to claim a spot.", length:"120–180 word post", hashtags:null },
+      LinkedIn: { hookLine:"I'm auditing 3 business inboxes this week, no charge.", body:["What most businesses get wrong in their DMs (the pattern I keep seeing)","What the audit covers","Why I cap it at 3 — I actually go through your inbox, not a template"], cta:"Want one of the 3 spots? Message me this week.", length:"150–200 word post", hashtags:null },
+      Threads: { hookLine:"3 free inbox audits this week. That's it, that's the post.", body:["What's included","Why only 3"], cta:"Reply or DM if you want one.", length:"2–3 short lines", hashtags:null },
+      Pinterest: { hookLine:"Free Inbox Audit: Find Out What's Costing You Leads", body:["What the audit reveals","Who it's for","Limited weekly spots"], cta:"Claim your free audit this week", length:"Pin description 100–150 words", hashtags:["#SmallBusinessTips","#InboxAudit","#LeadGeneration"] }
+    }
+  },
+  "Reply Vault": {
+    label: "Reply Vault — 96 Templates",
+    offerSummary: "96 customizable message templates across 13 categories that help businesses respond faster.",
+    whatsappScript: "For anyone tired of typing the same reply over and over 😅 — I put together 96 customizable message templates (13 categories) so you can just copy, tweak, send. Message me 'VAULT' if you want the link.",
+    platforms: {
+      Instagram: { hookLine:"96 message templates so you never stare at a blank reply box again.", body:["What Reply Vault includes (13 categories)","How customizable they are","A quick before/after of a real reply"], cta:"DM me 'VAULT' for the link.", length:"Caption 80–120 words, good with a carousel preview of the templates", hashtags:["#ReplyVault","#SmallBizTools","#DMTemplates"] },
+      Facebook: { hookLine:"Stop rewriting the same reply from scratch every time.", body:["The problem: repetitive replies eat your time","What Reply Vault is — 96 templates, 13 categories","How customizable they are for your business voice"], cta:"Comment 'VAULT' and I'll send you the link.", length:"150–200 word post", hashtags:null },
+      LinkedIn: { hookLine:"96 templates saved me hours a week on client replies — so I packaged them.", body:["The time-cost of writing every reply from scratch","What's inside Reply Vault","Who it's built for (small business owners handling their own DMs)"], cta:"Link in comments if you want to see what's inside.", length:"150–250 word post", hashtags:null },
+      Threads: { hookLine:"I built 96 reply templates because I got tired of typing the same thing.", body:["What's in it","Who actually needs this"], cta:"Want the link? Reply and I'll send it.", length:"3–4 short lines", hashtags:null },
+      Pinterest: { hookLine:"96 Customizable Message Templates for Small Business Owners", body:["13 categories covered","Fully customizable","Instant access"], cta:"Get Reply Vault", length:"Pin description 100–150 words", hashtags:["#SmallBusinessTools","#MessageTemplates","#BusinessTips"] }
+    }
+  },
+  "Nurturing Little Eaters": {
+    label: "Nurturing Little Eaters — Weaning Guide",
+    offerSummary: "A real, honest guide to baby-led weaning — myth-busting and practical, not textbook-perfect.",
+    whatsappScript: "For the mamas in here starting solids soon 👶 I wrote the weaning guide I wish I'd had — real, honest, no textbook fluff. Message me 'GUIDE' if you want it.",
+    platforms: {
+      Instagram: { hookLine:"Everything I wish someone handed me before we started weaning.", body:["What's inside the guide","The myths it busts","Why I made it real, not textbook-perfect"], cta:"DM me 'GUIDE' or check the link in bio.", length:"Caption 80–120 words", hashtags:["#NurturingLittleEaters","#WeaningGuide","#BabyLedWeaning"] },
+      Facebook: { hookLine:"If you're about to start weaning, save yourself the 2am googling.", body:["What the guide covers","Why I wrote it (my own experience + what I wish I knew)","Who it's for"], cta:"Comment 'GUIDE' and I'll send the link.", length:"150–200 word post", hashtags:null },
+      LinkedIn: { hookLine:"Building a product from a real parenting problem — here's what shipped.", body:["The gap I noticed","What Nurturing Little Eaters solves","Early feedback from parents using it"], cta:"Curious about the process behind it? Ask away in the comments.", length:"150–250 word post", hashtags:null },
+      Threads: { hookLine:"I made the weaning guide I wish existed when I started.", body:["What's in it","Who it's for"], cta:"Want the link? Reply and I'll send it over.", length:"3–4 short lines", hashtags:null },
+      Pinterest: { hookLine:"The Real Weaning Guide for First-Time Moms", body:["What's inside","Why it's different from generic advice","Get instant access"], cta:"Get the guide", length:"Pin description 100–150 words", hashtags:["#WeaningGuide","#BabyLedWeaning","#NewMomTips"] }
+    }
+  }
+};
+const PROMO_ROTATION = ["Inbox Aide Premium","Free Inbox Audit","Reply Vault","Nurturing Little Eaters"];
+const PROMO_PLATFORM_ORDER = ["Instagram","Facebook","LinkedIn","Threads","Pinterest"];
+
+/* ---------------- DAILY WHATSAPP PROMO SCRIPTS ----------------
+   Separate from Promo Friday's full 5-platform push. This is the
+   quick daily soft-promo message for your WhatsApp groups — short,
+   scroll-friendly, always: bold hook → pain point → clear CTA.
+   *asterisks* render as bold in WhatsApp.
+   Rotates through all 4 products daily, cycling through 5 short
+   variants per product so the wording doesn't repeat for a month. */
+const WHATSAPP_ROTATION = ["Inbox Aide Premium","Free Inbox Audit","Reply Vault","Nurturing Little Eaters"];
+const WHATSAPP_SCRIPTS = {
+  "Inbox Aide Premium": [
+    "*Still replying to DMs at 11pm?* 😩 That's exactly why I built Inbox Aide Premium — I manage your DMs so you're not glued to your phone all night. Message me 'MANAGE' to find out more.",
+    "*Missed leads = missed money.* If messages are slipping through your inbox, Inbox Aide Premium fixes that — done for you, not one more thing on your plate. DM 'MANAGE'.",
+    "*You didn't start your business to be a full-time DM manager.* Let me take that off your hands. Reply 'MANAGE' and I'll explain how it works.",
+    "*Slow replies are costing you clients right now.* Inbox Aide Premium keeps your DMs answered fast, every day — without you lifting a finger. Message 'MANAGE' to chat.",
+    "*Imagine never worrying about your inbox again.* That's what Inbox Aide Premium clients get. A few spots open — message 'MANAGE' if you're curious."
+  ],
+  "Free Inbox Audit": [
+    "*Only 3 free inbox audits left this week!* 🚨 Want to know what's costing you leads in your DMs? Message 'AUDIT' before spots fill up.",
+    "*Your inbox might be leaking sales and you don't even know it.* I'm auditing 3 businesses this week for free — message 'AUDIT' to grab a spot.",
+    "*What's actually happening in your DMs?* I'll tell you for free — 3 audit spots open this week. Reply 'AUDIT'.",
+    "*Free this week only: a real audit of your business inbox.* No charge, no catch, just 3 spots. Message 'AUDIT' to claim yours.",
+    "*Curious what a stranger would think of your DM replies?* I'll audit yours free — 3 spots this week. DM 'AUDIT'."
+  ],
+  "Reply Vault": [
+    "*Tired of typing the same reply for the 100th time?* 😅 Reply Vault has 96 templates ready to copy, paste, tweak. Message 'VAULT' for the link.",
+    "*Stop staring at a blank reply box.* 96 customizable templates, 13 categories, done. Message 'VAULT' to grab it.",
+    "*What if every reply was already written for you?* That's Reply Vault. Message 'VAULT' and I'll send the link.",
+    "*Save hours every week on messages alone.* Reply Vault = 96 templates ready to go. DM 'VAULT'.",
+    "*Your fastest replies are about to get faster.* 96 templates, fully customizable. Message 'VAULT' if you want it."
+  ],
+  "Nurturing Little Eaters": [
+    "*Starting solids and totally overwhelmed?* 😩 I wrote the weaning guide I wish I'd had — real, not textbook. Message 'GUIDE' for the link.",
+    "*Weaning doesn't have to feel like guesswork.* My guide breaks it down simply. Message 'GUIDE' to grab it.",
+    "*Still googling \"is this normal\" at 2am about feeding?* This guide has you covered. DM 'GUIDE'.",
+    "*No fluff, just what actually works for weaning.* Message 'GUIDE' and I'll send it over.",
+    "*The weaning guide made by a mom who's been there.* Message 'GUIDE' if you want it."
+  ]
+};
+function getDailyWhatsappScript(dayNum){
+  const productIdx = (dayNum - 1) % WHATSAPP_ROTATION.length;
+  const product = WHATSAPP_ROTATION[productIdx];
+  const variants = WHATSAPP_SCRIPTS[product];
+  const variantIdx = Math.floor((dayNum - 1) / WHATSAPP_ROTATION.length) % variants.length;
+  return variants[variantIdx];
+}
+
+/* ---------------- WEEKLY BUSINESS GROWTH FOCUS ----------------
+   One light-touch visibility challenge per week — not another daily
+   task, just a standing focus you see all week. Cycles every 5 weeks. */
+const GROWTH_CHALLENGES = [
+  "Comment thoughtfully on 5 posts in your niche today — visibility compounds before it converts.",
+  "DM 3 people who've engaged with your content recently and start a real conversation (not a pitch).",
+  "Ask one happy client or follower for a quick testimonial you can use later.",
+  "Pick your best-performing post this month and repurpose it for the platform you've been neglecting.",
+  "Review the whole month — what's the ONE thing you'll double down on next round?"
+];
+function getGrowthChallenge(dayNum){
+  const weekNum = Math.ceil(dayNum / 7);
+  return { weekNum, text: GROWTH_CHALLENGES[(weekNum - 1) % GROWTH_CHALLENGES.length] };
+}
+
+/* ---------------- THE 30-DAY SCRIPT ----------------
+   Each entry: day, theme, format, highlighted niche, and a topic
+   object per niche (null topics + isReflection:true for Sundays). */
+const CHALLENGE_DAYS = [
+{ day:1, theme:"Mindset Monday", format:"Reel", highlighted:"Building in Public", topics:{
+  "Building in Public": { topic:"3 things every mompreneur needs to stop doing", platform:"Instagram", secondary:"Threads", talkingPoints:["Stop comparing to founders without kids","Stop waiting for \"perfect\" conditions","Stop doing everything manually"], cta:"Which one are you guilty of? Comment below.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#BuildInPublic","#MompreneurMindset","#SoloBusinessTips"], hookLine:"You don't need more hours. You need to stop doing this one thing.", repurposeTip:"Threads — split into 3 separate blunt-opinion posts, one per point." },
+  "Inbox Aide": { topic:"The 60-second inbox reset I do every Monday morning", platform:"Instagram", secondary:"Threads", talkingPoints:["Clear notifications first","Sort by urgency","Templates ready to go","Block 15 min for follow-ups"], cta:"Try this Monday reset and tell me how it feels.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#InboxAideSA","#SmallBizTips","#CustomerServiceWins"], hookLine:"Your inbox isn't the problem. Your system is.", repurposeTip:"Threads — blunt one-liner: most inbox chaos is a sorting problem." },
+  "Mom Life": { topic:"One parenting win from last week (and what I'd do differently)", platform:"Instagram", secondary:"Threads", talkingPoints:["The situation","The small win","Honest reflection","The lesson"], cta:"Share your win from last week.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#MomLife","#RealMotherhood","#MompreneurJourney"], hookLine:"I almost lost it Tuesday. Here's what saved me.", repurposeTip:"Threads — blunt honest one-liner version of the win." }
+}},
+{ day:2, theme:"DM Strategy Tuesday", format:"Carousel", highlighted:"Inbox Aide", topics:{
+  "Inbox Aide": { topic:"5 DM mistakes that cost you sales", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Delayed response","Generic templates","No follow-up","Pitching too fast","No clear CTA — plus the fix"], cta:"Save this and audit your last 5 DMs.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#InboxAideSA","#DMStrategy","#SmallBizSales"], hookLine:"DMs aren't dying. Your replies are killing them.", repurposeTip:"LinkedIn — anecdote → lesson → question: one client's DM mistake, the fix, ask readers their struggle." },
+  "Building in Public": { topic:"5 systems I use to run my business from my phone", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Scheduling","Templates","Payments","Content","Tracking"], cta:"Which system do you need most? Comment the number.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#BuildInPublic","#PhoneFirstBusiness","#SoloFounderTips"], hookLine:"I run a business with zero laptop. Here's how.", repurposeTip:"Pinterest — \"5 Phone-Only Business Systems That Actually Work.\"" },
+  "Mom Life": { topic:"5 baby feeding myths busted", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Myth 1–4 + the truth","Stay within qualifications note"], cta:"Save this for feeding-day confusion.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#NurturingLittleEaters","#BabyFeedingTips","#NewMomAdvice"], hookLine:"Everything you were told about starting solids might be wrong.", repurposeTip:"Pinterest — \"5 Baby Feeding Myths Every New Mom Should Know.\"" }
+}},
+{ day:3, theme:"Wealth Building Wednesday", format:"Reel", highlighted:"Building in Public", topics:{
+  "Building in Public": { topic:"How I built an income stream that works while I'm with my baby", platform:"Instagram", secondary:"Threads", talkingPoints:["The constraint","The pivot","What it looks like now","Proof it's working"], cta:"Want the behind-the-scenes breakdown? Comment 'INCOME'.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#BuildInPublic","#PassiveIncome","#MompreneurLife"], hookLine:"I built an income stream during nap time. Here's the truth.", repurposeTip:"Threads — blunt one-liner on the single biggest unlock." },
+  "Inbox Aide": { topic:"The inbox system that pays for itself", platform:"Instagram", secondary:"Threads", talkingPoints:["Time saved per week","Tool/template used","ROI framing"], cta:"DM me 'SYSTEM' for the template.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#InboxAideSA","#SmallBizSystems","#TimeManagement"], hookLine:"This 10-minute system saves me 5 hours a week.", repurposeTip:"Threads — blunt stat-led one-liner." },
+  "Mom Life": { topic:"Automating meal prep so feeding time isn't a fight", platform:"Instagram", secondary:"Threads", talkingPoints:["Batch cooking basics","Freezer system","Tracking with an app"], cta:"Try this and tell me your time saved.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#HappySpoons","#MealPrepMom","#MomLifeHacks"], hookLine:"Meal prep isn't the answer. This 3-step system is.", repurposeTip:"Threads — blunt one-liner on the #1 time-saver." }
+}},
+{ day:4, theme:"Thrive Thursday", format:"Carousel", highlighted:"Mom Life", topics:{
+  "Mom Life": { topic:"Foods rich in iron for babies starting solids", platform:"Instagram", secondary:"Pinterest", talkingPoints:["4 iron-rich foods + why","Pairing tip for absorption","Age-range note"], cta:"Save this for your next shopping trip.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#NurturingLittleEaters","#BabyNutrition","#StartingSolids"], hookLine:"Your baby needs more iron than you think. Here's where to find it.", repurposeTip:"Pinterest — \"5 Iron-Rich Foods for Babies Starting Solids.\"" },
+  "Inbox Aide": { topic:"3 message templates that turn browsers into buyers", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Welcome message","Objection-handling message","Closing message"], cta:"Save this — you'll need it this week.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#InboxAideSA","#ReplyVault","#SalesDMs"], hookLine:"Copy these 3 messages. Paste them today.", repurposeTip:"LinkedIn — anecdote → lesson → question, framed around a message that changed a client's close rate." },
+  "Building in Public": { topic:"5 lessons from shipping my last 5 features", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Lesson 1–5, one per feature"], cta:"Which lesson do you need today?", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#BuildInPublic","#SoloFounder","#ShipFast"], hookLine:"5 features. 5 mistakes. Here's what I'd do differently.", repurposeTip:"LinkedIn — anecdote → lesson → question on the biggest mistake." }
+}},
+{ day:5, theme:"Promo Friday", format:"Promo", isPromo:true, weekIndex:0 },
+{ day:6, theme:"Story Saturday", format:"Story/BTS", highlighted:"Mom Life", topics:{
+  "Mom Life": { topic:"A day in my life as a mom running 3 businesses", platform:"Instagram", secondary:"Threads", talkingPoints:["Morning routine","A juggling moment","Honest struggle","What makes it worth it"], cta:"What does your Saturday look like? Tell me below.", length:"Story sequence (5–8 frames) or 30–45 sec reel", hashtags:["#MomLife","#DayInMyLife","#MompreneurJourney"], hookLine:"6am wake up. 3 businesses. 1 toddler. Here's my Saturday.", repurposeTip:"Threads — blunt one-liner on the hardest part of the day." },
+  "Inbox Aide": { topic:"Behind the scenes of an audit I did this week", platform:"Instagram", secondary:"Threads", talkingPoints:["What the audit found","The biggest surprise","The quick fix given"], cta:"Want your inbox audited? Comment 'AUDIT'.", length:"Story sequence or 30–45 sec reel", hashtags:["#InboxAideSA","#BehindTheScenes","#SmallBizSupport"], hookLine:"I audited a stranger's inbox. Here's what I found.", repurposeTip:"Threads — blunt one-liner on the most common mistake found." },
+  "Building in Public": { topic:"What I'm building this weekend (and why)", platform:"Instagram", secondary:"Threads", talkingPoints:["Current build","The \"why\" behind it","Timeline","Sneak peek"], cta:"What should I build next? Drop ideas.", length:"Story sequence or 30–45 sec reel", hashtags:["#BuildInPublic","#WeekendBuild","#IndieBusiness"], hookLine:"Here's what I'm building this weekend — and why it matters.", repurposeTip:"Threads — blunt one-liner teaser." }
+}},
+{ day:7, theme:"Success Sunday", isReflection:true },
+
+{ day:8, theme:"Mindset Monday", format:"Reel", highlighted:"Building in Public", topics:{
+  "Building in Public": { topic:"The mindset shift that got me unstuck this year", platform:"Instagram", secondary:"Threads", talkingPoints:["The stuck point","What shifted","What I do differently now"], cta:"What shift do you need right now? Tell me below.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#BuildInPublic","#MompreneurMindset","#SoloBusinessTips"], hookLine:"I was stuck for months. This one shift changed everything.", repurposeTip:"Threads — blunt one-liner on the mindset shift itself." },
+  "Inbox Aide": { topic:"How I decide what gets a reply today (and what waits)", platform:"Instagram", secondary:"Threads", talkingPoints:["My 3-tier priority system","What \"urgent\" actually means","What I let wait"], cta:"How do you triage your inbox? Tell me.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#InboxAideSA","#SmallBizTips","#InboxManagement"], hookLine:"Not every message deserves a reply today. Here's how I decide.", repurposeTip:"Threads — blunt one-liner on the 3-tier system." },
+  "Mom Life": { topic:"The Monday routine that keeps our mornings calm", platform:"Instagram", secondary:"Threads", talkingPoints:["Sunday-night prep","The morning sequence","What we skip on hard days"], cta:"What's your non-negotiable morning step?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#MomLife","#MorningRoutine","#MompreneurJourney"], hookLine:"Calm mornings aren't luck. They're a routine.", repurposeTip:"Threads — blunt one-liner on the one non-negotiable step." }
+}},
+{ day:9, theme:"DM Strategy Tuesday", format:"Carousel", highlighted:"Inbox Aide", topics:{
+  "Inbox Aide": { topic:"5 phrases that make you sound like a bot in DMs", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Phrase 1–4 to avoid + why","Closing slide: what to say instead"], cta:"Save this before your next DM.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#InboxAideSA","#DMStrategy","#SmallBizSales"], hookLine:"These 5 phrases are quietly killing your sales DMs.", repurposeTip:"LinkedIn — anecdote → lesson → question, framed around a DM rewrite that worked." },
+  "Building in Public": { topic:"5 tools that run my business without me", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Tool 1–4 + what each automates","Time saved overall"], cta:"Which tool would help you most? Comment the number.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#BuildInPublic","#PhoneFirstBusiness","#SoloFounderTips"], hookLine:"These 5 tools work while I'm asleep.", repurposeTip:"Pinterest — \"5 Tools That Run a Business on Autopilot.\"" },
+  "Mom Life": { topic:"5 signs your baby is ready for solids", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Sign 1–4 + what to look for","Note to consult a pediatrician"], cta:"Save this for when the time comes.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#NurturingLittleEaters","#BabyFeedingTips","#NewMomAdvice"], hookLine:"Is your baby actually ready for solids? Check these 5 signs first.", repurposeTip:"Pinterest — \"5 Signs Your Baby Is Ready to Start Solids.\"" }
+}},
+{ day:10, theme:"Wealth Building Wednesday", format:"Reel", highlighted:"Building in Public", topics:{
+  "Building in Public": { topic:"The digital product that sells while I sleep", platform:"Instagram", secondary:"Threads", talkingPoints:["What the product is","Why I built it","What it earns passively"], cta:"Curious how it works? Comment 'PRODUCT'.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#BuildInPublic","#PassiveIncome","#DigitalProducts"], hookLine:"This product made a sale while I was asleep. Here's what it is.", repurposeTip:"Threads — blunt one-liner on the biggest lesson from building it." },
+  "Inbox Aide": { topic:"How I price my audits (and why I stopped undercharging)", platform:"Instagram", secondary:"Threads", talkingPoints:["What I used to charge","What changed my mind","How I price now"], cta:"Are you undercharging? Be honest.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#InboxAideSA","#SmallBizPricing","#SoloBusinessTips"], hookLine:"I used to undercharge by half. Here's what changed.", repurposeTip:"Threads — blunt one-liner on the pricing mistake." },
+  "Mom Life": { topic:"The app that changed how I track my baby's meals", platform:"Instagram", secondary:"Threads", talkingPoints:["The problem before","What the app does","What changed"], cta:"Want the app name? Comment 'APP'.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#HappySpoons","#MealPrepMom","#MomLifeHacks"], hookLine:"I stopped guessing what my baby ate. Here's how.", repurposeTip:"Threads — blunt one-liner on the before/after." }
+}},
+{ day:11, theme:"Thrive Thursday", format:"Carousel", highlighted:"Mom Life", topics:{
+  "Mom Life": { topic:"5 signs your baby has had enough at mealtime", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Sign 1–4 + what it means","What to do next"], cta:"Save this for your next mealtime.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#NurturingLittleEaters","#BabyNutrition","#MealtimeTips"], hookLine:"Is your baby telling you they're full? Watch for these 5 signs.", repurposeTip:"Pinterest — \"5 Signs Your Baby Is Done Eating.\"" },
+  "Inbox Aide": { topic:"3 ways to say no to a bad-fit client (politely)", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Script 1–3 + when to use each"], cta:"Save these for the next mismatch.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#InboxAideSA","#ClientBoundaries","#SmallBizTips"], hookLine:"Saying no doesn't have to burn a bridge. Here's how.", repurposeTip:"LinkedIn — anecdote → lesson → question on a boundary that protected your business." },
+  "Building in Public": { topic:"5 things I wish I knew before going solo", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Lesson 1–5, one sentence each"], cta:"Which one surprises you most?", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#BuildInPublic","#SoloFounder","#StartupLessons"], hookLine:"Nobody told me these 5 things before I went solo.", repurposeTip:"LinkedIn — anecdote → lesson → question on the hardest lesson." }
+}},
+{ day:12, theme:"Promo Friday", format:"Promo", isPromo:true, weekIndex:1 },
+{ day:13, theme:"Story Saturday", format:"Story/BTS", highlighted:"Mom Life", topics:{
+  "Mom Life": { topic:"What self-care actually looks like right now (not the Pinterest version)", platform:"Instagram", secondary:"Threads", talkingPoints:["What self-care \"should\" look like","What it actually looks like this season","Why that's okay"], cta:"What does your real self-care look like right now?", length:"Story sequence or 30–45 sec reel", hashtags:["#MomLife","#RealMotherhood","#SelfCareRealTalk"], hookLine:"Self-care isn't a bubble bath. Here's what it actually looks like for me.", repurposeTip:"Threads — blunt one-liner reframing self-care." },
+  "Inbox Aide": { topic:"A weekend peek at how I batch client replies", platform:"Instagram", secondary:"Threads", talkingPoints:["Why I batch on weekends","The process","Time it takes"], cta:"Do you batch your replies too?", length:"Story sequence or 30–45 sec reel", hashtags:["#InboxAideSA","#BehindTheScenes","#SmallBizSystems"], hookLine:"Here's how I clear my inbox in 20 minutes on a Saturday.", repurposeTip:"Threads — blunt one-liner on batching." },
+  "Building in Public": { topic:"A behind-the-scenes look at my building process", platform:"Instagram", secondary:"Threads", talkingPoints:["Where ideas come from","My build process","What usually goes wrong"], cta:"Want to see more of the process? Let me know.", length:"Story sequence or 30–45 sec reel", hashtags:["#BuildInPublic","#BehindTheScenes","#IndieBusiness"], hookLine:"Here's what actually happens before a feature ships.", repurposeTip:"Threads — blunt one-liner on the messiest part of building." }
+}},
+{ day:14, theme:"Success Sunday", isReflection:true },
+
+{ day:15, theme:"Mindset Monday", format:"Reel", highlighted:"Building in Public", topics:{
+  "Building in Public": { topic:"Why I stopped chasing hustle culture as a mom in business", platform:"Instagram", secondary:"Threads", talkingPoints:["What hustle culture told me to do","Why it didn't work for my life","What I do instead"], cta:"Have you let go of hustle culture too?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#BuildInPublic","#MompreneurMindset","#SlowBusiness"], hookLine:"I stopped hustling. My business grew anyway.", repurposeTip:"Threads — blunt one-liner on what replaced hustle." },
+  "Inbox Aide": { topic:"The Monday message I send to reset client expectations", platform:"Instagram", secondary:"Threads", talkingPoints:["Why expectations slip","The message template","What changes after sending it"], cta:"Want the exact wording? Comment 'RESET'.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#InboxAideSA","#ClientCommunication","#SmallBizTips"], hookLine:"One message resets my whole week with clients.", repurposeTip:"Threads — blunt one-liner on why expectations slip." },
+  "Mom Life": { topic:"A mindset shift that changed how I handle mom-guilt", platform:"Instagram", secondary:"Threads", talkingPoints:["The guilt trigger","The reframe","How it feels now"], cta:"What's your biggest mom-guilt trigger?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#MomLife","#MomGuilt","#MompreneurJourney"], hookLine:"Mom-guilt used to run my day. Not anymore.", repurposeTip:"Threads — blunt one-liner on the reframe." }
+}},
+{ day:16, theme:"DM Strategy Tuesday", format:"Carousel", highlighted:"Inbox Aide", topics:{
+  "Inbox Aide": { topic:"5 signs a lead is ready to buy (based on their DMs)", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Sign 1–4 in DM behaviour","Closing slide: how to respond to each"], cta:"Save this for your next warm lead.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#InboxAideSA","#DMStrategy","#LeadNurturing"], hookLine:"Your leads are telling you they're ready. Are you listening?", repurposeTip:"LinkedIn — anecdote → lesson → question on reading buying signals." },
+  "Building in Public": { topic:"5 things I automated so I could be present with my kid", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Automation 1–4 + what it freed up","The time it gave back"], cta:"Which one would give you the most time back?", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#BuildInPublic","#MompreneurLife","#Automation"], hookLine:"I automated 5 things so I could actually be present. Here they are.", repurposeTip:"Pinterest — \"5 Business Automations Every Busy Parent Needs.\"" },
+  "Mom Life": { topic:"5 mom-life shortcuts that actually save time", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Shortcut 1–4 + why it works","Realistic expectations"], cta:"Save this and try one today.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#MomLife","#MomHacks","#BusyMomTips"], hookLine:"These 5 shortcuts actually work — no fluff.", repurposeTip:"Pinterest — \"5 Mom-Life Shortcuts That Actually Save Time.\"" }
+}},
+{ day:17, theme:"Wealth Building Wednesday", format:"Reel", highlighted:"Building in Public", topics:{
+  "Building in Public": { topic:"3 automations that freed up 5 hours a week", platform:"Instagram", secondary:"Threads", talkingPoints:["Automation 1–3 + time saved each","Total time back"], cta:"Which automation do you need first?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#BuildInPublic","#Automation","#SoloBusinessTips"], hookLine:"3 automations gave me back 5 hours a week.", repurposeTip:"Threads — blunt one-liner on the single biggest time-saver." },
+  "Inbox Aide": { topic:"The offer I almost didn't create — now my best seller", platform:"Instagram", secondary:"Threads", talkingPoints:["Why I hesitated","What changed my mind","How it's performed since"], cta:"Ever almost skip an idea that turned out great?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#InboxAideSA","#SmallBizGrowth","#ReplyVault"], hookLine:"I almost didn't launch this. It's now my best seller.", repurposeTip:"Threads — blunt one-liner on the hesitation." },
+  "Mom Life": { topic:"How I batch-cook for a picky toddler", platform:"Instagram", secondary:"Threads", talkingPoints:["The batch-cook system","Handling pickiness","What actually gets eaten"], cta:"Send me your toddler's go-to meal.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#HappySpoons","#ToddlerMeals","#MealPrepMom"], hookLine:"Batch-cooking for a picky toddler is possible. Here's how.", repurposeTip:"Threads — blunt one-liner on the batch system." }
+}},
+{ day:18, theme:"Thrive Thursday", format:"Carousel", highlighted:"Mom Life", topics:{
+  "Mom Life": { topic:"5 first foods that are easy to make at home", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Food 1–4 + simple prep method","Storage tip"], cta:"Save this for your next grocery run.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#NurturingLittleEaters","#BabyFirstFoods","#HomemadeBabyFood"], hookLine:"You don't need fancy jars. These 5 first foods are easy at home.", repurposeTip:"Pinterest — \"5 Easy Homemade First Foods for Babies.\"" },
+  "Inbox Aide": { topic:"3 red flags I look for in a new inquiry", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Red flag 1–3 + what they signal","What I do when I see one"], cta:"Save this before your next inquiry call.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#InboxAideSA","#ClientScreening","#SmallBizTips"], hookLine:"These 3 red flags save me from bad-fit clients every time.", repurposeTip:"LinkedIn — anecdote → lesson → question on a red flag you ignored once." },
+  "Building in Public": { topic:"5 signs it's time to raise your prices", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Sign 1–4 + what it means","How I decided my new price"], cta:"Which sign hits home for you?", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#BuildInPublic","#PricingStrategy","#SoloFounder"], hookLine:"If you're seeing these 5 signs, it's time to raise your prices.", repurposeTip:"LinkedIn — anecdote → lesson → question on the fear of raising prices." }
+}},
+{ day:19, theme:"Promo Friday", format:"Promo", isPromo:true, weekIndex:2 },
+{ day:20, theme:"Story Saturday", format:"Story/BTS", highlighted:"Mom Life", topics:{
+  "Mom Life": { topic:"A behind-the-scenes look at bath time chaos (and why I love it)", platform:"Instagram", secondary:"Threads", talkingPoints:["The chaos","The funny moment","Why it's still a favourite part of the day"], cta:"What's your favourite chaotic moment of the day?", length:"Story sequence or 30–45 sec reel", hashtags:["#MomLife","#DayInMyLife","#RealMotherhood"], hookLine:"Bath time is chaos. It's also my favourite 20 minutes of the day.", repurposeTip:"Threads — blunt one-liner on the funniest bath-time moment." },
+  "Inbox Aide": { topic:"What a typical inbox audit actually looks like, start to finish", platform:"Instagram", secondary:"Threads", talkingPoints:["Step 1: intake","Step 2: audit","Step 3: report and fix"], cta:"Curious what your audit would find? Comment 'AUDIT'.", length:"Story sequence or 30–45 sec reel", hashtags:["#InboxAideSA","#BehindTheScenes","#SmallBizSupport"], hookLine:"Here's exactly what happens during one of my audits.", repurposeTip:"Threads — blunt one-liner on the step clients are most surprised by." },
+  "Building in Public": { topic:"The tech stack I use to run everything from my phone", platform:"Instagram", secondary:"Threads", talkingPoints:["Apps I use","Why phone-only","What I still can't do on a phone"], cta:"What's missing from my stack? Tell me.", length:"Story sequence or 30–45 sec reel", hashtags:["#BuildInPublic","#PhoneFirstBusiness","#TechStack"], hookLine:"My entire business tech stack fits in my pocket. Here it is.", repurposeTip:"Threads — blunt one-liner on the one app you couldn't run the business without." }
+}},
+{ day:21, theme:"Success Sunday", isReflection:true },
+
+{ day:22, theme:"Mindset Monday", format:"Reel", highlighted:"Building in Public", topics:{
+  "Building in Public": { topic:"The one boundary that saved my business (and my sanity)", platform:"Instagram", secondary:"Threads", talkingPoints:["What was happening before the boundary","The boundary itself","What changed"], cta:"What boundary do you need to set this week?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#BuildInPublic","#MompreneurMindset","#Boundaries"], hookLine:"One boundary saved my business. Here's what it was.", repurposeTip:"Threads — blunt one-liner naming the boundary." },
+  "Inbox Aide": { topic:"One inbox habit that eliminated my Sunday-night dread", platform:"Instagram", secondary:"Threads", talkingPoints:["What Sunday nights used to feel like","The habit","How Sundays feel now"], cta:"What's your Sunday-night ritual?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#InboxAideSA","#SmallBizTips","#WorkLifeBalance"], hookLine:"This one habit ended my Sunday-night inbox dread.", repurposeTip:"Threads — blunt one-liner on the habit." },
+  "Mom Life": { topic:"What I do differently now than I did as a first-time mom", platform:"Instagram", secondary:"Threads", talkingPoints:["What I used to do","What changed","Why it's better now"], cta:"What would you tell first-time-mom you?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#MomLife","#MomOfMultiples","#RealMotherhood"], hookLine:"First-time-mom me would not recognize how I do things now.", repurposeTip:"Threads — blunt one-liner on the biggest change." }
+}},
+{ day:23, theme:"DM Strategy Tuesday", format:"Carousel", highlighted:"Inbox Aide", topics:{
+  "Inbox Aide": { topic:"5 ways to handle \"I need to think about it\" in your DMs", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Response 1–4 for different objection types","Closing slide: what not to say"], cta:"Save this for your next objection.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#InboxAideSA","#DMStrategy","#ObjectionHandling"], hookLine:"\"I need to think about it\" isn't a no. Here's how to respond.", repurposeTip:"LinkedIn — anecdote → lesson → question on turning a hesitant lead into a client." },
+  "Building in Public": { topic:"5 boundaries every solo business owner needs", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Boundary 1–4 + why it matters","How to enforce them"], cta:"Which boundary is hardest for you to hold?", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#BuildInPublic","#SoloFounder","#WorkLifeBalance"], hookLine:"These 5 boundaries protect my business and my sanity.", repurposeTip:"Pinterest — \"5 Boundaries Every Solo Business Owner Needs.\"" },
+  "Mom Life": { topic:"5 things I wish someone told me about weaning", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Myth or surprise 1–4","What actually helped"], cta:"Save this before you start weaning.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#NurturingLittleEaters","#WeaningTips","#NewMomAdvice"], hookLine:"5 things about weaning nobody warned me about.", repurposeTip:"Pinterest — \"5 Things Nobody Tells You About Weaning.\"" }
+}},
+{ day:24, theme:"Wealth Building Wednesday", format:"Reel", highlighted:"Building in Public", topics:{
+  "Building in Public": { topic:"Why I stopped trading time for money in my business", platform:"Instagram", secondary:"Threads", talkingPoints:["The old model","Why it capped my income","What I built instead"], cta:"Are you still trading time for money? Let's talk.", length:"30–45 sec reel, caption 50–100 words", hashtags:["#BuildInPublic","#PassiveIncome","#DigitalProducts"], hookLine:"Trading time for money has a ceiling. Here's what I built instead.", repurposeTip:"Threads — blunt one-liner on the ceiling." },
+  "Inbox Aide": { topic:"What I automated in my business this quarter", platform:"Instagram", secondary:"Threads", talkingPoints:["What was manual before","What's automated now","Time it freed up"], cta:"What's still manual in your business?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#InboxAideSA","#SmallBizSystems","#Automation"], hookLine:"I automated 3 things this quarter. Here's what changed.", repurposeTip:"Threads — blunt one-liner on the biggest win." },
+  "Mom Life": { topic:"The system that ended our dinner-time meltdowns", platform:"Instagram", secondary:"Threads", talkingPoints:["What dinner used to look like","The system","What changed"], cta:"What's your dinner-time survival tip?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#HappySpoons","#ToddlerMeals","#MomLifeHacks"], hookLine:"Dinner-time meltdowns stopped when I changed this one thing.", repurposeTip:"Threads — blunt one-liner on the system." }
+}},
+{ day:25, theme:"Thrive Thursday", format:"Carousel", highlighted:"Mom Life", topics:{
+  "Mom Life": { topic:"5 mistakes parents make when introducing allergens", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Mistake 1–4 + safer approach","Note to consult a pediatrician"], cta:"Save this before introducing allergens.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#NurturingLittleEaters","#BabyNutrition","#AllergenIntroduction"], hookLine:"These 5 allergen mistakes are more common than you'd think.", repurposeTip:"Pinterest — \"5 Allergen Introduction Mistakes to Avoid.\"" },
+  "Inbox Aide": { topic:"3 templates for following up without sounding pushy", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Template 1–3 + when to use each"], cta:"Save these for your next follow-up.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#InboxAideSA","#FollowUpTips","#ReplyVault"], hookLine:"Follow up without sounding desperate. Copy these 3 templates.", repurposeTip:"LinkedIn — anecdote → lesson → question on a follow-up that closed a deal." },
+  "Building in Public": { topic:"5 tools every phone-first entrepreneur needs", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Tool 1–4 + what it replaces","Why phone-only still works"], cta:"Which tool is new to you?", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#BuildInPublic","#PhoneFirstBusiness","#SoloFounderTips"], hookLine:"You don't need a laptop. You need these 5 tools.", repurposeTip:"LinkedIn — anecdote → lesson → question on running a business phone-only." }
+}},
+{ day:26, theme:"Promo Friday", format:"Promo", isPromo:true, weekIndex:3 },
+{ day:27, theme:"Story Saturday", format:"Story/BTS", highlighted:"Mom Life", topics:{
+  "Mom Life": { topic:"The realest thing about balancing 3 businesses and a toddler", platform:"Instagram", secondary:"Threads", talkingPoints:["The honest hard part","How I get through it","Why it's still worth it"], cta:"What's the realest part of your week been?", length:"Story sequence or 30–45 sec reel", hashtags:["#MomLife","#RealMotherhood","#MompreneurJourney"], hookLine:"Nobody talks about this part of running 3 businesses with a toddler.", repurposeTip:"Threads — blunt one-liner on the honest hard part." },
+  "Inbox Aide": { topic:"The tools on my phone that run Inbox Aide SA", platform:"Instagram", secondary:"Threads", talkingPoints:["App 1–3 + what each does","Why this setup works for me"], cta:"What app runs your business day-to-day?", length:"Story sequence or 30–45 sec reel", hashtags:["#InboxAideSA","#BehindTheScenes","#PhoneFirstBusiness"], hookLine:"These 3 apps run my entire business. Here they are.", repurposeTip:"Threads — blunt one-liner on the most-used app." },
+  "Building in Public": { topic:"What building alone (as a mom) really looks like", platform:"Instagram", secondary:"Threads", talkingPoints:["The lonely parts","The proud parts","What keeps me going"], cta:"If you're building alone too, tell me how it's going.", length:"Story sequence or 30–45 sec reel", hashtags:["#BuildInPublic","#SoloFounder","#MompreneurLife"], hookLine:"Building alone as a mom looks nothing like the highlight reel.", repurposeTip:"Threads — blunt one-liner on the loneliest part." }
+}},
+{ day:28, theme:"Success Sunday", isReflection:true },
+
+{ day:29, theme:"Mindset Monday", format:"Reel", highlighted:"Building in Public", topics:{
+  "Building in Public": { topic:"What confidence actually looks like when you're building solo", platform:"Instagram", secondary:"Threads", talkingPoints:["What confidence isn't","What it actually is","How I built it"], cta:"What does confidence look like for you right now?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#BuildInPublic","#SoloFounder","#MompreneurMindset"], hookLine:"Confidence isn't feeling ready. It's doing it scared.", repurposeTip:"Threads — blunt one-liner redefining confidence." },
+  "Inbox Aide": { topic:"How I plan my week around my inbox, not the other way around", platform:"Instagram", secondary:"Threads", talkingPoints:["The old way (reactive)","The new way (planned blocks)","Result"], cta:"Does your inbox run your week or the other way around?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#InboxAideSA","#SmallBizTips","#TimeManagement"], hookLine:"I stopped letting my inbox run my week. Here's what changed.", repurposeTip:"Threads — blunt one-liner on planned vs. reactive." },
+  "Mom Life": { topic:"The one thing I stopped apologizing for as a working mom", platform:"Instagram", secondary:"Threads", talkingPoints:["What I used to apologize for","Why I stopped","How it feels now"], cta:"What have you stopped apologizing for?", length:"30–45 sec reel, caption 50–100 words", hashtags:["#MomLife","#WorkingMom","#MompreneurJourney"], hookLine:"I stopped apologizing for this one thing. My week got better.", repurposeTip:"Threads — blunt one-liner naming the thing." }
+}},
+{ day:30, theme:"DM Strategy Tuesday", format:"Carousel", highlighted:"Inbox Aide", topics:{
+  "Inbox Aide": { topic:"5 things I check before sending any sales DM", platform:"Instagram", secondary:"LinkedIn", talkingPoints:["Check 1–4 before hitting send","Why this checklist matters"], cta:"Save this checklist for your next DM.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#InboxAideSA","#DMStrategy","#SalesTips"], hookLine:"I never send a sales DM without checking these 5 things first.", repurposeTip:"LinkedIn — anecdote → lesson → question on a DM sent without checking." },
+  "Building in Public": { topic:"5 lessons from my first year building in public", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Lesson 1–4 from the whole year","What's next"], cta:"Which lesson do you need most right now?", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#BuildInPublic","#SoloFounder","#YearOne"], hookLine:"One year of building in public. Here's what I learned.", repurposeTip:"Pinterest — \"5 Lessons From My First Year Building a Business in Public.\"" },
+  "Mom Life": { topic:"5 snacks that survive a diaper bag", platform:"Instagram", secondary:"Pinterest", talkingPoints:["Snack 1–4 + why it travels well","Storage tip"], cta:"Save this for your next outing.", length:"8–10 slide carousel, caption 100–150 words", hashtags:["#HappySpoons","#ToddlerSnacks","#MomLifeHacks"], hookLine:"These 5 snacks survive even the messiest diaper bag.", repurposeTip:"Pinterest — \"5 Toddler Snacks That Survive a Diaper Bag.\"" }
+}}
+];
+
+/* ---------------- helpers ---------------- */
+function dateStr(d){ const p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
+function yesterdayStr(){ return dateStr(new Date(Date.now()-86400000)); }
+function prettyDate(){ return new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'}); }
+function platformClass(name){
+  const map={Facebook:'tag-facebook',Instagram:'tag-instagram',LinkedIn:'tag-linkedin',Threads:'tag-threads',Pinterest:'tag-pinterest'};
+  return map[name] || 'tag-default';
+}
+function getDayEntry(dayNum){ return CHALLENGE_DAYS.find(d=>d.day===dayNum); }
+function getFlowSteps(entry){
+  if (entry.isPromo) return ["Script","Publish","Reflect"];
+  return ["Post","Repurpose","Publish","Reflect"];
+}
+function getTopicsForDay(dayEntry){ return dayEntry.topics; }
+function getHighlightedNiche(dayEntry){ return dayEntry.highlighted; }
+function getPromoProduct(dayEntry){ return PROMO_ROTATION[dayEntry.weekIndex]; }
+function isMonWedFriToday(){ const d = new Date().getDay(); return d===1 || d===3 || d===5; } // 0=Sun
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(()=>el.classList.remove('show'), 1600);
+}
+
+/* ---------------- STORE ---------------- */
+const STORAGE_KEY = 'contentOS_v3_state';
+
+const Store = {
+  state: null,
+
+  defaultState(){
+    return {
+      version: 3,
+      currentDay: 1,
+      cycleCount: 1,
+      streak: { current: 0, lastCompletedDate: null },
+      totalDaysCompleted: 0,
+      today: null,
+      weeklyReflections: {},
+      history: {},
+      postDrafts: {},
+      weeklyGrowthDone: {}
+    };
+  },
+
+  emptyToday(dateKey, dayNum){
+    const entry = getDayEntry(dayNum);
+    const focusNiche = (entry.isReflection || entry.isPromo) ? null : getHighlightedNiche(entry);
+    return {
+      date: dateKey,
+      dayNum: dayNum,
+      focusNiche: focusNiche,
+      step: 1,
+      started: false,
+      completed: false,
+      talkingPointsDone: {},
+      caption: "",
+      publish: { recorded:false, edited:false, postedPrimary:false, postedSecondary:false, mentionedCTA:false, repliedComments:false },
+      promoPosted: { Instagram:false, Facebook:false, LinkedIn:false, Threads:false, Pinterest:false, whatsapp:false },
+      products: { inbox:false, reply:false, happy:false, nurturing:false },
+      reflection: { wentWell:"", lesson:"", tomorrowIdea:"" },
+      whatsapp: { groupA:false, groupB:false }
+    };
+  },
+
+  load(){
+    let raw = null;
+    try { raw = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e){ raw = null; }
+    this.state = raw && raw.version === 3 ? raw : this.defaultState();
+    this.migrateState();
+    this.migrateToday();
+    this.rolloverIfNeeded();
+    this.save();
+  },
+
+  // Backfill top-level fields added after someone may have already
+  // saved a session, same reasoning as migrateToday below.
+  migrateState(){
+    const s = this.state;
+    if (!s.postDrafts) s.postDrafts = {};
+    if (!s.weeklyGrowthDone) s.weeklyGrowthDone = {};
+  },
+
+  // Defensive backfill: if 'today' was saved by an earlier build of the
+  // app and is missing fields a newer version added (e.g. whatsapp,
+  // promoPosted), fill them in rather than crashing on undefined.
+  migrateToday(){
+    const t = this.state.today;
+    if (!t) return;
+    if (!t.whatsapp) t.whatsapp = { groupA:false, groupB:false };
+    if (!t.promoPosted) t.promoPosted = { Instagram:false, Facebook:false, LinkedIn:false, Threads:false, Pinterest:false, whatsapp:false };
+    if (t.caption === undefined) t.caption = "";
+    if (t.started === undefined) t.started = false;
+  },
+
+  save(){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state)); } catch(e){ console.error('Save failed', e); }
+  },
+
+  rolloverIfNeeded(){
+    const todayKey = dateStr(new Date());
+    const s = this.state;
+    if (s.today && s.today.date === todayKey) return;
+
+    let nextDay = 1;
+    let justWrapped = false;
+    if (s.today){
+      s.history[s.today.date] = s.today;
+      nextDay = s.today.dayNum + 1;
+      if (nextDay > 30){ nextDay = 1; s.cycleCount += 1; justWrapped = true; }
+    }
+
+    if (s.streak.current > 0 && s.streak.lastCompletedDate && s.streak.lastCompletedDate !== yesterdayStr() && s.streak.lastCompletedDate !== todayKey){
+      s.streak.current = 0;
+    }
+
+    s.today = this.emptyToday(todayKey, nextDay);
+    s._justWrapped = justWrapped;
+  },
+
+  markDayComplete(){
+    const s = this.state;
+    const t = s.today;
+    t.completed = true;
+    if (s.streak.lastCompletedDate !== t.date){
+      s.streak.current = (s.streak.lastCompletedDate === yesterdayStr() || !s.streak.lastCompletedDate) ? s.streak.current + 1 : 1;
+      s.streak.lastCompletedDate = t.date;
+    }
+    s.totalDaysCompleted += 1;
+    s.history[t.date] = t;
+    this.save();
+  },
+
+  saveWeeklyReflection(weekNum, data){
+    this.state.weeklyReflections[weekNum] = data;
+    this.state.today.completed = true;
+    if (this.state.streak.lastCompletedDate !== this.state.today.date){
+      this.state.streak.current = (this.state.streak.lastCompletedDate === yesterdayStr() || !this.state.streak.lastCompletedDate) ? this.state.streak.current + 1 : 1;
+      this.state.streak.lastCompletedDate = this.state.today.date;
+    }
+    this.state.totalDaysCompleted += 1;
+    this.save();
+  },
+
+  // Simple, honest progress: how many of the actual on-screen steps
+  // you've moved past. No hidden 6-part breakdown — what you see is
+  // what's tracked.
+  progress(){
+    const t = this.state.today;
+    const entry = getDayEntry(t.dayNum);
+    const steps = getFlowSteps(entry);
+    const total = steps.length;
+    const done = t.completed ? total : Math.max(0, t.step - 1);
+    return { done, total, steps, currentIndex: t.step - 1 };
+  }
+};
+
+/* ---------------- NAV ---------------- */
+const Nav = {
+  current: 'home', stack: [],
+  go(screen, opts){
+    opts = opts || {};
+    if (!opts.silent) this.stack.push(this.current);
+    this.current = screen;
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('screen-'+screen).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.screen===screen));
+    document.getElementById('bottomNav').classList.toggle('hidden', screen==='flow' || screen==='reflect-sunday' || screen==='journal' || screen==='settings');
+    document.getElementById('backBtn').classList.toggle('hidden', !(screen==='flow' || screen==='reflect-sunday' || screen==='journal' || screen==='settings'));
+    if (screen==='home') HomeUI.render();
+    if (screen==='plan') PlanUI.render();
+    if (screen==='platforms') PlatformsUI.render();
+    if (screen==='flow') FlowUI.render();
+    if (screen==='reflect-sunday') SundayUI.render();
+    if (screen==='journal') JournalUI.render();
+    if (screen==='settings') SettingsUI.render();
+    window.scrollTo(0,0);
+  },
+  back(){ const prev = this.stack.pop() || 'home'; this.go(prev, {silent:true}); }
+};
+
+/* ---------------- HOME UI ---------------- */
+const HomeUI = {
+  render(){
+    const s = Store.state, t = s.today;
+    const entry = getDayEntry(t.dayNum);
+    const { done: doneCount, total: stageTotal } = Store.progress();
+
+    if (entry.isReflection){
+      document.getElementById('homeContent').innerHTML = `
+        <div class="journey-card">
+          <div class="journey-top">
+            <div class="journey-ring">${ring(t.completed?1:0,1)}</div>
+            <div class="journey-copy">
+              <div class="eyebrow">Day ${t.dayNum} of 30 · Success Sunday</div>
+              <div class="headline">🪞 Reflection Day</div>
+              <div class="sub">No content today — review your week and plan ahead.</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="Nav.go('reflect-sunday')">${t.completed ? 'Review reflection' : '▶ Start Weekly Reflection'}</button>
+        ${this.growthBlock(s)}
+        ${this.whatsappBlock(t, entry)}
+        ${this.statsBlock(s,t,true)}
+        <div class="btn-row" style="margin-top:6px;">
+          <button class="btn btn-ghost" style="font-size:12.5px;" onclick="Nav.go('journal')">📓 Reflections</button>
+          <button class="btn btn-ghost" style="font-size:12.5px;" onclick="Nav.go('settings')">⚙️ Backup</button>
+        </div>
+      `;
+      document.getElementById('dateNow').textContent = prettyDate();
+      return;
+    }
+
+    if (entry.isPromo){
+      const product = getPromoProduct(entry);
+      const info = PROMO_SCRIPTS[product];
+      let html = '';
+      if (t.completed){
+        html += `
+          <div class="journey-card">
+            <div class="journey-top">
+              <div class="journey-ring">${ring(stageTotal,stageTotal)}</div>
+              <div class="journey-copy">
+                <div class="eyebrow">Day ${t.dayNum} of 30 · Promo Friday</div>
+                <div class="headline">You're done for today ✅</div>
+                <div class="sub">Come back tomorrow for Day ${t.dayNum>=30?1:t.dayNum+1}.</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="Nav.go('flow')">Review today's entry</button>
+        `;
+      } else {
+        html += `
+          <div class="journey-card">
+            <div class="journey-top">
+              <div class="journey-ring">${ring(doneCount,stageTotal)}</div>
+              <div class="journey-copy">
+                <div class="eyebrow">Day ${t.dayNum} of 30 · Promo Friday</div>
+                <div class="headline">💰 ${info.label}</div>
+                <div class="sub">${info.offerSummary}</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="HomeUI.startDay()">▶ Start Today's Plan</button>
+        `;
+      }
+      html += this.growthBlock(s);
+      html += this.whatsappBlock(t, entry);
+      html += this.statsBlock(s,t,t.started||t.completed);
+      html += `<div class="btn-row" style="margin-top:6px;">
+          <button class="btn btn-ghost" style="font-size:12.5px;" onclick="Nav.go('journal')">📓 Reflections</button>
+          <button class="btn btn-ghost" style="font-size:12.5px;" onclick="Nav.go('settings')">⚙️ Backup</button>
+        </div>`;
+      document.getElementById('homeContent').innerHTML = html;
+      document.getElementById('dateNow').textContent = prettyDate();
+      return;
+    }
+
+    const topics = getTopicsForDay(entry);
+    const focusTopic = topics[t.focusNiche];
+    const others = NICHES.filter(n=>n!==t.focusNiche);
+
+    let html = '';
+    if (t.completed){
+      html += `
+        <div class="journey-card">
+          <div class="journey-top">
+            <div class="journey-ring">${ring(stageTotal,stageTotal)}</div>
+            <div class="journey-copy">
+              <div class="eyebrow">Day ${t.dayNum} of 30</div>
+              <div class="headline">You're done for today ✅</div>
+              <div class="sub">Come back tomorrow for Day ${t.dayNum>=30?1:t.dayNum+1}.</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-secondary" onclick="Nav.go('flow')">Review today's entry</button>
+      `;
+    } else {
+      html += `
+        <div class="journey-card">
+          <div class="journey-top">
+            <div class="journey-ring">${ring(doneCount,stageTotal)}</div>
+            <div class="journey-copy">
+              <div class="eyebrow">Day ${t.dayNum} of 30 · ${entry.theme}</div>
+              <div class="headline">${NICHE_META[t.focusNiche].icon} ${t.focusNiche}</div>
+              <div class="sub">${focusTopic.topic}</div>
+            </div>
+          </div>
+          ${this._showSwap ? `
+          <div class="mini-niche-row">
+            ${others.map(n=>`
+              <div class="mini-niche-card" onclick="HomeUI.swapFocus('${n}')">
+                <div class="mn-icon">${NICHE_META[n].icon}</div>
+                <div class="mn-label">${n}</div>
+              </div>
+            `).join('')}
+          </div>
+          ` : `<button class="btn btn-ghost" style="padding:8px 0 0; font-size:12.5px;" onclick="HomeUI.toggleSwap()">Post about ${others.join(' or ')} instead →</button>`}
+        </div>
+        <button class="btn btn-primary" onclick="HomeUI.startDay()">▶ Start Today's Plan</button>
+      `;
+    }
+
+    html += this.growthBlock(s);
+    html += this.whatsappBlock(t, entry);
+    html += this.statsBlock(s,t,t.started||t.completed);
+    html += `<div class="btn-row" style="margin-top:6px;">
+          <button class="btn btn-ghost" style="font-size:12.5px;" onclick="Nav.go('journal')">📓 Reflections</button>
+          <button class="btn btn-ghost" style="font-size:12.5px;" onclick="Nav.go('settings')">⚙️ Backup</button>
+        </div>`;
+    document.getElementById('homeContent').innerHTML = html;
+    document.getElementById('dateNow').textContent = prettyDate();
+
+    function ring(done, total){
+      const r=30, c=2*Math.PI*r, pct=total?done/total:0, offset=c*(1-pct);
+      return `<svg width="72" height="72" viewBox="0 0 72 72">
+        <circle cx="36" cy="36" r="${r}" fill="none" stroke="#E5E7EB" stroke-width="7"/>
+        <circle cx="36" cy="36" r="${r}" fill="none" stroke="#4F46E5" stroke-width="7" stroke-dasharray="${c}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+      </svg>
+      <div class="ring-label"><div class="ring-count">${done}/${total}</div><div class="ring-of">steps</div></div>`;
+    }
+  },
+
+  // Lightweight daily visibility habit — separate from the content
+  // flow entirely. Always a soft promo for one of your 4 products
+  // (bold hook → pain point → CTA), not a repost of today's topic.
+  // Promo Fridays keep their own dedicated full-push script instead.
+  whatsappBlock(t, entry){
+    const showB = isMonWedFriToday();
+    const script = entry.isPromo
+      ? PROMO_SCRIPTS[getPromoProduct(entry)].whatsappScript
+      : getDailyWhatsappScript(t.dayNum);
+    const scriptHtml = `
+      <div class="card" style="font-size:13.5px; margin-top:10px;">
+        <div class="meta-label">Ready-to-paste message</div>
+        <div class="meta-value" style="margin:6px 0 10px;">${script}</div>
+        <button class="copy-btn" onclick="HomeUI.copyWhatsapp(\`${script.replace(/`/g,"'")}\`)">📋 Copy for WhatsApp</button>
+      </div>
+    `;
+    return `
+      <div class="section-title" style="margin-top:22px;">WhatsApp Visibility</div>
+      ${scriptHtml}
+      <div class="check-row ${t.whatsapp.groupA?'checked':''}">
+        <input type="checkbox" id="wa-a" ${t.whatsapp.groupA?'checked':''} onchange="HomeUI.toggleWhatsapp('groupA')">
+        <label for="wa-a">Posted in WhatsApp Group A (daily)</label>
+      </div>
+      ${showB ? `
+      <div class="check-row ${t.whatsapp.groupB?'checked':''}">
+        <input type="checkbox" id="wa-b" ${t.whatsapp.groupB?'checked':''} onchange="HomeUI.toggleWhatsapp('groupB')">
+        <label for="wa-b">Posted in WhatsApp Group B (Mon/Wed/Fri)</label>
+      </div>` : ''}
+    `;
+  },
+  toggleWhatsapp(key){ Store.state.today.whatsapp[key] = !Store.state.today.whatsapp[key]; Store.save(); this.render(); },
+  copyWhatsapp(text){ navigator.clipboard?.writeText(text).then(()=>toast('Copied!')).catch(()=>toast('Could not copy')); },
+
+  growthBlock(s){
+    const dayNum = s.today.dayNum;
+    const { weekNum, text } = getGrowthChallenge(dayNum);
+    const done = !!s.weeklyGrowthDone[weekNum];
+    return `
+      <div class="section-title" style="margin-top:22px;">This Week's Growth Focus</div>
+      <div class="check-row ${done?'checked':''}">
+        <input type="checkbox" id="growth-${weekNum}" ${done?'checked':''} onchange="HomeUI.toggleGrowth(${weekNum})">
+        <label for="growth-${weekNum}">${text}</label>
+      </div>
+    `;
+  },
+  toggleGrowth(weekNum){ Store.state.weeklyGrowthDone[weekNum] = !Store.state.weeklyGrowthDone[weekNum]; Store.save(); this.render(); },
+
+  statsBlock(s,t,showStats){
+    const chips = `
+      <div class="chip-row" style="margin-top:20px;">
+        <div class="chip streak">🔥 ${s.streak.current}-day streak</div>
+        <div class="chip">Day ${t.dayNum} of 30${s.cycleCount>1?` · Round ${s.cycleCount}`:''}</div>
+      </div>
+    `;
+    if (!showStats) return chips;
+
+    const entry = getDayEntry(t.dayNum);
+    const postsPublished = entry.isPromo
+      ? PROMO_PLATFORM_ORDER.filter(p=>t.promoPosted[p]).length
+      : ['postedPrimary','postedSecondary'].filter(k=>t.publish[k]).length;
+    const { done: doneCount, total: stageTotal } = Store.progress();
+    const completionPct = Math.round((doneCount/stageTotal)*100);
+    return chips + `
+      <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-block"><div class="stat-num">${postsPublished}</div><div class="stat-lbl">Posts Today</div></div>
+        <div class="stat-block"><div class="stat-num">${completionPct}%</div><div class="stat-lbl">Completion</div></div>
+        <div class="stat-block"><div class="stat-num">${s.totalDaysCompleted}</div><div class="stat-lbl">Days Done</div></div>
+      </div>
+    `;
+  },
+
+  toggleSwap(){ this._showSwap = !this._showSwap; this.render(); },
+
+  swapFocus(niche){
+    Store.state.today.focusNiche = niche;
+    Store.state.today.talkingPointsDone = {};
+    Store.state.today.caption = "";
+    this._showSwap = false;
+    Store.save();
+    this.render();
+  },
+
+  startDay(){
+    Store.state.today.started = true;
+    Store.save();
+    Nav.go('flow');
+  }
+};
+
+/* ---------------- SUNDAY REFLECTION UI ---------------- */
+/* ---------------- JOURNAL UI (past reflections) ----------------
+   Reflections were always being saved to history — there was just no
+   screen showing them back. This pulls daily reflections and weekly
+   Sunday reflections together, most recent first. */
+/* ---------------- SETTINGS UI (backup & restore) ----------------
+   Everything lives in this browser's localStorage only — clearing
+   the cache or switching phones/browsers loses it all. This gives
+   two ways to back up (file download, or copy/paste text) and two
+   ways to restore, since the file-download approach doesn't always
+   work inside embedded browser previews. */
+const SettingsUI = {
+  render(){
+    const dateTag = dateStr(new Date());
+    document.getElementById('settingsContent').innerHTML = `
+      <div class="card" style="font-size:13px; color:var(--text-muted);">
+        Your 30-day progress, reflections, and drafts are saved only in this browser. Back up regularly, especially before clearing your browser cache or switching phones.
+      </div>
+
+      <div class="section-title">Export</div>
+      <button class="btn btn-primary" onclick="SettingsUI.downloadBackup()">⬇️ Download Backup File</button>
+      <button class="btn btn-secondary" style="margin-top:10px;" onclick="SettingsUI.copyBackup()">📋 Copy Backup Text Instead</button>
+
+      <div class="section-title">Restore</div>
+      <div class="card" style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
+        Restoring replaces everything currently saved in this app with the backup you provide. This can't be undone.
+      </div>
+      <input type="file" id="restoreFileInput" accept="application/json,.json" style="display:none;" onchange="SettingsUI.handleFile(event)">
+      <button class="btn btn-secondary" onclick="document.getElementById('restoreFileInput').click()">📁 Choose Backup File</button>
+
+      <div class="reflect-q" style="margin-top:18px;">Or paste backup text</div>
+      <textarea class="reflect-input" id="restoreTextBox" style="min-height:80px;" placeholder="Paste the copied backup text here"></textarea>
+      <button class="btn btn-secondary" onclick="SettingsUI.restoreFromPastedText()">Restore From Pasted Text</button>
+    `;
+  },
+
+  downloadBackup(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY) || JSON.stringify(Store.state);
+      const blob = new Blob([raw], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `content-os-backup-${dateStr(new Date())}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast('Backup downloaded');
+    } catch(e){
+      console.error(e);
+      toast('Download failed — try Copy instead');
+    }
+  },
+
+  copyBackup(){
+    const raw = localStorage.getItem(STORAGE_KEY) || JSON.stringify(Store.state);
+    navigator.clipboard?.writeText(raw).then(()=>toast('Backup copied — paste it somewhere safe')).catch(()=>toast('Could not copy'));
+  },
+
+  handleFile(event){
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => this.applyBackup(reader.result);
+    reader.onerror = () => toast('Could not read file');
+    reader.readAsText(file);
+  },
+
+  restoreFromPastedText(){
+    const text = document.getElementById('restoreTextBox').value.trim();
+    if (!text){ toast('Paste your backup text first'); return; }
+    this.applyBackup(text);
+  },
+
+  applyBackup(text){
+    let parsed;
+    try { parsed = JSON.parse(text); } catch(e){ toast("That doesn't look like a valid backup file"); return; }
+    if (!parsed || parsed.version !== 3 || !parsed.today){ toast('This backup file looks incomplete or from an incompatible version'); return; }
+    const ok = window.confirm('This will replace everything currently in the app with this backup. Continue?');
+    if (!ok) return;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    toast('Restored — reloading...');
+    setTimeout(()=>location.reload(), 600);
+  }
+};
+
+const JournalUI = {
+  render(){
+    const s = Store.state;
+    const entries = [];
+
+    Object.values(s.history || {}).forEach(day=>{
+      if (day.reflection && (day.reflection.wentWell || day.reflection.tomorrowIdea)){
+        entries.push({ date: day.date, dayNum: day.dayNum, type:'day', wentWell: day.reflection.wentWell, tomorrowIdea: day.reflection.tomorrowIdea });
+      }
+    });
+    // include today's if it has content, even before rollover archives it
+    const t = s.today;
+    if (t.reflection && (t.reflection.wentWell || t.reflection.tomorrowIdea) && !entries.some(e=>e.date===t.date)){
+      entries.push({ date: t.date, dayNum: t.dayNum, type:'day', wentWell: t.reflection.wentWell, tomorrowIdea: t.reflection.tomorrowIdea });
+    }
+    Object.entries(s.weeklyReflections || {}).forEach(([weekNum, r])=>{
+      if (r.win || r.lesson || r.plan){
+        entries.push({ date:`week-${weekNum}`, weekNum, type:'week', win:r.win, lesson:r.lesson, plan:r.plan });
+      }
+    });
+
+    entries.sort((a,b)=> (a.date < b.date ? 1 : -1));
+
+    if (!entries.length){
+      document.getElementById('journalContent').innerHTML = `<div style="text-align:center; color:var(--text-faint); padding:24px;">No reflections saved yet — they'll show up here once you complete a day.</div>`;
+      return;
+    }
+
+    document.getElementById('journalContent').innerHTML = entries.map(e=>{
+      const key = e.date; // already unique: a real date, or "week-N"
+      const domKey = key.replace(/[^a-zA-Z0-9]/g,'-');
+      const fallback = e.type==='week'
+        ? [e.win, e.lesson, e.plan].filter(Boolean).join('\n\n')
+        : [e.wentWell, e.tomorrowIdea].filter(Boolean).join('\n\n');
+      const draftValue = s.postDrafts[key] || '';
+
+      const header = e.type==='week'
+        ? `<div class="card-sub" style="margin-bottom:8px;">Success Sunday · Week ${e.weekNum}</div>
+           ${e.win ? `<div class="meta-label">Biggest win</div><div class="meta-value" style="margin-bottom:8px;">${e.win}</div>` : ''}
+           ${e.lesson ? `<div class="meta-label">Biggest lesson</div><div class="meta-value" style="margin-bottom:8px;">${e.lesson}</div>` : ''}
+           ${e.plan ? `<div class="meta-label">Plan for next week</div><div class="meta-value">${e.plan}</div>` : ''}`
+        : `<div class="card-sub" style="margin-bottom:8px;">Day ${e.dayNum} · ${e.date}</div>
+           ${e.wentWell ? `<div class="meta-label">Went well / learned</div><div class="meta-value" style="margin-bottom:8px;">${e.wentWell}</div>` : ''}
+           ${e.tomorrowIdea ? `<div class="meta-label">Idea for next time</div><div class="meta-value">${e.tomorrowIdea}</div>` : ''}`;
+
+      return `
+        <div class="card">
+          ${header}
+          <div class="rep-block" id="draft-${domKey}" style="margin-top:12px; border:1px solid var(--border-soft);">
+            <div class="rep-head" onclick="JournalUI.toggleDraft('${domKey}')">
+              <span style="font-size:12.5px; font-weight:700; color:var(--indigo);">✍️ Turn into a post</span>
+              <span class="rep-chevron">▼</span>
+            </div>
+            <div class="rep-body">
+              <div class="hook-formula" style="margin-top:8px;">How to draft it</div>
+              <div class="hook-card" style="font-weight:500; font-size:13px;">Use this as your hook. Add 1–2 lines on what led to it or why it matters. Close with a question or your usual CTA.</div>
+              <textarea class="reflect-input" id="draftbox-${domKey}" placeholder="${fallback.replace(/"/g,'&quot;')}" oninput="JournalUI.saveDraft('${key.replace(/'/g,"\\'")}','${domKey}')">${draftValue}</textarea>
+              <button class="copy-btn" onclick="JournalUI.copyDraft('${domKey}', \`${(draftValue||fallback).replace(/`/g,"'")}\`)">📋 Copy</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+  toggleDraft(domKey){ document.getElementById('draft-'+domKey).classList.toggle('open'); },
+  saveDraft(key, domKey){
+    Store.state.postDrafts[key] = document.getElementById('draftbox-'+domKey).value;
+    Store.save();
+  },
+  copyDraft(domKey, fallbackText){
+    const box = document.getElementById('draftbox-'+domKey);
+    const text = (box && box.value.trim()) ? box.value : fallbackText;
+    navigator.clipboard?.writeText(text).then(()=>toast('Copied!')).catch(()=>toast('Could not copy'));
+  }
+};
+
+const SundayUI = {
+  render(){
+    const t = Store.state.today;
+    const weekNum = Math.ceil(t.dayNum/7);
+    const saved = Store.state.weeklyReflections[weekNum] || { win:"", lesson:"", plan:"" };
+    document.getElementById('sundayContent').innerHTML = `
+      <div class="section-title">Success Sunday · Week ${weekNum}</div>
+      <div class="reflect-q">Biggest win this week?</div>
+      <textarea class="reflect-input" id="sun-win">${saved.win}</textarea>
+      <div class="reflect-q">Biggest lesson?</div>
+      <textarea class="reflect-input" id="sun-lesson">${saved.lesson}</textarea>
+      <div class="reflect-q">Plan for next week?</div>
+      <textarea class="reflect-input" id="sun-plan">${saved.plan}</textarea>
+      <button class="btn btn-primary" onclick="SundayUI.complete()">${t.completed ? 'Update & Save' : 'Complete Day 🎉'}</button>
+    `;
+  },
+  complete(){
+    const weekNum = Math.ceil(Store.state.today.dayNum/7);
+    const data = {
+      win: document.getElementById('sun-win').value,
+      lesson: document.getElementById('sun-lesson').value,
+      plan: document.getElementById('sun-plan').value
+    };
+    const wasComplete = Store.state.today.completed;
+    Store.saveWeeklyReflection(weekNum, data);
+    if (!wasComplete) Celebrate.open(); else { toast('Saved'); Nav.go('home', {silent:true}); }
+  }
+};
+
+/* ---------------- GUIDED FLOW UI ----------------
+   4 steps (merged Content+Draft into one, since reading the topic
+   and writing the caption are really the same moment — splitting
+   them just added a tap and a reason to go write somewhere else). */
+const FlowUI = {
+  render(){
+    const t = Store.state.today;
+    const entry = getDayEntry(t.dayNum);
+    this.renderStageBar();
+    if (entry.isPromo){
+      const fns = {1:this.promoStepScript,2:this.promoStepPublish,3:this.promoStepReflect};
+      document.getElementById('flowContent').innerHTML = (fns[t.step]||this.promoStepScript).call(this);
+      return;
+    }
+    const fns = {1:this.stepPost,2:this.stepRepurpose,3:this.stepPublish,4:this.stepReflect};
+    document.getElementById('flowContent').innerHTML = (fns[t.step]||this.stepPost).call(this);
+  },
+  renderStageBar(){
+    const t = Store.state.today;
+    const entry = getDayEntry(t.dayNum);
+    const steps = getFlowSteps(entry);
+    const titles = entry.isPromo
+      ? {1:"Promo Script",2:"Publishing Checklist",3:"Daily Reflection"}
+      : {1:"Today's Post",2:"Repurpose",3:"Publishing Checklist",4:"Daily Reflection"};
+    document.getElementById('flowStepTitle').textContent = `${titles[t.step] || steps[0]} · Step ${t.step} of ${steps.length}`;
+    document.getElementById('stageTrack').innerHTML = steps.map((label,i)=>{
+      const done = t.completed || (i+1) < t.step;
+      const current = !t.completed && (i+1) === t.step;
+      return `<div class="stage-seg ${done?'done':''} ${current?'current':''}"><div class="fill" style="width:${done?100:(current?50:0)}%"></div></div>`;
+    }).join('');
+    document.getElementById('stageLabels').innerHTML = steps.map(label=>`<span>${label}</span>`).join('');
+  },
+  goStep(n){ Store.state.today.step = n; Store.save(); this.render(); window.scrollTo(0,0); },
+  getTopic(){
+    const t = Store.state.today;
+    const entry = getDayEntry(t.dayNum);
+    return getTopicsForDay(entry)[t.focusNiche];
+  },
+
+  /* ---- Promo Day steps ---- */
+  promoStepScript(){
+    const entry = getDayEntry(Store.state.today.dayNum);
+    const product = getPromoProduct(entry);
+    const info = PROMO_SCRIPTS[product];
+    const blocks = PROMO_PLATFORM_ORDER.map((pName,idx)=>{
+      const script = info.platforms[pName];
+      let snippet = `${script.hookLine}\n\n${script.body.join('\n')}\n\n${script.cta}`;
+      if (script.hashtags) snippet += `\n\n${script.hashtags.join(' ')}`;
+      const hashtagsHtml = script.hashtags ? `<div class="meta-label" style="margin-top:10px;">Hashtags</div><div class="meta-value">${script.hashtags.join(' ')}</div>` : '';
+      return `
+        <div class="rep-block ${idx===0?'open':''}" id="promo-${pName}">
+          <div class="rep-head" onclick="FlowUI.toggleRep('${pName}')">
+            <span class="platform-tag ${platformClass(pName)}">${pName}</span>
+            <span class="rep-chevron">▼</span>
+          </div>
+          <div class="rep-body">
+            <div class="hook-formula">${HOOK_FORMULAS[pName] || ''}</div>
+            <div class="hook-card">${script.hookLine}</div>
+            <div class="meta-label">Length</div>
+            <div class="meta-value" style="margin-bottom:8px;">${script.length}</div>
+            ${hashtagsHtml}
+            <div style="margin-top:12px;">
+              <button class="copy-btn" onclick="FlowUI.copySnippet(\`${snippet.replace(/`/g,"'")}\`)">📋 Copy script</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    return `
+      <div class="card">
+        <div class="card-title">${info.label}</div>
+        <div class="card-sub">${info.offerSummary}</div>
+      </div>
+      <div class="section-title">Pick a Platform & Copy the Script</div>
+      ${blocks}
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-primary" onclick="FlowUI.goStep(2)">Continue to Publishing →</button>
+      </div>
+    `;
+  },
+  toggleRep(name){ document.getElementById('promo-'+name).classList.toggle('open'); },
+
+  promoStepPublish(){
+    const t = Store.state.today;
+    const rows = PROMO_PLATFORM_ORDER.map(p=>{
+      const checked = t.promoPosted[p];
+      return `<div class="check-row ${checked?'checked':''}"><input type="checkbox" id="promopub-${p}" ${checked?'checked':''} onchange="FlowUI.togglePromoPosted('${p}')"><label for="promopub-${p}">Posted — ${p}</label></div>`;
+    }).join('');
+    const waChecked = t.promoPosted.whatsapp;
+    return `
+      <div class="section-title">Where did you post today?</div>
+      ${rows}
+      <div class="check-row ${waChecked?'checked':''}">
+        <input type="checkbox" id="promopub-wa" ${waChecked?'checked':''} onchange="FlowUI.togglePromoPosted('whatsapp')">
+        <label for="promopub-wa">Mentioned in a WhatsApp group</label>
+      </div>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-secondary" onclick="FlowUI.goStep(1)">Back</button>
+        <button class="btn btn-primary" onclick="FlowUI.goStep(3)">Continue to Reflection →</button>
+      </div>
+    `;
+  },
+  togglePromoPosted(key){ Store.state.today.promoPosted[key] = !Store.state.today.promoPosted[key]; Store.save(); this.render(); HomeUI.render(); },
+
+  promoStepReflect(){
+    const r = Store.state.today.reflection;
+    return `
+      <div class="section-title">Daily Reflection <span style="text-transform:none; font-weight:600; color:var(--text-faint);">(optional)</span></div>
+      <div class="reflect-q">How did the promo land today?</div>
+      <textarea class="reflect-input" id="reflect-well" style="min-height:44px;" oninput="FlowUI.saveReflection()">${r.wentWell}</textarea>
+      <div class="reflect-q">Anything to try differently next time?</div>
+      <textarea class="reflect-input" id="reflect-tomorrow" style="min-height:44px;" oninput="FlowUI.saveReflection()">${r.tomorrowIdea}</textarea>
+      <div class="btn-row" style="margin-top:10px;">
+        <button class="btn btn-secondary" onclick="FlowUI.goStep(2)">Back</button>
+        <button class="btn btn-primary" onclick="FlowUI.completeDay()">Complete Day 🎉</button>
+      </div>
+    `;
+  },
+
+  // Builds a ready-to-paste caption from the topic's fixed fields —
+  // used as the copy fallback whenever the person hasn't typed their
+  // own version into the caption box yet.
+  buildFallbackCaption(topic){
+    let text = `${topic.hookLine}\n\n${topic.talkingPoints.join('\n')}\n\n${topic.cta}`;
+    if (topic.hashtags) text += `\n\n${topic.hashtags.join(' ')}`;
+    return text;
+  },
+
+  stepPost(){
+    const t = Store.state.today;
+    const topic = this.getTopic();
+    const hashtagsHtml = topic.hashtags ? `
+      <div class="section-title">Hashtags</div>
+      <div class="card" style="font-size:13.5px; color:var(--indigo-deep); background:var(--indigo-soft); border-color:transparent;">
+        ${topic.hashtags.join(' ')} <span style="color:var(--text-muted); font-weight:500;">— add your own topic-specific tags too</span>
+      </div>` : '';
+    const tpHtml = topic.talkingPoints.map((p,i)=>{
+      const checked = !!t.talkingPointsDone[i];
+      return `<li><input type="checkbox" id="tp-${i}" ${checked?'checked':''} onchange="FlowUI.toggleTalkingPoint(${i})"><label for="tp-${i}" class="${checked?'done':''}">${p}</label></li>`;
+    }).join('');
+
+    return `
+      <div class="card">
+        <span class="platform-tag ${platformClass(topic.platform)}">${topic.platform}</span>
+        <div class="card-title" style="margin-top:10px;">${topic.topic}</div>
+        <div class="card-sub">${topic.length}</div>
+        <div class="meta-grid">
+          <div><span class="meta-label">Secondary platform</span><span class="meta-value">${topic.secondary}</span></div>
+          <div><span class="meta-label">CTA</span><span class="meta-value">${topic.cta}</span></div>
+        </div>
+      </div>
+      ${hashtagsHtml}
+
+      <div class="section-title">Hook Formula — ${topic.platform}</div>
+      <div class="hook-formula">${HOOK_FORMULAS[topic.platform] || ''}</div>
+      <div class="hook-card">${topic.hookLine}</div>
+
+      <div class="section-title">Talking Points</div>
+      <ul class="talk-list">${tpHtml}</ul>
+
+      <div class="section-title">Write Your Caption</div>
+      <textarea class="reflect-input" id="captionBox" style="min-height:120px;" placeholder="${topic.hookLine}" oninput="FlowUI.saveCaption()">${t.caption}</textarea>
+      <button class="copy-btn" style="margin-bottom:16px;" onclick="FlowUI.copyCaption()">📋 Copy caption</button>
+
+      <div class="btn-row" style="margin-top:4px;">
+        <button class="btn btn-primary" onclick="FlowUI.goStep(2)">Continue to Repurpose →</button>
+      </div>
+    `;
+  },
+  toggleTalkingPoint(i){ Store.state.today.talkingPointsDone[i] = !Store.state.today.talkingPointsDone[i]; Store.save(); this.render(); },
+  saveCaption(){ Store.state.today.caption = document.getElementById('captionBox').value; Store.save(); },
+  copyCaption(){
+    const t = Store.state.today;
+    const topic = this.getTopic();
+    const text = (t.caption && t.caption.trim()) ? t.caption : this.buildFallbackCaption(topic);
+    this.copySnippet(text);
+  },
+
+  stepRepurpose(){
+    const topic = this.getTopic();
+    // Hook line now included — this was missing before, which meant
+    // the one line meant to prevent a blank-page moment on the
+    // secondary platform wasn't even in the copied text.
+    let snippet = `${topic.hookLine}\n\n${topic.talkingPoints.join('\n')}\n\n${topic.cta}`;
+    if (topic.hashtags) snippet += `\n\n${topic.hashtags.join(' ')}`;
+    return `
+      <div class="section-title">Repurpose For ${topic.secondary}</div>
+      <div class="card">
+        <div class="meta-label">Repurpose tip</div>
+        <div class="meta-value" style="margin-bottom:14px;">${topic.repurposeTip}</div>
+        <button class="copy-btn" onclick="FlowUI.copySnippet(\`${snippet.replace(/`/g,"'")}\`)">📋 Copy draft text</button>
+      </div>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-secondary" onclick="FlowUI.goStep(1)">Back</button>
+        <button class="btn btn-primary" onclick="FlowUI.goStep(3)">Continue to Publishing →</button>
+      </div>
+    `;
+  },
+  copySnippet(text){ navigator.clipboard?.writeText(text).then(()=>toast('Copied!')).catch(()=>toast('Could not copy')); },
+
+  stepPublish(){
+    const t = Store.state.today;
+    const topic = this.getTopic();
+    const rows = [
+      ['postedPrimary',`Posted — ${topic.platform}`], ['postedSecondary',`Posted — ${topic.secondary}`]
+    ];
+    const rowsHtml = rows.map(([key,label])=>{
+      const checked = t.publish[key];
+      return `<div class="check-row ${checked?'checked':''}"><input type="checkbox" id="pub-${key}" ${checked?'checked':''} onchange="FlowUI.togglePublish('${key}')"><label for="pub-${key}">${label}</label></div>`;
+    }).join('');
+    return `
+      <div class="section-title">Did You Post It?</div>${rowsHtml}
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-secondary" onclick="FlowUI.goStep(2)">Back</button>
+        <button class="btn btn-primary" onclick="FlowUI.goStep(4)">Continue to Reflection →</button>
+      </div>
+    `;
+  },
+  togglePublish(key){ Store.state.today.publish[key] = !Store.state.today.publish[key]; Store.save(); this.render(); HomeUI.render(); },
+
+  // Simplified to two optional one-liners. Nothing here is required
+  // to complete the day — the point is to protect your streak from
+  // your own end-of-day tiredness, not add homework.
+  stepReflect(){
+    const r = Store.state.today.reflection;
+    return `
+      <div class="section-title">Daily Reflection <span style="text-transform:none; font-weight:600; color:var(--text-faint);">(optional)</span></div>
+      <div class="reflect-q">One thing that went well or that you learned?</div>
+      <textarea class="reflect-input" id="reflect-well" style="min-height:44px;" oninput="FlowUI.saveReflection()">${r.wentWell}</textarea>
+      <div class="reflect-q">Idea for tomorrow?</div>
+      <textarea class="reflect-input" id="reflect-tomorrow" style="min-height:44px;" oninput="FlowUI.saveReflection()">${r.tomorrowIdea}</textarea>
+      <div class="btn-row" style="margin-top:10px;">
+        <button class="btn btn-secondary" onclick="FlowUI.goStep(3)">Back</button>
+        <button class="btn btn-primary" onclick="FlowUI.completeDay()">Complete Day 🎉</button>
+      </div>
+    `;
+  },
+  saveReflection(){
+    const t = Store.state.today;
+    t.reflection.wentWell = document.getElementById('reflect-well').value;
+    t.reflection.tomorrowIdea = document.getElementById('reflect-tomorrow').value;
+    Store.save();
+  },
+  completeDay(){ this.saveReflection(); const wasComplete = Store.state.today.completed; Store.markDayComplete(); Celebrate.open(wasComplete); }
+};
+
+/* ---------------- CELEBRATION ---------------- */
+const Celebrate = {
+  open(alreadyDone){
+    const s = Store.state;
+    const isFinalDay = s.today.dayNum === 30;
+    document.getElementById('celebrateEmoji').textContent = isFinalDay ? '🏆' : '🎉';
+    document.getElementById('celebrateTitle').textContent = isFinalDay ? 'Challenge Complete!' : `Day Complete! ${s.streak.current}-day streak`;
+    document.getElementById('celebrateSub').textContent = isFinalDay
+      ? "You finished all 30 days. Tomorrow the challenge loops back to Day 1 — same plan, fresh round."
+      : `Nice work — Day ${s.today.dayNum>=30?1:s.today.dayNum+1} will be ready when you open the app tomorrow.`;
+    document.getElementById('celebrateOverlay').classList.add('show');
+  },
+  close(){
+    document.getElementById('celebrateOverlay').classList.remove('show');
+    Nav.stack = [];
+    Nav.go('home', {silent:true});
+  }
+};
+
+/* ---------------- PLAN UI (browsable full 30-day reference) ---------------- */
+// Finds the record of what actually happened on a given challenge
+// day number — from history if it's in the past, from today's live
+// state if it's the current day. Returns null if it hasn't happened
+// yet (or the challenge has looped, in which case the most recent
+// pass through that day number is shown).
+function findRecordForDay(dayNum){
+  const s = Store.state;
+  if (s.today.dayNum === dayNum) return s.today;
+  const matches = Object.values(s.history || {}).filter(h => h.dayNum === dayNum);
+  if (!matches.length) return null;
+  matches.sort((a,b)=> (a.date < b.date ? 1 : -1));
+  return matches[0];
+}
+
+// Whether a record shows real evidence of posting, vs. just having
+// tapped through to the end of the flow (e.g. while testing).
+function recordHasRealPost(entry, record){
+  if (!record) return false;
+  if (entry.isPromo) return PROMO_PLATFORM_ORDER.some(p => record.promoPosted && record.promoPosted[p]);
+  if (entry.isReflection) return true; // no "posting" concept on reflection days
+  return !!(record.publish && (record.publish.postedPrimary || record.publish.postedSecondary));
+}
+
+function planBadge(entry, record){
+  if (!record) return '';
+  if (record.completed){
+    return recordHasRealPost(entry, record)
+      ? `<span style="font-size:10.5px; font-weight:800; color:var(--emerald);">✅ Done · ${record.date}</span>`
+      : `<span style="font-size:10.5px; font-weight:800; color:var(--amber);">⚠️ Marked complete, no post logged · ${record.date}</span>`;
+  }
+  if (record.started) return `<span style="font-size:10.5px; font-weight:800; color:var(--text-faint);">◐ In progress</span>`;
+  return '';
+}
+
+const PlanUI = {
+  render(){
+    const query = (document.getElementById('planSearch').value || '').toLowerCase();
+    const today = Store.state.today.dayNum;
+    let html = '';
+    CHALLENGE_DAYS.forEach(entry=>{
+      const isToday = entry.day === today;
+      const record = findRecordForDay(entry.day);
+      const badge = planBadge(entry, record);
+      const undoBtn = record && (record.completed || record.started)
+        ? `<button class="btn btn-ghost" style="font-size:11.5px; padding:4px 0;" onclick="PlanUI.resetDay(${entry.day},'${record.date}')">↩️ Undo / reset this day</button>`
+        : '';
+
+      if (entry.isReflection){
+        if (query) return;
+        const recap = record && (record.reflection?.wentWell || record.reflection?.tomorrowIdea) ? `
+          ${record.reflection.wentWell ? `<div class="mini-topic"><b>Went well:</b> ${record.reflection.wentWell}</div>` : ''}
+          ${record.reflection.tomorrowIdea ? `<div class="mini-topic"><b>Idea:</b> ${record.reflection.tomorrowIdea}</div>` : ''}
+        ` : '';
+        html += `
+          <details class="day-card is-reflection ${isToday?'is-today':''}">
+            <summary class="day-summary">
+              <div class="day-summary-left"><div class="day-name">Day ${entry.day}${isToday?' · Today':''}</div><div class="day-theme">${entry.theme}</div></div>
+              <span style="font-size:18px;">🪞</span>
+            </summary>
+            <div class="day-body">
+              <div class="mini-topic">Reflection only — no content today.</div>
+              ${badge ? `<div class="mini-topic">${badge}</div>` : ''}
+              ${recap}
+              ${undoBtn}
+            </div>
+          </details>
+        `;
+        return;
+      }
+
+      if (entry.isPromo){
+        const product = getPromoProduct(entry);
+        const info = PROMO_SCRIPTS[product];
+        const matches = info.label.toLowerCase().includes(query) || product.toLowerCase().includes(query);
+        if (query && !matches) return;
+        const didPost = record ? PROMO_PLATFORM_ORDER.filter(p=>record.promoPosted && record.promoPosted[p]) : [];
+        html += `
+          <details class="day-card ${isToday?'is-today':''}">
+            <summary class="day-summary">
+              <div class="day-summary-left"><div class="day-name">Day ${entry.day}${isToday?' · Today':''}</div><div class="day-theme">${entry.theme}</div></div>
+              <span>💰</span>
+            </summary>
+            <div class="day-body">
+              <div class="mini-topic"><b>${info.label}:</b> ${info.offerSummary}</div>
+              <div class="mini-topic" style="color:var(--text-faint);">Scripts ready for: ${PROMO_PLATFORM_ORDER.join(', ')}</div>
+              ${badge ? `<div class="mini-topic">${badge}${didPost.length ? ` — posted: ${didPost.join(', ')}` : ''}</div>` : ''}
+              ${undoBtn}
+            </div>
+          </details>
+        `;
+        return;
+      }
+
+      const topics = getTopicsForDay(entry);
+      const highlighted = getHighlightedNiche(entry);
+      const matches = NICHES.some(n => topics[n].topic.toLowerCase().includes(query));
+      if (query && !matches) return;
+      const actualNiche = record ? record.focusNiche : null;
+      const postedSummary = record && record.publish
+        ? [record.publish.postedPrimary?'primary':null, record.publish.postedSecondary?'secondary':null].filter(Boolean)
+        : [];
+      html += `
+        <details class="day-card ${isToday?'is-today':''}">
+          <summary class="day-summary">
+            <div class="day-summary-left"><div class="day-name">Day ${entry.day}${isToday?' · Today':''}</div><div class="day-theme">${entry.theme} · ${entry.format}</div></div>
+            <span>${NICHE_META[highlighted].icon}</span>
+          </summary>
+          <div class="day-body">
+            ${NICHES.map(n=>`<div class="mini-topic"><b>${NICHE_META[n].icon} ${n}${n===highlighted?' (highlighted)':''}${n===actualNiche?' — you posted this':''}:</b> ${topics[n].topic} <span style="color:var(--text-faint);">— ${topics[n].platform}</span></div>`).join('')}
+            ${badge ? `<div class="mini-topic">${badge}${postedSummary.length ? ` — posted ${postedSummary.length}/2 platforms` : ''}</div>` : ''}
+            ${undoBtn}
+          </div>
+        </details>
+      `;
+    });
+    document.getElementById('planContent').innerHTML = html || `<div style="text-align:center; color:var(--text-faint); padding:24px;">No topics match "${query}".</div>`;
+  },
+
+  resetDay(dayNum, recordDate){
+    const ok = window.confirm(`Reset Day ${dayNum}? This clears its completion and checkboxes so you can redo it properly.`);
+    if (!ok) return;
+    const s = Store.state;
+    if (s.today.dayNum === dayNum && s.today.date === recordDate){
+      s.today = Store.emptyToday(s.today.date, dayNum);
+    } else {
+      delete s.history[recordDate];
+    }
+    Store.save();
+    toast('Day reset');
+    this.render();
+  }
+};
+
+/* ---------------- PLATFORMS UI ---------------- */
+const PlatformsUI = {
+  render(){
+    document.getElementById('platformsContent').innerHTML = Object.entries(PLATFORM_GUIDES).map(([name,p])=>`
+      <div class="platform-card">
+        <div class="pname"><span class="platform-tag ${platformClass(name)}" style="font-size:13px; padding:6px 14px;">${name}</span></div>
+        <div class="pdetail"><span class="pdetail-label">Purpose</span><span class="pdetail-value">${p.purpose}</span></div>
+        <div class="pdetail"><span class="pdetail-label">Frequency</span><span class="pdetail-value" style="color:var(--indigo); font-weight:700;">${p.frequency}</span></div>
+        <div class="pdetail"><span class="pdetail-label">Hook formula</span><span class="pdetail-value">${HOOK_FORMULAS[name]}</span></div>
+        <div class="pdetail"><span class="pdetail-label">How to post — start from scratch</span>
+          <ul class="pstep-list">${p.howTo.map(step=>`<li>${step}</li>`).join('')}</ul>
+        </div>
+      </div>
+    `).join('');
+  }
+};
+
+/* ---------------- INIT ---------------- */
+window.addEventListener('DOMContentLoaded', ()=>{
+  Store.load();
+  document.getElementById('dateNow').textContent = prettyDate();
+  Nav.go('home', {silent:true});
+});
+</script>
+</body>
+</html>
