@@ -665,10 +665,49 @@ const Store = {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state)); } catch(e){ console.error('Save failed', e); }
   },
 
+  calculateDayFromWeek(){
+    // Map calendar day-of-week to challenge day
+    // Challenge assumes: day 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun
+    // Then it repeats: day 8=Mon, 9=Tue, etc.
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+    // Convert to 1-based: Sun=7, Mon=1, Tue=2, etc.
+    const challengeDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
+    
+    // Current cycle position (1-7)
+    const s = this.state;
+    const currentDayNum = s.today ? s.today.dayNum : 1;
+    
+    // Calculate which day of the week the current dayNum falls on
+    const currentCycleDayOfWeek = ((currentDayNum - 1) % 7) + 1;
+    
+    // Calculate offset between expected day-of-week and actual current day
+    const offset = challengeDayOfWeek - currentCycleDayOfWeek;
+    
+    // Adjust dayNum by this offset
+    let correctedDay = currentDayNum + offset;
+    
+    // Wrap around if needed
+    while (correctedDay < 1) correctedDay += 30;
+    while (correctedDay > 30) correctedDay -= 30;
+    
+    return correctedDay;
+  },
+
   rolloverIfNeeded(){
     const todayKey = dateStr(new Date());
     const s = this.state;
-    if (s.today && s.today.date === todayKey) return;
+    if (s.today && s.today.date === todayKey){
+      // Same day - but double-check the day number is correct
+      const correctedDay = this.calculateDayFromWeek();
+      if (correctedDay !== s.today.dayNum){
+        console.warn(`Day mismatch detected. Was day ${s.today.dayNum}, correcting to day ${correctedDay}`);
+        s.today.dayNum = correctedDay;
+        const entry = getDayEntry(correctedDay);
+        s.today.focusNiche = (entry.isReflection || entry.isPromo) ? null : getHighlightedNiche(entry);
+      }
+      return;
+    }
 
     let nextDay = 1;
     let justWrapped = false;
@@ -676,6 +715,9 @@ const Store = {
       s.history[s.today.date] = s.today;
       nextDay = s.today.dayNum + 1;
       if (nextDay > 30){ nextDay = 1; s.cycleCount += 1; justWrapped = true; }
+    } else {
+      // First time loading - calculate correct day based on day of week
+      nextDay = this.calculateDayFromWeek();
     }
 
     if (s.streak.current > 0 && s.streak.lastCompletedDate && s.streak.lastCompletedDate !== yesterdayStr() && s.streak.lastCompletedDate !== todayKey){
