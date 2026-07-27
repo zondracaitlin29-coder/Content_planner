@@ -1,0 +1,62 @@
+{
+  "name": "ContentHub - Personal Content Planning Assistant",
+  "short_name": "ContentHub",
+  "description": "Plan, organize, and create content with intention-based guidance",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%236366f1' width='192' height='192'/><text x='50%' y='50%' font-size='120' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>C</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%236366f1' width='512' height='512'/><text x='50%' y='50%' font-size='320' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>C</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["productivity", "business"],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%23f9fafb' width='540' height='720'/><rect fill='%236366f1' width='540' height='120'/><text x='30' y='60' font-size='40' font-weight='bold' fill='white'>ContentHub</text><rect fill='%23ffffff' x='20' y='150' width='500' height='200' rx='12'/><text x='40' y='180' font-size='20' font-weight='bold'>Today's Plan</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's Plan",
+      "short_name": "Today",
+      "description": "Jump to today's content plan",
+      "url": "/index.html?page=today",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%236366f1' width='96' height='96'/><text x='50%' y='50%' font-size='60' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>📅</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Content Vault",
+      "short_name": "Vault",
+      "description": "Access saved inspiration",
+      "url": "/index.html?page=vault",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%236366f1' width='96' height='96'/><text x='50%' y='50%' font-size='60' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>💾</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

@@ -687,7 +687,7 @@
             color: #ef4444;
         }
 
-        /* SECTION COLORS */
+        /* SECTION COLORS (used on Growth Day page cards) */
         .card.ideas-section {
             border-left: 6px solid #3b82f6;
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.04), transparent);
@@ -703,22 +703,6 @@
             opacity: 0.15;
         }
 
-        .captions-section {
-            border-left: 6px solid #ec4899;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.04), transparent);
-            position: relative;
-            padding: 0;
-        }
-
-        .captions-section::after {
-            content: '✍️';
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            font-size: 24px;
-            opacity: 0.15;
-        }
-
         .card.hooks-section {
             border-left: 6px solid #8b5cf6;
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.04), transparent);
@@ -727,6 +711,19 @@
         .card.ctas-section {
             border-left: 6px solid #f59e0b;
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.04), transparent);
+        }
+
+        /* CONTENT LIBRARY - clean, consistent panel (no colored wrappers) */
+        .library-panel {
+            padding: 20px;
+            background: var(--bg-light);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+        }
+
+        body.dark-mode .library-panel {
+            background: var(--bg-dark-secondary);
+            border-color: var(--border-dark);
         }
 
         .card.calendar-section {
@@ -1075,6 +1072,8 @@
                 <div id="todayGuidance" style="margin-top: 16px; font-size: 13px;"></div>
             </div>
 
+            <div id="dashboardBatchNote"></div>
+
             <div class="card">
                 <button class="btn btn-primary btn-block" onclick="showPage('today')">→ Go to Today's Plan</button>
             </div>
@@ -1082,6 +1081,13 @@
             <div class="card calendar-section">
                 <h3>📊 Weekly Progress</h3>
                 <div id="weeklyProgress"></div>
+            </div>
+
+            <div class="card calendar-section" id="dashboardProductPriority">
+                <h3>🎯 This Week's Focus</h3>
+                <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px; margin-top: 0;">Products to promote this week in your outreach</p>
+                <div id="dashboardProductPriorityList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                <button class="btn btn-secondary btn-sm btn-block" onclick="showPage('settings'); setTimeout(() => jumpToSettingsSection('settingsCard-priority', 'productPrioritySection'), 100);" style="margin-top: 12px;">Edit Priority</button>
             </div>
         </div>
 
@@ -1121,19 +1127,20 @@
 
             <!-- TABS NAVIGATION - BUTTONS -->
             <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; padding-bottom: 16px;">
-                <button class="btn" id="nav-hooks-btn" onclick="switchLibraryTab('hooks')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: var(--primary); color: white; border: none; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">Hooks</button>
-                <button class="btn" id="nav-ctas-btn" onclick="switchLibraryTab('ctas')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: var(--bg-light-secondary); color: var(--text-light); border: 2px solid var(--border-light); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.borderColor='var(--primary)'; this.style.color='var(--primary)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-light)'; this.style.color='var(--text-light)';">CTAs</button>
-                <button class="btn" id="nav-ideas-btn" onclick="switchLibraryTab('ideas')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: var(--bg-light-secondary); color: var(--text-light); border: 2px solid var(--border-light); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.borderColor='var(--primary)'; this.style.color='var(--primary)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-light)'; this.style.color='var(--text-light)';">Ideas</button>
-                <button class="btn" id="nav-hashtags-btn" onclick="switchLibraryTab('hashtags')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: var(--bg-light-secondary); color: var(--text-light); border: 2px solid var(--border-light); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.borderColor='var(--primary)'; this.style.color='var(--primary)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-light)'; this.style.color='var(--text-light)';">Tags</button>
-                <button class="btn" id="nav-topics-btn" onclick="switchLibraryTab('topics')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: var(--bg-light-secondary); color: var(--text-light); border: 2px solid var(--border-light); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.borderColor='var(--primary)'; this.style.color='var(--primary)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-light)'; this.style.color='var(--text-light)';">Topics</button>
-                <button class="btn" id="nav-captions-btn" onclick="switchLibraryTab('captions')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: var(--bg-light-secondary); color: var(--text-light); border: 2px solid var(--border-light); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.borderColor='var(--primary)'; this.style.color='var(--primary)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-light)'; this.style.color='var(--text-light)';">Captions</button>
+                <button class="btn" id="nav-hooks-btn" onclick="switchLibraryTab('hooks')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: #8b5cf6; color: white; border: 2px solid #8b5cf6; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">Hooks</button>
+                <button class="btn" id="nav-ctas-btn" onclick="switchLibraryTab('ctas')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: white; color: #f59e0b; border: 2px solid #f59e0b; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">CTAs</button>
+                <button class="btn" id="nav-ideas-btn" onclick="switchLibraryTab('ideas')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: white; color: #3b82f6; border: 2px solid #3b82f6; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">Ideas</button>
+                <button class="btn" id="nav-hashtags-btn" onclick="switchLibraryTab('hashtags')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: white; color: #14B8A6; border: 2px solid #14B8A6; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">Tags</button>
+                <button class="btn" id="nav-topics-btn" onclick="switchLibraryTab('topics')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: white; color: #06b6d4; border: 2px solid #06b6d4; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">Topics</button>
+                <button class="btn" id="nav-captions-btn" onclick="switchLibraryTab('captions')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: white; color: #ec4899; border: 2px solid #ec4899; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">Captions</button>
+                <button class="btn" id="nav-outreach-btn" onclick="switchLibraryTab('outreach')" style="flex: 1; min-width: 80px; padding: 10px 16px; border-radius: 20px; background: white; color: #10b981; border: 2px solid #10b981; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">Outreach</button>
             </div>
 
             <!-- HOOKS TAB -->
             <div id="library-hooks-tab" class="library-tab-content">
-                <div class="hooks-section" style="padding: 20px;">
+                <div class="library-panel">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <button class="btn btn-primary" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2); margin-left: auto;" onclick="toggleAddHookForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(99, 102, 241, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(99, 102, 241, 0.2)';">+</button>
+                        <button class="btn" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; background: #8b5cf6; color: white; border: none; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3); margin-left: auto;" onclick="toggleAddHookForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(139, 92, 246, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.3)';">+</button>
                     </div>
                     
                     <!-- Add Form (Hidden by default) -->
@@ -1179,9 +1186,9 @@
 
             <!-- CTAs TAB -->
             <div id="library-ctas-tab" class="library-tab-content" style="display: none;">
-                <div class="ctas-section" style="padding: 20px;">
+                <div class="library-panel">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <button class="btn btn-primary" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2); margin-left: auto;" onclick="toggleAddCTAForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(99, 102, 241, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(99, 102, 241, 0.2)';">+</button>
+                        <button class="btn" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; background: #f59e0b; color: white; border: none; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3); margin-left: auto;" onclick="toggleAddCTAForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(245, 158, 11, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(245, 158, 11, 0.3)';">+</button>
                     </div>
                     
                     <!-- Add Form (Hidden by default) -->
@@ -1227,9 +1234,9 @@
 
             <!-- IDEAS TAB -->
             <div id="library-ideas-tab" class="library-tab-content" style="display: none;">
-                <div class="ideas-section" style="padding: 20px;">
+                <div class="library-panel">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <button class="btn btn-primary" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2); margin-left: auto;" onclick="toggleAddIdeaForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(99, 102, 241, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(99, 102, 241, 0.2)';">+</button>
+                        <button class="btn" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; background: #3b82f6; color: white; border: none; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); margin-left: auto;" onclick="toggleAddIdeaForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(59, 130, 246, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(59, 130, 246, 0.3)';">+</button>
                     </div>
                     
                     <!-- Add Form (Hidden by default) -->
@@ -1279,9 +1286,9 @@
 
             <!-- HASHTAGS TAB -->
             <div id="library-hashtags-tab" class="library-tab-content" style="display: none;">
-                <div class="hashtags-section" style="padding: 20px; border-left: 6px solid #14b8a6; background: linear-gradient(135deg, rgba(20, 184, 166, 0.04), transparent);">
+                <div class="library-panel">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <button class="btn btn-primary" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2); margin-left: auto;" onclick="toggleAddHashtagForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(99, 102, 241, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(99, 102, 241, 0.2)';">+</button>
+                        <button class="btn" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; background: #14B8A6; color: white; border: none; box-shadow: 0 2px 8px rgba(20, 184, 166, 0.3); margin-left: auto;" onclick="toggleAddHashtagForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(20, 184, 166, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(20, 184, 166, 0.3)';">+</button>
                     </div>
                     
                     <!-- Add Form (Hidden by default) -->
@@ -1317,9 +1324,9 @@
 
             <!-- TOPICS TAB -->
             <div id="library-topics-tab" class="library-tab-content" style="display: none;">
-                <div class="topics-section" style="padding: 20px; border-left: 6px solid #f59e0b; background: linear-gradient(135deg, rgba(245, 158, 11, 0.04), transparent);">
+                <div class="library-panel">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <button class="btn btn-primary" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2); margin-left: auto;" onclick="toggleAddTopicForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(99, 102, 241, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(99, 102, 241, 0.2)';">+</button>
+                        <button class="btn" style="width: 36px; height: 36px; padding: 0; border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; background: #06b6d4; color: white; border: none; box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3); margin-left: auto;" onclick="toggleAddTopicForm()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 16px rgba(6, 182, 212, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(6, 182, 212, 0.3)';">+</button>
                     </div>
                     <div id="addTopicForm" style="display: none; background: var(--bg-light-secondary); padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--primary);">
                         <div class="form-group" style="margin-bottom: 16px;">
@@ -1352,8 +1359,7 @@
 
             <!-- CAPTIONS TAB -->
             <div id="library-captions-tab" class="library-tab-content" style="display: none;">
-                <div class="captions-section" style="padding: 20px; margin-bottom: 0;">
-                    <h3 style="margin: 0 0 16px 0;">✍️ Caption Drafter</h3>
+                <div class="library-panel" style="margin-bottom: 16px;">
                     <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 24px;">Build compelling captions from your hooks, ideas, and CTAs</p>
                     
                     <div class="form-group" style="margin-bottom: 20px;">
@@ -1412,10 +1418,34 @@
                     <button class="btn btn-primary btn-block" onclick="saveDraftCaption()">Save Draft Caption</button>
                 </div>
 
-                <div class="captions-section" style="padding: 20px; margin-bottom: 0;">
-                    <h3 style="margin: 0 0 12px 0;">✍️ Saved Captions</h3>
+                <div class="library-panel">
                     <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px;">Your drafted captions ready to post</p>
                     <div id="draftCaptionsList"></div>
+                </div>
+            </div>
+
+            <!-- OUTREACH TAB -->
+            <div id="library-outreach-tab" class="library-tab-content" style="display: none;">
+                <div class="library-panel">
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 20px;">Save captions you rotate in WhatsApp & Facebook groups for product outreach</p>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin: 0 0 12px 0; color: var(--primary);">📱 WhatsApp Group Captions</h4>
+                        <div id="whatsappCaptionsDisplay" style="margin-bottom: 12px;"></div>
+                        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                            <input type="text" id="whatsappCaptionInput" placeholder="Add WhatsApp caption..." style="flex: 1; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                            <button class="btn btn-primary btn-sm" onclick="addOutreachCaption('whatsapp')">Add</button>
+                        </div>
+                    </div>
+
+                    <div style="border-top: 2px solid var(--border-light); padding-top: 16px;">
+                        <h4 style="margin: 0 0 12px 0; color: var(--primary);">👥 Facebook Group Captions</h4>
+                        <div id="facebookCaptionsDisplay" style="margin-bottom: 12px;"></div>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="facebookCaptionInput" placeholder="Add Facebook caption..." style="flex: 1; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                            <button class="btn btn-primary btn-sm" onclick="addOutreachCaption('facebook')">Add</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1541,8 +1571,24 @@
                 <p>Manage your content strategy</p>
             </div>
 
+            <!-- QUICK JUMP -->
+            <div class="card" style="padding: 12px 16px;">
+                <p style="font-size: 11px; font-weight: 600; color: var(--text-light-secondary); margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">Jump to</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    <button class="btn btn-secondary btn-sm" onclick="jumpToSettingsSection('settingsCard-calendar', 'calendarSection')">📅 Calendar</button>
+                    <button class="btn btn-secondary btn-sm" onclick="jumpToSettingsSection('settingsCard-strategy', 'strategySection')">🎯 Pillars</button>
+                    <button class="btn btn-secondary btn-sm" onclick="jumpToSettingsSection('settingsCard-goals', 'goalsSection')">🎯 Goals</button>
+                    <button class="btn btn-secondary btn-sm" onclick="jumpToSettingsSection('settingsCard-priority', 'productPrioritySection')">🎯 Priority</button>
+                    <button class="btn btn-secondary btn-sm" onclick="jumpToSettingsSection('settingsCard-growth', 'growthActivitiesSection')">⚡ Growth</button>
+                    <button class="btn btn-secondary btn-sm" onclick="jumpToSettingsSection('settingsCard-contenttypes', 'contentTypesSection')">📝 Types</button>
+                    <button class="btn btn-secondary btn-sm" onclick="jumpToSettingsSection('settingsCard-data', 'dataSection')">🔄 Data</button>
+                </div>
+            </div>
+
+            <p style="font-size: 11px; font-weight: 700; color: var(--text-light-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 4px 8px;">📋 Content Planning</p>
+
             <!-- WEEKLY CALENDAR (COLLAPSIBLE) -->
-            <div class="card">
+            <div class="card" id="settingsCard-calendar">
                 <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('calendarSection')">
                     <h3 style="margin: 0;">📅 Weekly Content Calendar</h3>
                     <span id="calendarToggle" style="font-size: 20px;">+</span>
@@ -1555,7 +1601,7 @@
             </div>
 
             <!-- CONTENT STRATEGY (COLLAPSIBLE) -->
-            <div class="card">
+            <div class="card" id="settingsCard-strategy">
                 <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('strategySection')">
                     <h3 style="margin: 0;">🎯 Content Strategy & Pillars</h3>
                     <span id="strategyToggle" style="font-size: 20px;">+</span>
@@ -1593,7 +1639,7 @@
             </div>
 
             <!-- GOALS & POSTING DAYS (COLLAPSIBLE) -->
-            <div class="card">
+            <div class="card" id="settingsCard-goals">
                 <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('goalsSection')">
                     <h3 style="margin: 0;">🎯 Goals & Posting Days</h3>
                     <span id="goalsToggle" style="font-size: 20px;">+</span>
@@ -1621,7 +1667,7 @@
             </div>
 
             <!-- CONTENT TYPES (COLLAPSIBLE) -->
-            <div class="card">
+            <div class="card" id="settingsCard-contenttypes">
                 <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('contentTypesSection')">
                     <h3 style="margin: 0;">📝 Custom Content Types</h3>
                     <span id="contentTypesToggle" style="font-size: 20px;">+</span>
@@ -1637,8 +1683,51 @@
                 </div>
             </div>
 
+            <p style="font-size: 11px; font-weight: 700; color: var(--text-light-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 4px 8px;">🚀 Growth & Priority</p>
+
+            <!-- GROWTH ACTIVITIES (COLLAPSIBLE) -->
+            <div class="card" id="settingsCard-growth">
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('growthActivitiesSection')">
+                    <h3 style="margin: 0;">⚡ Growth Day Activities</h3>
+                    <span id="growthActivitiesToggle" style="font-size: 20px;">+</span>
+                </div>
+                <div id="growthActivitiesSection" style="display: none; margin-top: 16px; border-top: 2px solid var(--border-light); padding-top: 16px;">
+                    <p style="font-size: 13px; color: var(--text-light-secondary); margin-bottom: 16px;">On batch/growth days, the app suggests random activities from your list. Customize what you'd like to focus on.</p>
+                    
+                    <div id="growthActivitiesDisplay" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;"></div>
+                    
+                    <div style="border-top: 2px solid var(--border-light); padding-top: 16px; margin-top: 16px;">
+                        <h4 style="margin-top: 0; color: var(--primary);">➕ Add Activity</h4>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label">Activity Icon</label>
+                            <input type="text" id="newActivityIcon" placeholder="e.g. 🎬, 📊, 🤝" maxlength="5" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label">Activity Name</label>
+                            <input type="text" id="newActivityName" placeholder="e.g. Record Video, Email Outreach" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="addGrowthActivity()">+ Add Activity</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEKLY PRODUCT PRIORITY (COLLAPSIBLE) -->
+            <div class="card" id="settingsCard-priority">
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('productPrioritySection')">
+                    <h3 style="margin: 0;">🎯 Weekly Product Priority</h3>
+                    <span id="productPriorityToggle" style="font-size: 20px;">+</span>
+                </div>
+                <div id="productPrioritySection" style="display: none; margin-top: 16px; border-top: 2px solid var(--border-light); padding-top: 16px;">
+                    <p style="font-size: 13px; color: var(--text-light-secondary); margin-bottom: 16px;">Rank your top 3 products to focus on this week. Dashboard shows current week's priority.</p>
+                    <div id="productPriorityDisplay" style="margin-bottom: 16px;"></div>
+                    <button class="btn btn-secondary btn-sm btn-block" onclick="showProductPriorityEditor()">Edit Weekly Priority</button>
+                </div>
+            </div>
+
+            <p style="font-size: 11px; font-weight: 700; color: var(--text-light-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 4px 8px;">⚙️ App Data</p>
+
             <!-- DATA MANAGEMENT (COLLAPSIBLE) -->
-            <div class="card">
+            <div class="card" id="settingsCard-data">
                 <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('dataSection')">
                     <h3 style="margin: 0;">🔄 Data Management</h3>
                     <span id="dataToggle" style="font-size: 20px;">+</span>
@@ -1702,6 +1791,18 @@
         <div class="modal-header">
             <span>Browse Past Days</span>
             <button class="modal-close" onclick="closeModal('browsePastPostsModal')">×</button>
+        </div>
+        <div id="pastPostsStats" style="margin-bottom: 16px;"></div>
+        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+            <input type="text" id="pastPostsSearch" placeholder="🔍 Search content..." oninput="renderBrowsePastPosts()" style="flex: 1; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+            <select id="pastPostsPlatformFilter" onchange="renderBrowsePastPosts()" style="padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                <option value="">All Platforms</option>
+                <option value="Instagram">Instagram</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Threads">Threads</option>
+                <option value="Facebook">Facebook</option>
+                <option value="Pinterest">Pinterest</option>
+            </select>
         </div>
         <div id="pastPostsList"></div>
     </div>
@@ -1777,7 +1878,14 @@
         userTopics: [],
         userHashtags: [],
         customContentTypes: [],
-        growthActivities: [],
+        outreachCaptions: {
+            whatsapp: [],  // {id, text, dateAdded}
+            facebook: []   // {id, text, dateAdded}
+        },
+        weeklyProductPriority: {
+            week: null,  // ISO week number
+            products: [] // [{rank: 1, name: 'Inbox Aide SA'}, {rank: 2, name: 'Reply Vault'}, ...]
+        },
         contentVault: [],
         contentPillars: [],
         brandRule: "Does this help someone save time, communicate better, or work smarter?",
@@ -1841,7 +1949,13 @@
                 currentWeekIndex: 0,
                 rotationDay: 'Friday'
             }
-        }
+        },
+        growthActivities: [
+            { icon: '🔍', name: 'Platform Audit', id: 'platform-audit' },
+            { icon: '🕵️', name: 'Silent Competitor Audit', id: 'competitor-audit' },
+            { icon: '💬', name: 'Send Outreach Messages', id: 'outreach' },
+            { icon: '🛠️', name: 'Product Optimization', id: 'product-optimization' }
+        ]
     };
 
     // Editing state to track which item is being edited
@@ -1988,6 +2102,7 @@
             if (document.getElementById('topicsList')) renderTopics();
             if (document.getElementById('calendarGrid')) renderCalendar();
             if (document.getElementById('pillarsDisplay')) renderContentStrategyDisplay();
+            if (document.getElementById('growthActivitiesDisplay')) renderGrowthActivitiesDisplay();
             if (document.getElementById('goalsForm')) renderGoalsForm();
             if (document.getElementById('postingDaysForm')) renderPostingDaysForm();
             if (document.getElementById('batchCreateDaysForm')) renderBatchCreateDaysForm();
@@ -1997,9 +2112,18 @@
             if (document.getElementById('platformGuidelines')) renderPlatformGuidelines();
             if (document.getElementById('todaySubheader')) renderToday();
             
+            try {
+                if (document.getElementById('whatsappCaptionsDisplay')) renderOutreachCaptionsDisplay();
+                if (document.getElementById('productPriorityDisplay')) renderProductPriorityDisplay();
+            } catch (e) {
+                console.error('Error rendering outreach/priority sections:', e);
+            }
+            
+            // Sync day preferences to weekly calendar
+            assignFromDayPreferences();
+            
             // Auto-assign pillars if not yet done
             if (!appState.contentStrategy.setupCompleted) {
-                assignPillarsToWeek();
                 appState.contentStrategy.setupCompleted = true;
                 saveState();
             }
@@ -2034,15 +2158,21 @@
         }
     }
 
-    const growthActivities = [
-        { icon: '🔍', name: 'Platform Audit', id: 'calendar-section' },
-        { icon: '🕵️', name: 'Silent Competitor Audit', id: 'goals-section' },
-        { icon: '💬', name: 'Send Outreach Messages', id: 'ctas-section' },
-        { icon: '🛠️', name: 'Product Optimization', id: 'product-section' }
-    ];
-
     function generateGrowthDaySuggestion() {
-        const suggestion = growthActivities[Math.floor(Math.random() * growthActivities.length)];
+        // Safety check - wait for appState to exist
+        if (typeof appState === 'undefined' || !appState.growthActivities) {
+            return;
+        }
+
+        if (appState.growthActivities.length === 0) {
+            const suggestionText = document.getElementById('suggestionText');
+            if (suggestionText) {
+                suggestionText.textContent = 'No growth activities configured. Add some in Settings!';
+            }
+            return;
+        }
+        
+        const suggestion = appState.growthActivities[Math.floor(Math.random() * appState.growthActivities.length)];
         const suggestionText = document.getElementById('suggestionText');
         const jumpBtn = document.getElementById('jumpToActivityBtn');
         
@@ -2052,19 +2182,19 @@
         
         if (jumpBtn) {
             jumpBtn.onclick = () => {
-                const section = document.querySelector(`.${suggestion.id}`);
-                if (section) {
-                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                showToast(`👉 ${suggestion.name} is ready for you!`);
             };
         }
     }
 
     function setTodayPlatform(platform) {
+        if (!platform || typeof platform !== 'string') return;
+        
         // Update button styling
         document.querySelectorAll('[id^="today-platform-"]').forEach(btn => {
             btn.style.background = 'white';
-            btn.style.color = btn.id.replace('today-platform-', '').toLowerCase() === platform.toLowerCase() ? 'white' : getComputedStyle(document.documentElement).getPropertyValue('--platform-' + btn.id.replace('today-platform-', '').toLowerCase()).trim();
+            const btnPlatform = btn.id.replace('today-platform-', '');
+            btn.style.color = btnPlatform.toLowerCase() === platform.toLowerCase() ? 'white' : getComputedStyle(document.documentElement).getPropertyValue('--platform-' + btnPlatform.toLowerCase()).trim();
         });
         const activeBtn = document.getElementById(`today-platform-${platform}`);
         if (activeBtn) {
@@ -2096,24 +2226,49 @@
         if (!todaySubheader || !todayPlanCard || !todayGuidanceDetail) return; // Elements not ready
         
         const today = getToday();
-        const schedule = appState.weeklyCalendar[today];
+        const schedule = appState.weeklyCalendar[today] || {};
         const color = dayColors[today] || 'var(--primary)';
-        const isGrowthDay = !isPostingDay();
+        const isRestDay = schedule.intention === 'Rest';
+        const isBatch = isBatchDay();
+        const isGrowthDay = !isPostingDay() && !isBatch && !isRestDay;
 
         const dateStr = getFormattedDate();
         todaySubheader.textContent = `${today} • ${dateStr}`;
         
-        if (isGrowthDay) {
-            // Generate today's suggestion
-            const suggestion = growthActivities[Math.floor(Math.random() * growthActivities.length)];
+        if (isRestDay) {
             todayPlanCard.innerHTML = `
-                <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; text-align: center;">
-                    <p style="font-size: 14px; margin: 0 0 12px 0; opacity: 0.9;">Today's Suggested Focus</p>
-                    <p style="font-size: 18px; font-weight: 700; margin: 0 0 16px 0;">${suggestion.icon} ${suggestion.name}</p>
-                    <button style="background: rgba(255,255,255,0.25); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px;" onclick="switchPage('growth'); setTimeout(() => { const section = document.querySelector('.${suggestion.id}'); if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);">Jump to Activity →</button>
-                </div>
-                <h3>📋 Growth Day</h3>
-                <p style="color: var(--text-light-secondary);">No posting today. Focus on business growth activities and save insights for future content.</p>
+                <h3>😴 Rest Day</h3>
+                <p style="color: var(--text-light-secondary);">No content plan today — enjoy the break!</p>
+            `;
+        } else if (isGrowthDay) {
+            // Generate today's suggestion from growth activities
+            if (appState.growthActivities && appState.growthActivities.length > 0) {
+                const suggestion = appState.growthActivities[Math.floor(Math.random() * appState.growthActivities.length)];
+                todayPlanCard.innerHTML = `
+                    <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; text-align: center;">
+                        <p style="font-size: 14px; margin: 0 0 12px 0; opacity: 0.9;">Today's Suggested Focus</p>
+                        <p style="font-size: 18px; font-weight: 700; margin: 0 0 16px 0;">${suggestion.icon} ${suggestion.name}</p>
+                        <button style="background: rgba(255,255,255,0.25); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px;" onclick="switchPage('growth'); setTimeout(() => { const section = document.querySelector('.${suggestion.id}'); if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);">Jump to Activity →</button>
+                    </div>
+                    <h3>📋 Growth Day</h3>
+                    <p style="color: var(--text-light-secondary);">No posting today. Focus on business growth activities and save insights for future content.</p>
+                `;
+            } else {
+                todayPlanCard.innerHTML = `
+                    <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; text-align: center;">
+                        <p style="font-size: 14px; margin: 0 0 12px 0; opacity: 0.9;">Today's Suggested Focus</p>
+                        <p style="font-size: 18px; font-weight: 700; margin: 0 0 16px 0;">⚡ Growth Day</p>
+                        <button style="background: rgba(255,255,255,0.25); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px;" onclick="switchPage('settings'); setTimeout(() => jumpToSettingsSection('settingsCard-growth', 'growthActivitiesSection'), 100);">Set Up Activities →</button>
+                    </div>
+                    <h3>📋 Growth Day</h3>
+                    <p style="color: var(--text-light-secondary);">No posting today. Focus on business growth activities and save insights for future content.</p>
+                `;
+            }
+        } else if (isBatch) {
+            const pillarInfo = schedule.pillar ? `<strong>${schedule.pillar}</strong> pillar` : `<strong>${schedule.intention || 'Teach'}</strong> content`;
+            todayPlanCard.innerHTML = `
+                <h3>🎨 Batch Create Day</h3>
+                <p style="color: var(--text-light-secondary);">Aim for at least 3 pieces of content today, focused on ${pillarInfo}. Bank them ahead so future posting days are covered.</p>
             `;
         } else {
             const pillarInfo = schedule.pillar ? `<strong>${schedule.pillar}</strong> pillar` : `<strong>${schedule.intention}</strong> content`;
@@ -2123,7 +2278,11 @@
 
         renderDashboardOverview();
         renderDraftPostCard();
-        renderRepurposeGuides();
+        try {
+            renderRepurposeGuides();
+        } catch (e) {
+            console.error('Error in renderRepurposeGuides:', e.message);
+        }
     }
 
     function renderDashboard() {
@@ -2141,23 +2300,44 @@
         dashboardDate.innerHTML = `<strong>${today}</strong> • ${dateStr}`;
 
         // Update today's display and card styling
+        const batchNoteEl = document.getElementById('dashboardBatchNote');
         if (todayDisplay && todayGuidance) {
             const schedule = appState.weeklyCalendar[today];
-            const isGrowthDay = !isPostingDay();
+            const isRestDay = !!(schedule && schedule.intention === 'Rest');
+            const isBatch = isBatchDay();
+            const hasContentPlan = !!(schedule && schedule.platform && schedule.intention && !isRestDay);
+            const isGrowthDay = !isPostingDay() && !isBatch && !isRestDay && !hasContentPlan;
             
             if (dashboardCard) {
                 dashboardCard.classList.toggle('growth-day', isGrowthDay);
             }
             
-            if (isGrowthDay) {
-                todayDisplay.innerHTML = '<p style="font-size: 16px; margin: 0;">📊 Growth Day</p>';
-                todayGuidance.innerHTML = '<p style="margin: 0; font-size: 13px;">Focus on business growth activities today</p>';
-            } else if (schedule) {
+            if (isRestDay) {
+                // No content plan today — rest takes priority since there's nothing to post
+                todayDisplay.innerHTML = '<p style="font-size: 16px; margin: 0;">😴 Rest Day</p>';
+                todayGuidance.innerHTML = '<p style="margin: 0; font-size: 13px;">No content plan today — enjoy the break!</p>';
+                if (batchNoteEl) batchNoteEl.innerHTML = '';
+            } else if (hasContentPlan) {
+                // The post idea is always the priority in the main box — batch or not
                 todayDisplay.innerHTML = `<p style="font-size: 16px; margin: 0; font-weight: 600;">${schedule.platform}</p>`;
                 todayGuidance.innerHTML = `<p style="margin: 0; font-size: 13px;">Post <strong>${schedule.intention}</strong> content</p>`;
+
+                // Batch reminder goes below the main box, not replacing it
+                if (batchNoteEl) {
+                    batchNoteEl.innerHTML = isBatch ? `
+                        <div class="card" style="border-left: 4px solid #F59E0B; background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), transparent); padding: 14px 16px;">
+                            <p style="margin: 0; font-size: 13px;">🎨 <strong>Batch Create Day</strong> — aim for at least 3 pieces of content to bank ahead for the week.</p>
+                        </div>
+                    ` : '';
+                }
+            } else if (isGrowthDay) {
+                todayDisplay.innerHTML = '<p style="font-size: 16px; margin: 0;">📊 Growth Day</p>';
+                todayGuidance.innerHTML = '<p style="margin: 0; font-size: 13px;">Focus on business growth activities today</p>';
+                if (batchNoteEl) batchNoteEl.innerHTML = '';
             } else {
                 todayDisplay.innerHTML = '<p style="font-size: 16px; margin: 0;">—</p>';
                 todayGuidance.innerHTML = '';
+                if (batchNoteEl) batchNoteEl.innerHTML = '';
             }
         }
 
@@ -2184,22 +2364,63 @@
 
         const highestIntention = Object.entries(topIntention).sort((a, b) => b[1] - a[1])[0];
         const motivation = totalPosted >= totalGoal ? '🎉 You\'re on track!' : 'Keep pushing! 📈';
+        const streak = calculatePostingStreak();
+        const streakLabel = streak > 0 ? `🔥 ${streak} day${streak === 1 ? '' : 's'}` : '—';
 
         const progressHtml = `
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                <div style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; text-align: center;">
-                    <p style="font-size: 12px; color: var(--text-light-secondary); margin: 0 0 6px 0;">POSTS COMPLETED</p>
-                    <p style="font-size: 28px; font-weight: 700; margin: 0; color: var(--primary);">${totalPosted} / ${totalGoal}</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                <div style="background: var(--bg-light-secondary); padding: 12px 8px; border-radius: 8px; text-align: center;">
+                    <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0 0 6px 0;">POSTS</p>
+                    <p style="font-size: 22px; font-weight: 700; margin: 0; color: var(--primary);">${totalPosted}/${totalGoal}</p>
                 </div>
-                <div style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; text-align: center;">
-                    <p style="font-size: 12px; color: var(--text-light-secondary); margin: 0 0 6px 0;">PLATFORMS USED</p>
-                    <p style="font-size: 18px; font-weight: 600; margin: 0;">${platformsUsed.join(', ') || '—'}</p>
+                <div style="background: var(--bg-light-secondary); padding: 12px 8px; border-radius: 8px; text-align: center;">
+                    <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0 0 6px 0;">STREAK</p>
+                    <p style="font-size: 18px; font-weight: 700; margin: 0; color: var(--primary);">${streakLabel}</p>
+                </div>
+                <div style="background: var(--bg-light-secondary); padding: 12px 8px; border-radius: 8px; text-align: center;">
+                    <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0 0 6px 0;">PLATFORMS</p>
+                    <p style="font-size: 13px; font-weight: 600; margin: 0; line-height: 1.4;">${platformsUsed.join(', ') || '—'}</p>
                 </div>
             </div>
             ${highestIntention ? `<p style="font-size: 13px; margin: 0 0 8px 0;">Most used: <strong>${highestIntention[0]}</strong> (${highestIntention[1]} posts)</p>` : ''}
             <p style="font-size: 13px; margin: 0; color: var(--primary); font-weight: 500;">${motivation}</p>
         `;
         weeklyProgress.innerHTML = progressHtml;
+
+        // Render product priority section
+        try {
+            const currentWeek = getISOWeekNumber(new Date());
+            const priority = appState.weeklyProductPriority;
+            const priorityList = document.getElementById('dashboardProductPriorityList');
+            
+            if (priorityList) {
+                if (priority && priority.week === currentWeek && priority.products && Array.isArray(priority.products) && priority.products.length > 0) {
+                    let priorityHtml = '';
+                    priority.products.forEach(item => {
+                        if (item && item.name && typeof item.rank === 'number') {
+                            const rankEmoji = {1: '🥇', 2: '🥈', 3: '🥉'}[item.rank] || '📌';
+                            priorityHtml += `
+                                <div style="background: var(--bg-light-secondary); padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 16px;">${rankEmoji}</span>
+                                    <span>${item.rank}. ${item.name}</span>
+                                </div>
+                            `;
+                        }
+                    });
+                    if (priorityHtml) {
+                        priorityList.innerHTML = priorityHtml;
+                    } else {
+                        priorityList.innerHTML = '<p style="font-size: 12px; color: var(--text-light-secondary); font-style: italic; margin: 0;">No priorities set yet</p>';
+                    }
+                } else {
+                    priorityList.innerHTML = '<p style="font-size: 12px; color: var(--text-light-secondary); font-style: italic; margin: 0;">No priorities set yet</p>';
+                }
+            }
+        } catch (e) {
+            console.error('Error rendering dashboard product priority:', e);
+            const list = document.getElementById('dashboardProductPriorityList');
+            if (list) list.innerHTML = '';
+        }
     }
 
     function renderDashboardOverview() {
@@ -2282,148 +2503,200 @@
     }
 
     function renderDraftPostCard() {
-        const isGrowthDay = !isPostingDay();
-        
-        if (isGrowthDay) {
-            document.getElementById('draftPostCard').innerHTML = '';
-            renderGrowthDayActivities();
-            return;
-        }
-
-        const schedule = appState.weeklyCalendar[getToday()];
-        if (!schedule) {
-            document.getElementById('draftPostCard').innerHTML = '<p>No schedule for today</p>';
-            return;
-        }
-
-        const todayIntention = schedule.intention.toLowerCase();
-        const todayPlatform = schedule.platform;
-        const todayPillar = schedule.pillar;
-
-        // Helper function to check if item matches today's pillar and intention
-        const matchesPillarAndIntention = (item) => {
-            const matchesIntention = item.types && item.types.length > 0 ? item.types.includes(todayIntention) : true;
-            const matchesPillar = todayPillar ? (item.pillar === todayPillar) : true;
-            return matchesIntention && matchesPillar;
-        };
-
-        // Filter by today's pillar and intention, get best match for each type
-        const relevantHooks = appState.userHooks.filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
-        const bestHook = relevantHooks.length > 0 ? relevantHooks[0] : null;
-
-        const relevantCTAs = appState.userCTAs.filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
-        const bestCTA = relevantCTAs.length > 0 ? relevantCTAs[0] : null;
-
-        const relevantIdeas = appState.userIdeas.filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
-        const bestIdea = relevantIdeas.length > 0 ? relevantIdeas[0] : null;
-
-        const relevantTopics = appState.userTopics.filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
-        const bestTopic = relevantTopics.length > 0 ? relevantTopics[0] : null;
-
-        let suggestedContent = '';
-        
-        // Build suggested library items section with ONE best match per type
-        if (bestHook || bestCTA || bestIdea || bestTopic) {
-            const pillarDisplay = todayPillar ? `<strong>${todayPillar}</strong>` : `<strong>${todayIntention}</strong>`;
-            suggestedContent = `<div style="margin-bottom: 16px;">
-                <p style="font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 8px;">✨ Best Matches for ${pillarDisplay}</p>
-                <div style="display: flex; flex-direction: column; gap: 8px;">`;
-            
-            if (bestHook) {
-                suggestedContent += `
-                    <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${bestHook.text.replace(/'/g, "\\'")}'); showToast('Hook added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
-                        <span>🎣 ${bestHook.text.substring(0, 45)}${bestHook.text.length > 45 ? '...' : ''}</span>
-                        <span style="font-size: 16px; opacity: 0.7;">→</span>
-                    </div>
-                `;
-            }
-            
-            if (bestCTA) {
-                suggestedContent += `
-                    <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${bestCTA.text.replace(/'/g, "\\'")}'); showToast('CTA added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
-                        <span>💬 ${bestCTA.text.substring(0, 45)}${bestCTA.text.length > 45 ? '...' : ''}</span>
-                        <span style="font-size: 16px; opacity: 0.7;">→</span>
-                    </div>
-                `;
-            }
-            
-            if (bestIdea) {
-                suggestedContent += `
-                    <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${bestIdea.text.replace(/'/g, "\\'")}'); showToast('Idea added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
-                        <span>💡 ${bestIdea.text.substring(0, 45)}${bestIdea.text.length > 45 ? '...' : ''}</span>
-                        <span style="font-size: 16px; opacity: 0.7;">→</span>
-                    </div>
-                `;
-            }
-            
-            if (bestTopic) {
-                suggestedContent += `
-                    <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${bestTopic.text.replace(/'/g, "\\'")}'); showToast('Topic added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
-                        <span>💭 ${bestTopic.text.substring(0, 45)}${bestTopic.text.length > 45 ? '...' : ''}</span>
-                        <span style="font-size: 16px; opacity: 0.7;">→</span>
-                    </div>
-                `;
-            }
-            
-            suggestedContent += `</div></div>`;
-        }
-
-        let browseButtons = '<div style="display: flex; gap: 8px; flex-wrap: wrap;">';
-        if (!bestHook) browseButtons += '<button class="btn btn-secondary btn-sm" onclick="switchPage(\'library\'); switchLibraryTab(\'hooks\');">Browse Hooks</button>';
-        if (!bestCTA) browseButtons += '<button class="btn btn-secondary btn-sm" onclick="switchPage(\'library\'); switchLibraryTab(\'ctas\');">Browse CTAs</button>';
-        if (!bestIdea) browseButtons += '<button class="btn btn-secondary btn-sm" onclick="switchPage(\'library\'); switchLibraryTab(\'ideas\');">Browse Ideas</button>';
-        if (!bestTopic) browseButtons += '<button class="btn btn-secondary btn-sm" onclick="switchPage(\'library\'); switchLibraryTab(\'topics\');">Browse Topics</button>';
-        browseButtons += '</div>';
-
-        const draftHtml = `
-            <div class="card">
-                <h3>✍️ Draft Your Post</h3>
-                <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px;">📍 ${todayPlatform} • 📌 ${todayIntention}</p>
-                
-                <div style="margin-bottom: 16px;">
-                    <label class="form-label" style="margin-bottom: 8px;">Platform</label>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
-                        <button type="button" onclick="setTodayPlatform('Instagram')" id="today-platform-Instagram" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Instagram' ? 'var(--platform-instagram)' : 'white'}; border: 2px solid var(--platform-instagram); color: ${todayPlatform === 'Instagram' ? 'white' : 'var(--platform-instagram)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">📷 Instagram</button>
-                        <button type="button" onclick="setTodayPlatform('LinkedIn')" id="today-platform-LinkedIn" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'LinkedIn' ? 'var(--platform-linkedin)' : 'white'}; border: 2px solid var(--platform-linkedin); color: ${todayPlatform === 'LinkedIn' ? 'white' : 'var(--platform-linkedin)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">💼 LinkedIn</button>
-                        <button type="button" onclick="setTodayPlatform('Threads')" id="today-platform-Threads" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Threads' ? 'var(--platform-threads)' : 'white'}; border: 2px solid var(--platform-threads); color: ${todayPlatform === 'Threads' ? 'white' : 'var(--platform-threads)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">🧵 Threads</button>
-                        <button type="button" onclick="setTodayPlatform('Facebook')" id="today-platform-Facebook" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Facebook' ? 'var(--platform-facebook)' : 'white'}; border: 2px solid var(--platform-facebook); color: ${todayPlatform === 'Facebook' ? 'white' : 'var(--platform-facebook)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">f Facebook</button>
-                        <button type="button" onclick="setTodayPlatform('Pinterest')" id="today-platform-Pinterest" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Pinterest' ? 'var(--platform-pinterest)' : 'white'}; border: 2px solid var(--platform-pinterest); color: ${todayPlatform === 'Pinterest' ? 'white' : 'var(--platform-pinterest)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">📌 Pinterest</button>
-                    </div>
-                    <div id="todayPlatformGuidelines" style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); font-size: 13px; line-height: 1.6; color: var(--text-light); display: none;"></div>
-                </div>
-
-                ${suggestedContent}
-                ${!suggestedContent ? `<p style="color: var(--text-light-secondary); font-size: 12px; margin-bottom: 16px; padding: 12px; background: var(--bg-light-secondary); border-radius: 8px;">📚 No content tagged for <strong>${todayIntention}</strong> yet. Browse your library or create new items to get started!</p>` : ''}
-                <div class="form-group">
-                    <label class="form-label">Post Content</label>
-                    <textarea id="draftContent" placeholder="Write your post here..."></textarea>
-                    <div class="textarea-counter" id="draftCounter"></div>
-                </div>
-                <div style="margin-bottom: 16px;">
-                    ${browseButtons}
-                </div>
-                <label style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; cursor: pointer;">
-                    <input type="checkbox" id="markAsPostedCheckbox" onchange="markPostAsPosted()">
-                    <span style="font-weight: 500;">Mark as Posted</span>
-                </label>
-            </div>
-        `;
-        document.getElementById('draftPostCard').innerHTML = draftHtml;
-        
-        // Add event listener for draft counter
-        const draftContentEl = document.getElementById('draftContent');
-        if (draftContentEl) {
-            draftContentEl.addEventListener('input', () => updateTextareaCounter('draftContent'));
-        }
-        
-        // Show platform guidelines for today's platform
-        setTimeout(() => {
+        try {
+            const draftEl = document.getElementById('draftPostCard');
+            const growthEl = document.getElementById('growthDaySection');
             const today = getToday();
             const schedule = appState.weeklyCalendar[today];
-            if (schedule && schedule.platform) {
-                setTodayPlatform(schedule.platform);
+
+            const isRestDay = !!(schedule && schedule.intention === 'Rest');
+            const isBatch = isBatchDay();
+            const isTruePostingDay = isPostingDay() || isBatch;
+
+            // Rest day: message already shown in todayPlanCard (renderToday) — just clear the rest
+            if (isRestDay) {
+                if (draftEl) draftEl.innerHTML = '';
+                if (growthEl) growthEl.innerHTML = '';
+                return;
             }
-        }, 100);
+
+            // True growth/business day (not posting, not batch): show growth activities
+            if (!isTruePostingDay) {
+                if (draftEl) draftEl.innerHTML = '';
+                renderGrowthDayActivities();
+                return;
+            }
+
+            // Posting day OR batch day: show the real content plan/draft tools
+            if (growthEl) growthEl.innerHTML = '';
+            if (!draftEl) return;
+
+            if (!schedule || typeof schedule !== 'object') {
+                draftEl.innerHTML = '<p>No schedule for today</p>';
+                return;
+            }
+
+            // SAFETY CHECK before toLowerCase
+            const intention = schedule.intention;
+            if (!intention || typeof intention !== 'string') {
+                draftEl.innerHTML = '<p>⚠️ Schedule incomplete. Check settings.</p>';
+                return;
+            }
+
+            const todayIntention = intention.toLowerCase();
+            const todayPlatform = schedule.platform || 'Instagram';
+            const todayPillar = schedule.pillar;
+
+            // Helper function to check if item matches today's pillar and intention
+            const matchesPillarAndIntention = (item) => {
+                if (!item || typeof item !== 'object') return false;
+                const matchesIntention = item.types && Array.isArray(item.types) && item.types.length > 0 ? item.types.includes(todayIntention) : true;
+                const matchesPillar = todayPillar ? (item.pillar === todayPillar) : true;
+                return matchesIntention && matchesPillar;
+            };
+
+            // Filter by today's pillar and intention, get best match for each type
+            const relevantHooks = (appState.userHooks || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
+            const bestHook = relevantHooks.length > 0 ? relevantHooks[0] : null;
+
+            const relevantCTAs = (appState.userCTAs || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
+            const bestCTA = relevantCTAs.length > 0 ? relevantCTAs[0] : null;
+
+            const relevantIdeas = (appState.userIdeas || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
+            const bestIdea = relevantIdeas.length > 0 ? relevantIdeas[0] : null;
+
+            const relevantTopics = (appState.userTopics || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
+            const bestTopic = relevantTopics.length > 0 ? relevantTopics[0] : null;
+
+            let suggestedContent = '';
+            
+            // Build suggested library items section with ONE best match per type
+            if (bestHook || bestCTA || bestIdea || bestTopic) {
+                const pillarDisplay = todayPillar ? `<strong>${todayPillar}</strong>` : `<strong>${todayIntention}</strong>`;
+                suggestedContent = `<div style="margin-bottom: 16px;">
+                    <p style="font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 8px;">✨ Best Matches for ${pillarDisplay}</p>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">`;
+                
+                if (bestHook && bestHook.text) {
+                    const fullText = String(bestHook.text);
+                    const displayText = fullText.substring(0, 45) + (fullText.length > 45 ? '...' : '');
+                    const safeText = fullText.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                    suggestedContent += `
+                        <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${safeText}'); showToast('Hook added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
+                            <span>🎣 ${displayText}</span>
+                            <span style="font-size: 16px; opacity: 0.7;">→</span>
+                        </div>
+                    `;
+                }
+                
+                if (bestCTA && bestCTA.text) {
+                    const fullText = String(bestCTA.text);
+                    const displayText = fullText.substring(0, 45) + (fullText.length > 45 ? '...' : '');
+                    const safeText = fullText.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                    suggestedContent += `
+                        <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${safeText}'); showToast('CTA added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
+                            <span>💬 ${displayText}</span>
+                            <span style="font-size: 16px; opacity: 0.7;">→</span>
+                        </div>
+                    `;
+                }
+                
+                if (bestIdea && bestIdea.text) {
+                    const fullText = String(bestIdea.text);
+                    const displayText = fullText.substring(0, 45) + (fullText.length > 45 ? '...' : '');
+                    const safeText = fullText.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                    suggestedContent += `
+                        <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${safeText}'); showToast('Idea added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
+                            <span>💡 ${displayText}</span>
+                            <span style="font-size: 16px; opacity: 0.7;">→</span>
+                        </div>
+                    `;
+                }
+                
+                if (bestTopic && bestTopic.text) {
+                    const fullText = String(bestTopic.text);
+                    const displayText = fullText.substring(0, 45) + (fullText.length > 45 ? '...' : '');
+                    const safeText = fullText.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                    suggestedContent += `
+                        <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${safeText}'); showToast('Topic added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
+                            <span>💭 ${displayText}</span>
+                            <span style="font-size: 16px; opacity: 0.7;">→</span>
+                        </div>
+                    `;
+                }
+                
+                suggestedContent += `</div></div>`;
+            }
+
+            let browseButtons = '<div style="display: flex; gap: 8px; flex-wrap: wrap;">';
+            if (!bestHook) browseButtons += '<button class="btn btn-secondary btn-sm" onclick="switchPage(\'library\'); switchLibraryTab(\'hooks\');">Browse Hooks</button>';
+            if (!bestCTA) browseButtons += '<button class="btn btn-secondary btn-sm" onclick="switchPage(\'library\'); switchLibraryTab(\'ctas\');">Browse CTAs</button>';
+            if (!bestIdea) browseButtons += '<button class="btn btn-secondary btn-sm" onclick="switchPage(\'library\'); switchLibraryTab(\'ideas\');">Browse Ideas</button>';
+            if (!bestTopic) browseButtons += '<button class="btn btn-secondary btn-sm" onclick="switchPage(\'library\'); switchLibraryTab(\'topics\');">Browse Topics</button>';
+            browseButtons += '</div>';
+
+            const batchBanner = isBatch ? `
+                <div class="card" style="border-left: 6px solid #F59E0B; background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), transparent); margin-bottom: 12px;">
+                    <p style="margin: 0; font-weight: 600; font-size: 14px;">🎨 Batch Create Day</p>
+                    <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-light-secondary);">It's batch create day today, aim for at least 3 pieces of content to bank ahead for the week.</p>
+                </div>
+            ` : '';
+
+            const draftHtml = `
+                ${batchBanner}
+                <div class="card">
+                    <h3>✍️ Draft Your Post</h3>
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px;">📍 ${todayPlatform} • 📌 ${todayIntention}</p>
+                    
+                    <div style="margin-bottom: 16px;">
+                        <label class="form-label" style="margin-bottom: 8px;">Platform</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                            <button type="button" onclick="setTodayPlatform('Instagram')" id="today-platform-Instagram" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Instagram' ? 'var(--platform-instagram)' : 'white'}; border: 2px solid var(--platform-instagram); color: ${todayPlatform === 'Instagram' ? 'white' : 'var(--platform-instagram)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">📷 Instagram</button>
+                            <button type="button" onclick="setTodayPlatform('LinkedIn')" id="today-platform-LinkedIn" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'LinkedIn' ? 'var(--platform-linkedin)' : 'white'}; border: 2px solid var(--platform-linkedin); color: ${todayPlatform === 'LinkedIn' ? 'white' : 'var(--platform-linkedin)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">💼 LinkedIn</button>
+                            <button type="button" onclick="setTodayPlatform('Threads')" id="today-platform-Threads" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Threads' ? 'var(--platform-threads)' : 'white'}; border: 2px solid var(--platform-threads); color: ${todayPlatform === 'Threads' ? 'white' : 'var(--platform-threads)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">🧵 Threads</button>
+                            <button type="button" onclick="setTodayPlatform('Facebook')" id="today-platform-Facebook" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Facebook' ? 'var(--platform-facebook)' : 'white'}; border: 2px solid var(--platform-facebook); color: ${todayPlatform === 'Facebook' ? 'white' : 'var(--platform-facebook)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">f Facebook</button>
+                            <button type="button" onclick="setTodayPlatform('Pinterest')" id="today-platform-Pinterest" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Pinterest' ? 'var(--platform-pinterest)' : 'white'}; border: 2px solid var(--platform-pinterest); color: ${todayPlatform === 'Pinterest' ? 'white' : 'var(--platform-pinterest)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">📌 Pinterest</button>
+                        </div>
+                        <div id="todayPlatformGuidelines" style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); font-size: 13px; line-height: 1.6; color: var(--text-light); display: none;"></div>
+                    </div>
+
+                    ${suggestedContent}
+                    ${!suggestedContent ? `<p style="color: var(--text-light-secondary); font-size: 12px; margin-bottom: 16px; padding: 12px; background: var(--bg-light-secondary); border-radius: 8px;">📚 No content tagged for <strong>${todayIntention}</strong> yet. Browse your library or create new items to get started!</p>` : ''}
+                    <div class="form-group">
+                        <label class="form-label">Post Content</label>
+                        <textarea id="draftContent" placeholder="Write your post here..."></textarea>
+                        <div class="textarea-counter" id="draftCounter"></div>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        ${browseButtons}
+                    </div>
+                    <label style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; cursor: pointer;">
+                        <input type="checkbox" id="markAsPostedCheckbox" onchange="markPostAsPosted()">
+                        <span style="font-weight: 500;">Mark as Posted</span>
+                    </label>
+                </div>
+            `;
+            document.getElementById('draftPostCard').innerHTML = draftHtml;
+            
+            // Add event listener for draft counter
+            const draftContentEl = document.getElementById('draftContent');
+            if (draftContentEl) {
+                draftContentEl.addEventListener('input', () => updateTextareaCounter('draftContent'));
+            }
+            
+            // Show platform guidelines for today's platform
+            setTimeout(() => {
+                const today = getToday();
+                const schedule = appState.weeklyCalendar[today];
+                if (schedule && schedule.platform) {
+                    setTodayPlatform(schedule.platform);
+                }
+            }, 100);
+        } catch (e) {
+            console.error('Error rendering draft post card:', e);
+            const el = document.getElementById('draftPostCard');
+            if (el) el.innerHTML = '<p>⚠️ Error loading draft section</p>';
+        }
     }
 
     // SMART REPURPOSE GUIDES - Platform-specific guidelines
@@ -2693,44 +2966,387 @@
     };
 
     function renderRepurposeGuides() {
-        const isGrowthDay = !isPostingDay();
-        if (isGrowthDay) {
-            document.getElementById('repurposeSection').innerHTML = '';
-            return;
-        }
+        try {
+            const repurposeEl = document.getElementById('repurposeSection');
+            if (!repurposeEl) return;
 
-        const schedule = appState.weeklyCalendar[getToday()];
-        if (!schedule) return;
+            const isGrowthDay = !isPostingDay() && !isBatchDay();
+            if (isGrowthDay) {
+                repurposeEl.innerHTML = '';
+                return;
+            }
 
-        const todayIntention = schedule.intention.toLowerCase();
-        const todayPlatform = schedule.platform;
-        const guidesKey = `${todayIntention}+${todayPlatform.toLowerCase()}`;
-        const guides = repurposeGuides[guidesKey];
+            const today = getToday();
+            if (!today) {
+                repurposeEl.innerHTML = '';
+                return;
+            }
 
-        if (!guides || Object.keys(guides).length === 0) {
-            document.getElementById('repurposeSection').innerHTML = '';
-            return;
-        }
+            const schedule = appState && appState.weeklyCalendar && appState.weeklyCalendar[today];
+            
+            if (!schedule || typeof schedule !== 'object') {
+                repurposeEl.innerHTML = '';
+                return;
+            }
+            
+            const platform = schedule.platform;
+            const intention = schedule.intention;
+            
+            if (!platform || !intention || typeof platform !== 'string' || typeof intention !== 'string') {
+                repurposeEl.innerHTML = '';
+                return;
+            }
 
-        const repurposeHtml = `
-            <div class="card" style="border-left: 6px solid #8b5cf6; background: linear-gradient(135deg, rgba(139, 92, 246, 0.04), transparent);">
-                <h3>🔄 Repurpose This Post</h3>
-                <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 16px;">Use your ${todayPlatform} post about <strong>${todayIntention}</strong> on these platforms with specific tweaks:</p>
-                
-                <div style="display: flex; flex-direction: column; gap: 16px;">
-                    ${Object.entries(guides).map(([platform, guide]) => `
+            const todayIntention = intention.toLowerCase();
+            const todayPlatformLower = platform.toLowerCase();
+            
+            if (!todayIntention || !todayPlatformLower) {
+                repurposeEl.innerHTML = '';
+                return;
+            }
+            
+            const guidesKey = `${todayIntention}+${todayPlatformLower}`;
+            let guides = (repurposeGuides && repurposeGuides[guidesKey]) || null;
+
+            // If exact combo doesn't exist, suggest relevant platforms
+            if (!guides || Object.keys(guides).length === 0) {
+                guides = generateSmartRepurposeSuggestions(todayIntention, platform);
+            }
+
+            if (!guides || Object.keys(guides).length === 0) {
+                repurposeEl.innerHTML = '';
+                return;
+            }
+
+            let entriesHtml = '';
+            Object.entries(guides).forEach(([plat, guide]) => {
+                if (guide && guide.icon && guide.title && Array.isArray(guide.guidelines)) {
+                    const guidelineHtml = guide.guidelines.map(g => `<li style="margin-bottom: 6px; font-size: 12px; line-height: 1.4; color: var(--text-light-secondary);">✓ ${g}</li>`).join('');
+                    entriesHtml += `
                         <div style="background: var(--bg-light-secondary); border-left: 4px solid var(--primary); padding: 12px; border-radius: 6px;">
                             <p style="font-weight: 600; margin-bottom: 8px; font-size: 14px;">${guide.icon} ${guide.title}</p>
                             <ul style="margin: 0; padding-left: 20px; list-style: none;">
-                                ${guide.guidelines.map(g => `<li style="margin-bottom: 6px; font-size: 12px; line-height: 1.4; color: var(--text-light-secondary);">✓ ${g}</li>`).join('')}
+                                ${guidelineHtml}
                             </ul>
                         </div>
-                    `).join('')}
+                    `;
+                }
+            });
+
+            const repurposeHtml = `
+                <div class="card" style="border-left: 6px solid #8b5cf6; background: linear-gradient(135deg, rgba(139, 92, 246, 0.04), transparent);">
+                    <h3>🔄 Repurpose This Post</h3>
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 16px;">Use your ${platform} post about <strong>${todayIntention}</strong> on these platforms with specific tweaks:</p>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        ${entriesHtml}
+                    </div>
                 </div>
-            </div>
-        `;
-        
-        document.getElementById('repurposeSection').innerHTML = repurposeHtml;
+            `;
+            
+            repurposeEl.innerHTML = repurposeHtml;
+        } catch (e) {
+            console.error('Error rendering repurpose guides:', e.message);
+            const el = document.getElementById('repurposeSection');
+            if (el) el.innerHTML = '';
+        }
+    }
+
+    function generateSmartRepurposeSuggestions(intention, currentPlatform) {
+        // Safety check
+        if (!intention || !currentPlatform) {
+            return {};
+        }
+
+        // Smart defaults when exact combo isn't in guides
+        const smartMappings = {
+            'teach': {
+                'Instagram': {
+                    icon: '📸',
+                    title: 'Instagram Post/Carousel',
+                    guidelines: [
+                        'Break into 3-5 visual steps (carousel)',
+                        'Use simple language—no jargon',
+                        'Visual-first: screenshot, graphic, or diagram',
+                        'Add "Save this" CTA'
+                    ]
+                },
+                'Threads': {
+                    icon: '💬',
+                    title: 'Threads Thread',
+                    guidelines: [
+                        'Conversational tone—like teaching a friend',
+                        'Start with relatable problem or question',
+                        'Numbered steps or simple thread',
+                        'End: "Have you tried this?"'
+                    ]
+                },
+                'LinkedIn': {
+                    icon: '💼',
+                    title: 'LinkedIn Post',
+                    guidelines: [
+                        'Expand with professional context',
+                        'Add business relevance or results',
+                        'Include your experience with topic',
+                        'End with "What would you add?"'
+                    ]
+                },
+                'Pinterest': {
+                    icon: '📌',
+                    title: 'Pinterest Pin',
+                    guidelines: [
+                        'Create vertical pin (1000x1500px)',
+                        'Headline: action-focused ("How to...")',
+                        'Brand consistent with your style',
+                        'Link to blog post or full tutorial'
+                    ]
+                },
+                'Twitter': {
+                    icon: '𝕏',
+                    title: 'Twitter/X Thread',
+                    guidelines: [
+                        'First tweet hooks the reader',
+                        'Numbered tips (2-5 points)',
+                        'Short, punchy sentences',
+                        'End: "Follow for more ideas"'
+                    ]
+                },
+                'TikTok': {
+                    icon: '🎬',
+                    title: 'TikTok Video',
+                    guidelines: [
+                        'Hook in first 1-2 seconds',
+                        'Teach one quick skill/fact',
+                        'Visual demonstration > talking head',
+                        'Text overlays for key points'
+                    ]
+                },
+                'Facebook': {
+                    icon: '👥',
+                    title: 'Facebook Post',
+                    guidelines: [
+                        'Longer form OK—explain the "why"',
+                        'Add personal touch or experience',
+                        'Encourage discussion in comments',
+                        'Engage with replies actively'
+                    ]
+                }
+            },
+            'promote': {
+                'Instagram': {
+                    icon: '📸',
+                    title: 'Instagram Reel/Story',
+                    guidelines: [
+                        'Make visually appealing—lifestyle imagery',
+                        'Keep copy punchy and benefit-focused',
+                        'Include special offer or limited-time element',
+                        'Use Reels for algorithm boost'
+                    ]
+                },
+                'Threads': {
+                    icon: '💬',
+                    title: 'Threads Post',
+                    guidelines: [
+                        'Casual, conversational tone',
+                        'Lead with value, then mention offer',
+                        'Share customer success story or testimonial',
+                        'End with "DM for details" or link'
+                    ]
+                },
+                'Pinterest': {
+                    icon: '📌',
+                    title: 'Pinterest Pin',
+                    guidelines: [
+                        'Design vertical pin (1000x1500px)',
+                        'Headline: benefit/outcome focused',
+                        'Brand consistently—build pin collection',
+                        'Direct to sales/landing page'
+                    ]
+                },
+                'LinkedIn': {
+                    icon: '💼',
+                    title: 'LinkedIn Post',
+                    guidelines: [
+                        'Lead with business/professional angle',
+                        'Show how it solves specific problem',
+                        'Add metrics or results if available',
+                        'Soft promotion—focus on value'
+                    ]
+                },
+                'Facebook': {
+                    icon: '👥',
+                    title: 'Facebook Post',
+                    guidelines: [
+                        'Detailed description—what makes it special',
+                        'Include social proof or reviews',
+                        'Use urgency if real ("Limited stock", "Ends Friday")',
+                        'Clear CTA: "Shop Now" or "Learn More"'
+                    ]
+                },
+                'TikTok': {
+                    icon: '🎬',
+                    title: 'TikTok Video',
+                    guidelines: [
+                        'Entertaining format > hard sell',
+                        'Show product in action or transformation',
+                        'Fast cuts, trending sounds, energy',
+                        'Link in bio—TikTok limits direct links'
+                    ]
+                }
+            },
+            'convo': {
+                'LinkedIn': {
+                    icon: '💼',
+                    title: 'LinkedIn Post',
+                    guidelines: [
+                        'Frame as thought-provoking question',
+                        'Add professional context',
+                        'Share your perspective first',
+                        'Be specific—avoid vague corporate speak'
+                    ]
+                },
+                'Instagram': {
+                    icon: '📸',
+                    title: 'Instagram Story Poll',
+                    guidelines: [
+                        'Use Stories Poll feature or ask in caption',
+                        'Make relevant to audience interests',
+                        'Keep question simple and clear',
+                        'Respond to comments to spark engagement'
+                    ]
+                },
+                'Twitter': {
+                    icon: '𝕏',
+                    title: 'Twitter Poll or Thread',
+                    guidelines: [
+                        'Use native poll feature for engagement',
+                        'Or start conversational thread',
+                        'Ask for opinions/experiences',
+                        'Retweet and reply to responses'
+                    ]
+                },
+                'Threads': {
+                    icon: '💬',
+                    title: 'Threads Post',
+                    guidelines: [
+                        'Most conversational platform—safe space',
+                        'Ask open-ended questions',
+                        'Share your genuine take first',
+                        'Engage deeply with every reply'
+                    ]
+                },
+                'Facebook': {
+                    icon: '👥',
+                    title: 'Facebook Post',
+                    guidelines: [
+                        'Community-focused—family/friend angle',
+                        'Spark discussion in your group',
+                        'Tag relevant people to invite participation',
+                        'Create sense of belonging'
+                    ]
+                }
+            },
+            'story': {
+                'LinkedIn': {
+                    icon: '💼',
+                    title: 'LinkedIn Post',
+                    guidelines: [
+                        'Extract business/career lesson from story',
+                        'Reframe as "Here\'s what I learned..."',
+                        'Add professional relevance',
+                        'End with actionable insight'
+                    ]
+                },
+                'Threads': {
+                    icon: '💬',
+                    title: 'Threads Thread',
+                    guidelines: [
+                        'Tell story casually—like coffee chat',
+                        'Use conversational language',
+                        'Invite engagement: "Have you experienced this?"',
+                        'Stories resonate deeply here'
+                    ]
+                },
+                'Instagram': {
+                    icon: '📸',
+                    title: 'Instagram Reel/Post',
+                    guidelines: [
+                        'Show, don\'t just tell—visual storytelling',
+                        'Before/after format works great',
+                        'Emotional hook in first frame',
+                        'Let audience feel the story'
+                    ]
+                },
+                'Facebook': {
+                    icon: '👥',
+                    title: 'Facebook Post',
+                    guidelines: [
+                        'Personal, emotional, relatable',
+                        'Community loves long-form stories here',
+                        'Tag people mentioned in story',
+                        'Encourage family/friends to share reactions'
+                    ]
+                }
+            },
+            'trust': {
+                'Instagram': {
+                    icon: '📸',
+                    title: 'Instagram Story/Reel',
+                    guidelines: [
+                        'Share behind-the-scenes content',
+                        'Show the human side—not polished',
+                        'Tell short story about why you care',
+                        'Use Stories for raw, authentic feel'
+                    ]
+                },
+                'LinkedIn': {
+                    icon: '💼',
+                    title: 'LinkedIn Post',
+                    guidelines: [
+                        'Position as thought leadership',
+                        'Add credentials or relevant results',
+                        'Focus on solving real problems',
+                        'How to work with you: "DM" or link'
+                    ]
+                },
+                'Threads': {
+                    icon: '💬',
+                    title: 'Threads Post',
+                    guidelines: [
+                        'Be vulnerable—share what you learned hard way',
+                        'Authenticity > perfection here',
+                        'Ask genuine questions—show you learn too',
+                        'Reply to comments—build relationships'
+                    ]
+                },
+                'Facebook': {
+                    icon: '👥',
+                    title: 'Facebook Post',
+                    guidelines: [
+                        'Personal details—why this matters to you',
+                        'Share struggles AND wins',
+                        'Invite friends to share experiences',
+                        'Community builds through vulnerability'
+                    ]
+                }
+            }
+        };
+
+        // Get suggestions for this intention, or return empty
+        const intentionMap = smartMappings[intention];
+        if (!intentionMap) {
+            // Fallback: suggest all platforms for generic handling
+            return {};
+        }
+
+        // Remove current platform from suggestions (don't repost to same place)
+        const suggestions = {};
+        Object.entries(intentionMap).forEach(([platform, guide]) => {
+            if (platform.toLowerCase() !== currentPlatform.toLowerCase()) {
+                suggestions[platform] = guide;
+            }
+        });
+
+        return suggestions;
     }
 
     function renderGrowthDayActivities() {
@@ -2744,28 +3360,223 @@
         document.getElementById('growthDaySection').innerHTML = growthHtml;
     }
 
-    function renderBrowsePastPosts() {
-        const pastPostsList = document.getElementById('pastPostsList');
-        if (!pastPostsList) return; // Element not yet in DOM
-        
-        if (appState.pastPosts.length === 0) {
-            pastPostsList.innerHTML = '<p style="color: var(--text-light-secondary); padding: 20px; text-align: center;">No past posts yet. Mark posts as completed to see them here.</p>';
-            return;
-        }
+    function calculatePostingStreak() {
+        try {
+            if (!appState.pastPosts || appState.pastPosts.length === 0) return 0;
+            
+            const postDates = new Set(
+                appState.pastPosts
+                    .map(p => p.isoDate)
+                    .filter(d => d)
+            );
+            if (postDates.size === 0) return 0;
 
-        const pastPostsHtml = appState.pastPosts.map(post => `
-            <div class="card" style="margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
-                    <div>
-                        <p style="font-weight: 600; margin-bottom: 4px;">${post.date}</p>
-                        <p style="font-size: 12px; color: var(--text-light-secondary);">${post.platform} • ${post.intention}</p>
+            let streak = 0;
+            let checkDate = new Date();
+            // If nothing posted today yet, start counting from yesterday instead
+            const todayIso = checkDate.toISOString().split('T')[0];
+            if (!postDates.has(todayIso)) {
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            while (true) {
+                const iso = checkDate.toISOString().split('T')[0];
+                if (postDates.has(iso)) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+            return streak;
+        } catch (e) {
+            console.error('Error calculating streak:', e);
+            return 0;
+        }
+    }
+
+    function calculatePillarBalance() {
+        try {
+            const pillars = (appState.contentStrategy && appState.contentStrategy.pillars) || [];
+            if (!appState.pastPosts || appState.pastPosts.length === 0 || pillars.length === 0) return null;
+
+            const counts = {};
+            let total = 0;
+            appState.pastPosts.forEach(p => {
+                if (p.pillar) {
+                    counts[p.pillar] = (counts[p.pillar] || 0) + 1;
+                    total++;
+                }
+            });
+            if (total === 0) return null;
+
+            return pillars.map(pillar => ({
+                name: pillar.name,
+                target: pillar.percentage,
+                actual: Math.round(((counts[pillar.name] || 0) / total) * 100)
+            }));
+        } catch (e) {
+            console.error('Error calculating pillar balance:', e);
+            return null;
+        }
+    }
+
+    function renderBrowsePastPosts() {
+        try {
+            const pastPostsList = document.getElementById('pastPostsList');
+            const statsEl = document.getElementById('pastPostsStats');
+            if (!pastPostsList) return; // Element not yet in DOM
+
+            // --- Stats header: streak + pillar balance ---
+            if (statsEl) {
+                const streak = calculatePostingStreak();
+                const balance = calculatePillarBalance();
+                let statsHtml = `<div style="display: flex; gap: 12px; margin-bottom: ${balance ? '12px' : '0'};">
+                    <div style="flex: 1; background: var(--bg-light-secondary); border-radius: 8px; padding: 12px; text-align: center;">
+                        <p style="font-size: 20px; font-weight: 700; margin: 0; color: var(--primary);">${streak}</p>
+                        <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0;">🔥 Day Streak</p>
                     </div>
-                </div>
-                <p style="line-height: 1.6; font-size: 13px; margin-bottom: 0;">${post.content}</p>
-            </div>
-        `).join('');
-        
-        pastPostsList.innerHTML = pastPostsHtml;
+                    <div style="flex: 1; background: var(--bg-light-secondary); border-radius: 8px; padding: 12px; text-align: center;">
+                        <p style="font-size: 20px; font-weight: 700; margin: 0; color: var(--primary);">${appState.pastPosts.length}</p>
+                        <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0;">📝 Total Posts</p>
+                    </div>
+                </div>`;
+
+                if (balance) {
+                    statsHtml += `<div style="background: var(--bg-light-secondary); border-radius: 8px; padding: 12px;">
+                        <p style="font-size: 11px; font-weight: 600; color: var(--text-light-secondary); margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">Pillar Balance (target vs actual)</p>
+                        ${balance.map(b => `
+                            <div style="margin-bottom: 6px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px;">
+                                    <span>${b.name}</span>
+                                    <span style="color: var(--text-light-secondary);">${b.actual}% <span style="opacity:0.6;">(target ${b.target}%)</span></span>
+                                </div>
+                                <div style="height: 6px; background: var(--border-light); border-radius: 3px; overflow: hidden;">
+                                    <div style="height: 100%; width: ${Math.min(b.actual, 100)}%; background: var(--primary);"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>`;
+                }
+                statsEl.innerHTML = statsHtml;
+            }
+
+            if (!appState.pastPosts || appState.pastPosts.length === 0) {
+                pastPostsList.innerHTML = '<p style="color: var(--text-light-secondary); padding: 20px; text-align: center;">No past posts yet. Mark posts as completed to see them here.</p>';
+                return;
+            }
+
+            // --- Filters ---
+            const searchInput = document.getElementById('pastPostsSearch');
+            const platformFilter = document.getElementById('pastPostsPlatformFilter');
+            const searchTerm = (searchInput && searchInput.value || '').toLowerCase().trim();
+            const platformValue = (platformFilter && platformFilter.value) || '';
+
+            let filtered = [...appState.pastPosts].reverse(); // most recent first
+            if (searchTerm) {
+                filtered = filtered.filter(p => (p.content || '').toLowerCase().includes(searchTerm));
+            }
+            if (platformValue) {
+                filtered = filtered.filter(p => p.platform === platformValue);
+            }
+
+            if (filtered.length === 0) {
+                pastPostsList.innerHTML = '<p style="color: var(--text-light-secondary); padding: 20px; text-align: center;">No posts match your search.</p>';
+                return;
+            }
+
+            const pillarColors = {
+                'Customer Communication': '#10b981',
+                'Systems & Digital Products': '#0A66C2',
+                'Practical Business Tips': '#F59E0B',
+                'Your Journey': '#14B8A6'
+            };
+
+            const pastPostsHtml = filtered.map(post => {
+                const isEditing = editingState.type === 'pastPost' && editingState.id === post.id;
+                const pillarColor = post.pillar && pillarColors[post.pillar] ? pillarColors[post.pillar] : '#e5e7eb';
+                const pillarBadge = post.pillar ? `<span class="badge" style="background: ${pillarColor}22; color: ${pillarColor};">${post.pillar}</span>` : '';
+                const safeContent = String(post.content || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+
+                if (isEditing) {
+                    return `
+                        <div class="card" style="margin-bottom: 12px; border-left: 4px solid var(--primary);">
+                            <p style="font-weight: 600; margin-bottom: 8px; font-size: 13px;">${post.date}</p>
+                            <textarea id="edit-pastPost-${post.id}" style="width: 100%; padding: 10px; border: 1px solid var(--border-light); border-radius: 6px; font-family: inherit; font-size: 13px; min-height: 100px;">${post.content}</textarea>
+                            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                <button class="btn btn-primary btn-sm" onclick="saveEditPastPost('${post.id}', document.getElementById('edit-pastPost-${post.id}').value)">Save</button>
+                                <button class="btn btn-secondary btn-sm" onclick="cancelEditing(); renderBrowsePastPosts();">Cancel</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="card" style="margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 4px;">${post.date}</p>
+                                <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 4px;">${post.platform} • ${post.intention}</p>
+                                ${pillarBadge}
+                            </div>
+                            <div style="display: flex; gap: 6px; flex-shrink: 0;">
+                                <button onclick="reusePastPost('${post.id}')" title="Reuse as today's draft" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 13px;">↻</button>
+                                <button onclick="startEditingPastPost('${post.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 13px;">✏️</button>
+                                <button onclick="copyToClipboard('${safeContent}'); showToast('Copied!');" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
+                                <button onclick="removePastPost('${post.id}')" style="padding: 6px 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
+                            </div>
+                        </div>
+                        <p style="line-height: 1.6; font-size: 13px; margin-bottom: 0;">${post.content}</p>
+                    </div>
+                `;
+            }).join('');
+
+            pastPostsList.innerHTML = pastPostsHtml;
+        } catch (e) {
+            console.error('Error rendering past posts:', e);
+        }
+    }
+
+    function startEditingPastPost(id) {
+        editingState.type = 'pastPost';
+        editingState.id = id;
+        renderBrowsePastPosts();
+    }
+
+    function saveEditPastPost(id, newContent) {
+        const post = appState.pastPosts.find(p => p.id === id);
+        if (post) {
+            post.content = newContent.trim();
+            saveState();
+        }
+        editingState.type = null;
+        editingState.id = null;
+        renderBrowsePastPosts();
+        showToast('Post updated!');
+    }
+
+    function removePastPost(id) {
+        appState.pastPosts = appState.pastPosts.filter(p => p.id !== id);
+        saveState();
+        renderBrowsePastPosts();
+        renderDashboardOverview();
+        showToast('Post removed');
+    }
+
+    function reusePastPost(id) {
+        const post = appState.pastPosts.find(p => p.id === id);
+        if (!post) return;
+        closeModal('browsePastPostsModal');
+        showPage('today');
+        setTimeout(() => {
+            const draftEl = document.getElementById('draftContent');
+            if (draftEl) {
+                draftEl.value = post.content;
+                updateTextareaCounter('draftContent');
+                draftEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 150);
+        showToast('↻ Post reused — edit and repost!');
     }
 
     function markPostAsPosted() {
@@ -2786,8 +3597,10 @@
         appState.pastPosts.push({
             id: Date.now().toString(),
             date: `${today} • ${dateStr}`,
+            isoDate: new Date().toISOString().split('T')[0],
             platform: schedule.platform,
             intention: schedule.intention,
+            pillar: schedule.pillar || null,
             content: draftContent
         });
 
@@ -2869,13 +3682,6 @@
         renderDashboard();
     }
 
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            console.log('Copied to clipboard');
-        }).catch(err => {
-            console.error('Failed to copy:', err);
-        });
-    }
 
     function renderIdeas() {
         const ideasListEl = document.getElementById('ideasList');
@@ -3712,20 +4518,27 @@
     };
 
     function setPlatform(platform) {
+        if (!platform || typeof platform !== 'string') return;
+        
         document.getElementById('captionPlatform').value = platform;
         
         // Update button styling
         document.querySelectorAll('[id^="platform-"]').forEach(btn => {
             btn.style.background = 'white';
         });
-        document.getElementById(`platform-${platform}`).style.background = `var(--platform-${platform.toLowerCase()})`;
-        document.getElementById(`platform-${platform}`).style.color = 'white';
+        const btn = document.getElementById(`platform-${platform}`);
+        if (btn) {
+            btn.style.background = `var(--platform-${platform.toLowerCase()})`;
+            btn.style.color = 'white';
+        }
         
         // Show guidelines
         const guidelinesDiv = document.getElementById('platformGuidelines');
-        guidelinesDiv.innerHTML = `<strong>${platform} Tips:</strong> ${platformGuidelines[platform]}`;
-        guidelinesDiv.style.display = 'block';
-        guidelinesDiv.style.borderLeftColor = `var(--platform-${platform.toLowerCase()})`;
+        if (guidelinesDiv) {
+            guidelinesDiv.innerHTML = `<strong>${platform} Tips:</strong> ${platformGuidelines[platform] || ''}`;
+            guidelinesDiv.style.display = 'block';
+            guidelinesDiv.style.borderLeftColor = `var(--platform-${platform.toLowerCase()})`;
+        }
     }
 
     function insertIntoDraft(text) {
@@ -3917,13 +4730,6 @@
         }
     }
 
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            showToast('Copied to clipboard!');
-        }).catch(err => {
-            console.error('Copy failed:', err);
-        });
-    }
 
     function copyCaptionById(captionId) {
         const caption = appState.draftCaptions.find(c => c.id === captionId);
@@ -4278,16 +5084,6 @@
         document.getElementById('draftCounter').textContent = `${content.length} characters`;
     }
 
-    function markPostAsPosted() {
-        const schedule = getTodaySchedule();
-        appState.weeklyPosted[schedule.platform] = (appState.weeklyPosted[schedule.platform] || 0) + 1;
-        saveState();
-        renderDashboard();
-        document.getElementById('draftContent').value = '';
-        updateDraftCounter();
-        showToast('Post marked as posted! 🎉');
-    }
-
     document.addEventListener('input', (e) => {
         if (e.target.id === 'draftContent') {
             updateDraftCounter();
@@ -4357,18 +5153,20 @@
         let html = '';
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         days.forEach(day => {
-            const schedule = appState.weeklyCalendar[day];
-            const platformColor = `var(--platform-${schedule.platform.toLowerCase()})`;
+            const schedule = appState.weeklyCalendar[day] || {};
+            const platform = schedule.platform || 'Instagram';
+            const intention = schedule.intention || 'Teach';
+            const platformColor = `var(--platform-${platform.toLowerCase()})`;
             html += `
                 <div class="calendar-day">
                     <label>${day}</label>
                     <div style="display: flex; gap: 8px;">
                         <select style="flex: 1; padding: 8px; font-size: 13px;" onchange="updateCalendar('${day}', 'intention', this.value)">
-                            ${INTENTIONS.map(i => `<option value="${i}" ${schedule.intention === i ? 'selected' : ''}>${i}</option>`).join('')}
+                            ${INTENTIONS.map(i => `<option value="${i}" ${intention === i ? 'selected' : ''}>${i}</option>`).join('')}
                         </select>
                         <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
                             <select style="flex: 1; padding: 8px; font-size: 13px;" onchange="updateCalendar('${day}', 'platform', this.value)">
-                                ${PLATFORMS.map(p => `<option value="${p}" ${schedule.platform === p ? 'selected' : ''}>${p}</option>`).join('')}
+                                ${PLATFORMS.map(p => `<option value="${p}" ${platform === p ? 'selected' : ''}>${p}</option>`).join('')}
                             </select>
                             <div style="width: 24px; height: 24px; border-radius: 4px; background: ${platformColor}; border: 2px solid var(--border-light);"></div>
                         </div>
@@ -4417,20 +5215,25 @@
     }
 
     function saveGoals() {
-        PLATFORMS.forEach(platform => {
-            const input = document.getElementById(`goal-${platform}`);
-            if (input) {
-                appState.weeklyGoals[platform] = parseInt(input.value) || 0;
-            }
-        });
-        saveState();
-        
-        // Smart assignment: auto-assign platforms to posting days based on goals
-        smartAssignPlatforms();
-        
-        renderCalendar();
-        renderDashboard();
-        showToast('Goals saved & calendar assigned!');
+        try {
+            PLATFORMS.forEach(platform => {
+                const input = document.getElementById(`goal-${platform}`);
+                if (input) {
+                    appState.weeklyGoals[platform] = parseInt(input.value) || 0;
+                }
+            });
+            saveState();
+            
+            // Use new smart calendar generation that respects day preferences
+            generateWeeklyCalendarFromPreferences();
+            
+            renderCalendar();
+            renderDashboard();
+            showToast('✅ Weekly goals saved & calendar auto-generated!');
+        } catch (e) {
+            console.error('Error saving goals:', e);
+            showToast('⚠️ Error saving goals: ' + e.message);
+        }
     }
 
     function smartAssignPlatforms() {
@@ -4565,7 +5368,640 @@
     }
 
     function showDayPreferencesEditor() {
-        showToast('📅 Day preference editing coming soon!');
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+        
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const intentions = ['Teach', 'Build Trust', 'Tell a Story', 'Share Progress', 'Celebrate a Win', 'Start a Conversation', 'Promote'];
+        const prefs = appState.contentStrategy.dayPreferences;
+        
+        let html = `
+            <div style="background: white; border-radius: 12px; padding: 20px; max-width: 90vw; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">📅 Edit Day Preferences</h2>
+                    <button onclick="this.closest('div').parentElement.remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                </div>
+                
+                <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 16px;">Set the default intention for each day. App will auto-generate your weekly calendar based on these preferences + your platform posting goals.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+        `;
+        
+        days.forEach(day => {
+            const isBatch = prefs[day]?.batchDay;
+            const isRest = prefs[day]?.rest;
+            const currentIntention = prefs[day]?.preferredIntention || null;
+            
+            html += `
+                <div style="border: 2px solid var(--border-light); border-radius: 8px; padding: 12px;">
+                    <p style="font-weight: 600; margin: 0 0 8px 0; font-size: 14px;">${day}</p>
+                    
+                    ${isRest ? `
+                        <div style="background: #e0e7ff; padding: 8px; border-radius: 6px; text-align: center;">
+                            <p style="margin: 0; font-size: 12px; color: #4f46e5; font-weight: 500;">Rest Day</p>
+                        </div>
+                    ` : isBatch ? `
+                        <div style="background: #fef3c7; padding: 8px; border-radius: 6px; text-align: center;">
+                            <p style="margin: 0; font-size: 12px; color: #d97706; font-weight: 500;">Batch Day</p>
+                        </div>
+                    ` : `
+                        <select id="pref-${day}" style="width: 100%; padding: 8px; border: 2px solid var(--border-light); border-radius: 6px; font-size: 12px;">
+                            <option value="">Select intention...</option>
+                            ${intentions.map(int => `<option value="${int}" ${currentIntention === int ? 'selected' : ''}>${int}</option>`).join('')}
+                        </select>
+                    `}
+                </div>
+            `;
+        });
+        
+        html += `
+                </div>
+                
+                <div style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                    <p style="font-size: 11px; margin: 0; line-height: 1.5; color: var(--text-light-secondary);">
+                        <strong>How this works:</strong><br>
+                        1. Set each day's intention above<br>
+                        2. Click "Auto-Generate Calendar"<br>
+                        3. App distributes platforms based on your posting goals<br>
+                        4. Each day gets: intention + platform to hit weekly targets
+                    </p>
+                </div>
+                
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="this.closest('div').parentElement.remove()" style="flex: 1; padding: 12px; background: var(--bg-light-secondary); border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel</button>
+                    <button onclick="saveCustomDayPreferences(); this.closest('div').parentElement.remove();" style="flex: 1; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Save & Auto-Generate</button>
+                </div>
+            </div>
+        `;
+        
+        modal.innerHTML = html;
+        document.body.appendChild(modal);
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.remove();
+        };
+    }
+
+    function saveCustomDayPreferences() {
+        try {
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            days.forEach(day => {
+                const select = document.getElementById(`pref-${day}`);
+                if (select) {
+                    const value = select.value;
+                    if (value) {
+                        appState.contentStrategy.dayPreferences[day] = { preferredIntention: value };
+                    }
+                }
+            });
+            
+            saveState();
+            generateWeeklyCalendarFromPreferences();
+            renderContentStrategyDisplay();
+            renderDashboard();
+            showToast('📅 Day preferences saved & calendar generated!');
+        } catch (e) {
+            console.error('Error saving preferences:', e);
+            showToast('⚠️ Error saving preferences: ' + e.message);
+        }
+    }
+
+    function generateWeeklyCalendarFromPreferences() {
+        try {
+            const prefs = appState.contentStrategy.dayPreferences;
+            const goals = appState.weeklyGoals; // { 'Threads': 5, 'LinkedIn': 3, ... }
+            const postingDays = appState.postingDays; // ['Monday', 'Tuesday', ...]
+            const batchDays = appState.batchCreateDays; // Use actual batch days
+            
+            if (!goals || Object.keys(goals).length === 0) {
+                showToast('⚠️ Set platform posting goals first (Settings → Weekly Goals)');
+                return;
+            }
+            
+            if (!postingDays || postingDays.length === 0) {
+                showToast('⚠️ No posting days configured');
+                return;
+            }
+            
+            // Create list of platforms needed based on goals
+            const platformQueue = [];
+            Object.entries(goals).forEach(([platform, count]) => {
+                if (platform && count > 0) {
+                    for (let i = 0; i < count; i++) {
+                        platformQueue.push(platform);
+                    }
+                }
+            });
+            
+            if (platformQueue.length === 0) {
+                showToast('⚠️ Set platform posting goals (all platforms are 0)');
+                return;
+            }
+            
+            // Shuffle for variety
+            for (let i = platformQueue.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [platformQueue[i], platformQueue[j]] = [platformQueue[j], platformQueue[i]];
+            }
+            
+            // Assign to posting days
+            let queueIndex = 0;
+            postingDays.forEach(day => {
+                if (!day) return; // Skip undefined days
+                
+                if (queueIndex >= platformQueue.length) queueIndex = 0; // Wrap around if needed
+                
+                const platform = platformQueue[queueIndex];
+                const intention = prefs[day]?.preferredIntention || 'Teach';
+                
+                if (platform) {
+                    appState.weeklyCalendar[day] = {
+                        intention: intention,
+                        platform: platform,
+                        pillar: null,
+                        posting: true
+                    };
+                    queueIndex++;
+                }
+            });
+            
+            // Handle batch days (no posting)
+            if (batchDays && batchDays.length > 0) {
+                batchDays.forEach(day => {
+                    if (day && appState.weeklyCalendar[day]) {
+                        appState.weeklyCalendar[day] = {
+                            intention: 'Batch Day',
+                            posting: false
+                        };
+                    }
+                });
+            }
+            
+            // Handle rest days (Sunday)
+            if (appState.weeklyCalendar['Sunday']) {
+                appState.weeklyCalendar['Sunday'] = {
+                    intention: 'Rest',
+                    posting: false
+                };
+            }
+            
+            assignPillarsToWeek(); // Then assign pillars
+            saveState();
+        } catch (e) {
+            console.error('Error generating calendar:', e);
+            showToast('⚠️ Error generating calendar: ' + e.message);
+        }
+    }
+
+    // GROWTH ACTIVITIES FUNCTIONS
+    function renderGrowthActivitiesDisplay() {
+        const display = document.getElementById('growthActivitiesDisplay');
+        if (!display) return;
+
+        if (appState.growthActivities.length === 0) {
+            display.innerHTML = '<p style="font-size: 12px; color: var(--text-light-secondary); padding: 12px; background: var(--bg-light-secondary); border-radius: 8px;">No growth activities yet. Add one to get started!</p>';
+            return;
+        }
+
+        let html = '<p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px; font-weight: 600;">Your growth day activities (randomly suggested):</p>';
+        html += '<div style="display: flex; flex-direction: column; gap: 8px;">';
+        
+        appState.growthActivities.forEach((activity, idx) => {
+            html += `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-light-secondary); border-radius: 8px; border-left: 4px solid var(--primary);">
+                    <span style="font-size: 16px; margin-right: 8px;">${activity.icon}</span>
+                    <span style="font-size: 13px; font-weight: 500; flex: 1;">${activity.name}</span>
+                    <button onclick="removeGrowthActivity(${idx})" style="padding: 4px 8px; background: #fee2e2; color: #dc2626; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='#dc2626'; this.style.color='white'" onmouseout="this.style.background='#fee2e2'; this.style.color='#dc2626'">Remove</button>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        display.innerHTML = html;
+    }
+
+    function addGrowthActivity() {
+        const icon = document.getElementById('newActivityIcon').value.trim();
+        const name = document.getElementById('newActivityName').value.trim();
+
+        if (!icon || !name) {
+            showToast('⚠️ Add both icon and activity name!');
+            return;
+        }
+
+        appState.growthActivities.push({
+            icon,
+            name,
+            id: `activity-${Date.now()}`
+        });
+
+        document.getElementById('newActivityIcon').value = '';
+        document.getElementById('newActivityName').value = '';
+        
+        saveState();
+        renderGrowthActivitiesDisplay();
+        showToast(`⚡ Added: ${icon} ${name}`);
+    }
+
+    function removeGrowthActivity(idx) {
+        const activity = appState.growthActivities[idx];
+        appState.growthActivities.splice(idx, 1);
+        saveState();
+        renderGrowthActivitiesDisplay();
+        showToast(`Removed: ${activity.icon} ${activity.name}`);
+    }
+
+    // OUTREACH CAPTIONS FUNCTIONS
+    function renderOutreachCaptionsDisplay() {
+        try {
+            if (!appState.outreachCaptions) {
+                appState.outreachCaptions = { whatsapp: [], facebook: [] };
+            }
+            renderOutreachCaptionsPlatform('whatsapp');
+            renderOutreachCaptionsPlatform('facebook');
+        } catch (e) {
+            console.error('Error rendering outreach captions:', e);
+        }
+    }
+
+    function renderOutreachCaptionsPlatform(platform) {
+        try {
+            const displayId = platform === 'whatsapp' ? 'whatsappCaptionsDisplay' : 'facebookCaptionsDisplay';
+            const display = document.getElementById(displayId);
+            if (!display) return;
+
+            if (!appState.outreachCaptions || !appState.outreachCaptions[platform]) {
+                display.innerHTML = '<p style="font-size: 12px; color: var(--text-light-secondary); font-style: italic;">No captions yet</p>';
+                return;
+            }
+
+            const captions = appState.outreachCaptions[platform];
+            
+            if (!Array.isArray(captions) || captions.length === 0) {
+                display.innerHTML = '<p style="font-size: 12px; color: var(--text-light-secondary); font-style: italic;">No captions yet</p>';
+                return;
+            }
+
+            let html = '';
+            captions.forEach((caption, idx) => {
+                if (!caption || !caption.text) return;
+                
+                const safeText = String(caption.text).replace(/`/g, '\\`').replace(/"/g, '&quot;');
+                html += `
+                    <div style="background: var(--bg-light-secondary); padding: 10px; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                        <div style="flex: 1; font-size: 12px; line-height: 1.4;">${caption.text}</div>
+                        <div style="display: flex; gap: 4px; flex-shrink: 0;">
+                            <button style="background: var(--primary); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;" onclick="copyToClipboard(\`${safeText}\`); showToast('📋 Copied!');">Copy</button>
+                            <button style="background: #f87171; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;" onclick="removeOutreachCaption('${platform}', ${idx})">×</button>
+                        </div>
+                    </div>
+                `;
+            });
+            display.innerHTML = html || '<p style="font-size: 12px; color: var(--text-light-secondary); font-style: italic;">No captions yet</p>';
+        } catch (e) {
+            console.error('Error rendering platform captions:', e);
+        }
+    }
+
+    function addOutreachCaption(platform) {
+        try {
+            if (!platform || (platform !== 'whatsapp' && platform !== 'facebook')) {
+                showToast('⚠️ Invalid platform');
+                return;
+            }
+
+            const inputId = platform === 'whatsapp' ? 'whatsappCaptionInput' : 'facebookCaptionInput';
+            const input = document.getElementById(inputId);
+            if (!input) {
+                showToast('⚠️ Input not found');
+                return;
+            }
+
+            const text = String(input.value || '').trim();
+            if (!text) {
+                showToast('⚠️ Enter a caption');
+                return;
+            }
+
+            if (!appState.outreachCaptions) {
+                appState.outreachCaptions = { whatsapp: [], facebook: [] };
+            }
+
+            if (!appState.outreachCaptions[platform]) {
+                appState.outreachCaptions[platform] = [];
+            }
+
+            appState.outreachCaptions[platform].push({
+                id: `caption-${Date.now()}`,
+                text: text,
+                dateAdded: new Date().toISOString()
+            });
+
+            input.value = '';
+            saveState();
+            renderOutreachCaptionsDisplay();
+            const platformName = platform === 'whatsapp' ? 'WhatsApp' : 'Facebook';
+            showToast(`✅ ${platformName} caption added!`);
+        } catch (e) {
+            console.error('Error adding caption:', e);
+            showToast('⚠️ Error adding caption');
+        }
+    }
+
+    function removeOutreachCaption(platform, idx) {
+        try {
+            if (!appState.outreachCaptions || !appState.outreachCaptions[platform]) {
+                return;
+            }
+            
+            const item = appState.outreachCaptions[platform][idx];
+            appState.outreachCaptions[platform].splice(idx, 1);
+            saveState();
+            renderOutreachCaptionsDisplay();
+            showToast('🗑️ Caption removed');
+        } catch (e) {
+            console.error('Error removing caption:', e);
+        }
+    }
+
+    function copyToClipboard(text) {
+        try {
+            if (!text || typeof text !== 'string') {
+                text = String(text || '');
+            }
+            
+            if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).catch(() => {
+                    // Fallback for older browsers
+                    fallbackCopyToClipboard(text);
+                });
+            } else {
+                fallbackCopyToClipboard(text);
+            }
+        } catch (e) {
+            console.error('Error copying to clipboard:', e);
+            fallbackCopyToClipboard(text);
+        }
+    }
+
+    function fallbackCopyToClipboard(text) {
+        try {
+            const textarea = document.createElement('textarea');
+            textarea.value = String(text || '');
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        } catch (e) {
+            console.error('Fallback copy failed:', e);
+        }
+    }
+
+    // PRODUCT PRIORITY FUNCTIONS
+    function renderProductPriorityDisplay() {
+        try {
+            const display = document.getElementById('productPriorityDisplay');
+            if (!display) return;
+
+            if (!appState.weeklyProductPriority) {
+                appState.weeklyProductPriority = { week: null, products: [] };
+            }
+
+            const currentWeek = getISOWeekNumber(new Date());
+            const priority = appState.weeklyProductPriority;
+
+            if (!priority || !priority.products || priority.products.length === 0 || priority.week !== currentWeek) {
+                display.innerHTML = '<p style="font-size: 12px; color: var(--text-light-secondary); font-style: italic;">No priorities set for this week</p>';
+                return;
+            }
+
+            let html = '<div style="display: flex; flex-direction: column; gap: 8px;">';
+            priority.products.forEach(item => {
+                if (!item || !item.name) return;
+                const rankEmoji = {1: '🥇', 2: '🥈', 3: '🥉'}[item.rank] || '📌';
+                html += `<div style="background: var(--bg-light-secondary); padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 600;">${rankEmoji} ${item.rank}. ${item.name}</div>`;
+            });
+            html += '</div>';
+            display.innerHTML = html;
+        } catch (e) {
+            console.error('Error rendering product priority:', e);
+            const display = document.getElementById('productPriorityDisplay');
+            if (display) display.innerHTML = '';
+        }
+    }
+
+    function showProductPriorityEditor() {
+        try {
+            const currentWeek = getISOWeekNumber(new Date());
+            const priority = appState.weeklyProductPriority || { week: null, products: [] };
+            const products = (appState.contentStrategy && appState.contentStrategy.products) || [];
+
+            if (!products || products.length === 0) {
+                showToast('⚠️ Add products in Content Strategy first');
+                return;
+            }
+
+            // Get current priority for this week
+            let selected = [];
+            if (priority.week === currentWeek && priority.products) {
+                selected = priority.products.map(p => p && p.name ? p.name : null).filter(p => p);
+            }
+
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+            
+            let html = `
+                <div style="background: white; border-radius: 12px; padding: 20px; max-width: 90vw; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="margin: 0;">🎯 This Week's Product Priority</h2>
+                        <button onclick="this.closest('div').parentElement.remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                    </div>
+                    
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 16px;">Select your top 3 products to focus on this week. Clear priority by selecting 0 products.</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+            `;
+
+            products.forEach((prod, idx) => {
+                if (!prod) return;
+                const isSelected = selected.includes(prod);
+                const rank = selected.indexOf(prod) + 1;
+                const rankLabel = rank > 0 ? ` (Rank ${rank})` : '';
+                
+                html += `
+                    <label style="display: flex; align-items: center; padding: 12px; background: var(--bg-light-secondary); border-radius: 8px; cursor: pointer; border: 2px solid ${isSelected ? 'var(--primary)' : 'transparent'};">
+                        <input type="checkbox" 
+                            id="prod-${idx}" 
+                            ${isSelected ? 'checked' : ''} 
+                            onchange="updateProductSelection(${idx})"
+                            style="width: 18px; height: 18px; cursor: pointer; margin-right: 12px;">
+                        <span style="font-size: 13px; font-weight: 500;">${prod}${rankLabel}</span>
+                    </label>
+                `;
+            });
+
+            html += `
+                    </div>
+                    
+                    <div style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                        <p style="font-size: 11px; margin: 0; line-height: 1.5; color: var(--text-light-secondary);">
+                            <strong>How this works:</strong><br>
+                            Check the boxes to select products. They'll be ranked 1-3 in order you select them. Max 3 products.
+                        </p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="this.closest('div').parentElement.remove()" style="flex: 1; padding: 12px; background: var(--bg-light-secondary); border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel</button>
+                        <button onclick="saveProductPriority(); this.closest('div').parentElement.remove();" style="flex: 1; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Save Priority</button>
+                    </div>
+                </div>
+            `;
+
+            modal.innerHTML = html;
+            document.body.appendChild(modal);
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+        } catch (e) {
+            console.error('Error showing product priority editor:', e);
+            showToast('⚠️ Error opening editor');
+        }
+    }
+
+    function updateProductSelection(idx) {
+        try {
+            const currentWeek = getISOWeekNumber(new Date());
+            const checkbox = document.getElementById(`prod-${idx}`);
+            if (!checkbox) return;
+
+            const products = (appState.contentStrategy && appState.contentStrategy.products) || [];
+            if (!products[idx]) return;
+
+            if (checkbox.checked) {
+                // Limit to 3 products
+                const currentSelection = appState.weeklyProductPriority && appState.weeklyProductPriority.products ? appState.weeklyProductPriority.products : [];
+                if (currentSelection.length >= 3) {
+                    checkbox.checked = false;
+                    showToast('⚠️ Max 3 products per week');
+                    return;
+                }
+            }
+        } catch (e) {
+            console.error('Error updating product selection:', e);
+        }
+    }
+
+    function saveProductPriority() {
+        try {
+            const products = (appState.contentStrategy && appState.contentStrategy.products) || [];
+            const selected = [];
+
+            products.forEach((prod, idx) => {
+                const checkbox = document.getElementById(`prod-${idx}`);
+                if (checkbox && checkbox.checked && prod) {
+                    selected.push(prod);
+                }
+            });
+
+            if (selected.length > 3) {
+                showToast('⚠️ Max 3 products');
+                return;
+            }
+
+            const currentWeek = getISOWeekNumber(new Date());
+            const ranked = selected.map((prod, idx) => ({
+                rank: idx + 1,
+                name: prod
+            }));
+
+            appState.weeklyProductPriority = {
+                week: currentWeek,
+                products: ranked
+            };
+
+            saveState();
+            renderProductPriorityDisplay();
+            showToast('✅ Product priority saved!');
+        } catch (e) {
+            console.error('Error saving product priority:', e);
+            showToast('⚠️ Error saving priority');
+        }
+    }
+
+    function getISOWeekNumber(date) {
+        try {
+            if (!date || !(date instanceof Date)) {
+                date = new Date();
+            }
+            const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            const dayNum = d.getUTCDay() || 7;
+            d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        } catch (e) {
+            console.error('Error calculating week number:', e);
+            return 1;
+        }
+    }
+
+    // SYNC DAY PREFERENCES TO WEEKLY CALENDAR
+    function assignFromDayPreferences() {
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const prefs = appState.contentStrategy.dayPreferences;
+        const rotationIntentions = ['Teach', 'Build Trust', 'Tell a Story', 'Share Progress', 'Celebrate a Win', 'Start a Conversation', 'Promote'];
+        
+        days.forEach((day, idx) => {
+            const pref = prefs[day] || {};
+            if (!appState.weeklyCalendar[day]) {
+                appState.weeklyCalendar[day] = {};
+            }
+            // Unify the two sources of truth for "is this a batch day" — the Day Preferences
+            // editor (pref.batchDay) and the Settings > Batch Create Days list can drift apart,
+            // so treat either one as authoritative.
+            const isBatchPref = !!(pref.batchDay || (appState.batchCreateDays || []).includes(day));
+            
+            // Apply day preference
+            if (pref.rest) {
+                appState.weeklyCalendar[day].intention = 'Rest';
+                appState.weeklyCalendar[day].posting = false;
+                appState.weeklyCalendar[day].isBatchDay = false;
+            } else if (isBatchPref) {
+                // Batch days keep a REAL content intention/plan — never overwrite with a placeholder.
+                // If no intention exists yet, assign one so library matching & suggestions still work.
+                const existing = appState.weeklyCalendar[day].intention;
+                if (!existing || existing === 'Batch Day') {
+                    appState.weeklyCalendar[day].intention = pref.preferredIntention || rotationIntentions[idx % rotationIntentions.length];
+                }
+                appState.weeklyCalendar[day].isBatchDay = true;
+                appState.weeklyCalendar[day].posting = false; // not a single-post day, but content plan stays intact
+            } else if (pref.preferredIntention) {
+                appState.weeklyCalendar[day].intention = pref.preferredIntention;
+                appState.weeklyCalendar[day].posting = true;
+                appState.weeklyCalendar[day].isBatchDay = false;
+            }
+
+            // Safety net: repair any day (except Rest) that's missing a platform or intention —
+            // e.g. from older saved data — so the dashboard always has a real post idea to show.
+            const repaired = appState.weeklyCalendar[day];
+            if (repaired.intention !== 'Rest') {
+                if (!repaired.platform) {
+                    repaired.platform = PLATFORMS[idx % PLATFORMS.length];
+                }
+                if (!repaired.intention) {
+                    repaired.intention = pref.preferredIntention || rotationIntentions[idx % rotationIntentions.length];
+                }
+            }
+        });
+        
+        assignPillarsToWeek(); // Then assign pillars based on intentions
+    }
+
+    function isBatchDay() {
+        const today = getToday();
+        const schedule = appState.weeklyCalendar[today];
+        return !!(schedule && schedule.isBatchDay) || appState.batchCreateDays.includes(today);
     }
 
     // SMART PILLAR ASSIGNMENT
@@ -4577,35 +6013,45 @@
             !appState.batchCreateDays.includes(day)
         );
         
-        if (postingDays.length === 0) return;
+        if (postingDays.length > 0) {
+            // Calculate how many posts each pillar should get
+            const postDistribution = [];
+            pillars.forEach(pillar => {
+                const count = Math.round((postingDays.length * pillar.percentage) / 100);
+                for (let i = 0; i < count; i++) {
+                    postDistribution.push(pillar.name);
+                }
+            });
 
-        // Calculate how many posts each pillar should get
-        const postDistribution = [];
-        pillars.forEach(pillar => {
-            const count = Math.round((postingDays.length * pillar.percentage) / 100);
-            for (let i = 0; i < count; i++) {
-                postDistribution.push(pillar.name);
+            // If distribution doesn't match posting days, adjust
+            while (postDistribution.length < postingDays.length) {
+                const mostFrequent = pillars[0].name; // Default to first pillar
+                postDistribution.push(mostFrequent);
             }
-        });
-
-        // If distribution doesn't match posting days, adjust
-        while (postDistribution.length < postingDays.length) {
-            const mostFrequent = pillars[0].name; // Default to first pillar
-            postDistribution.push(mostFrequent);
-        }
-        while (postDistribution.length > postingDays.length) {
-            postDistribution.pop();
-        }
-
-        // Shuffle for variety
-        postDistribution.sort(() => Math.random() - 0.5);
-
-        // Assign to each posting day
-        postingDays.forEach((day, idx) => {
-            if (appState.weeklyCalendar[day]) {
-                appState.weeklyCalendar[day].pillar = postDistribution[idx] || null;
+            while (postDistribution.length > postingDays.length) {
+                postDistribution.pop();
             }
-        });
+
+            // Shuffle for variety
+            postDistribution.sort(() => Math.random() - 0.5);
+
+            // Assign to each posting day
+            postingDays.forEach((day, idx) => {
+                if (appState.weeklyCalendar[day]) {
+                    appState.weeklyCalendar[day].pillar = postDistribution[idx] || null;
+                }
+            });
+        }
+
+        // Batch create days also need a pillar so their content plan/library suggestions still work
+        const batchDays = days.filter(day => appState.batchCreateDays.includes(day));
+        if (batchDays.length > 0 && pillars && pillars.length > 0) {
+            batchDays.forEach((day, idx) => {
+                if (appState.weeklyCalendar[day] && !appState.weeklyCalendar[day].pillar) {
+                    appState.weeklyCalendar[day].pillar = pillars[idx % pillars.length].name;
+                }
+            });
+        }
 
         saveState();
         renderContentStrategyDisplay();
@@ -4670,8 +6116,12 @@
             userHooks: JSON.parse(localStorage.getItem('userHooks') || '[]'),
             userIdeas: JSON.parse(localStorage.getItem('userIdeas') || '[]'),
             userCTAs: JSON.parse(localStorage.getItem('userCTAs') || '[]'),
+            userTopics: JSON.parse(localStorage.getItem('userTopics') || '[]'),
             userHashtags: JSON.parse(localStorage.getItem('userHashtags') || '[]'),
             customContentTypes: JSON.parse(localStorage.getItem('customContentTypes') || '[]'),
+            outreachCaptions: JSON.parse(localStorage.getItem('outreachCaptions') || JSON.stringify(appState.outreachCaptions)),
+            weeklyProductPriority: JSON.parse(localStorage.getItem('weeklyProductPriority') || JSON.stringify(appState.weeklyProductPriority)),
+            contentStrategy: JSON.parse(localStorage.getItem('contentStrategy') || JSON.stringify(appState.contentStrategy)),
             growthActivities: JSON.parse(localStorage.getItem('growthActivities') || '[]'),
             contentVault: JSON.parse(localStorage.getItem('contentVault') || '[]'),
             contentPillars: JSON.parse(localStorage.getItem('contentPillars') || '[]'),
@@ -4699,8 +6149,12 @@
         localStorage.setItem('userHooks', JSON.stringify(appState.userHooks));
         localStorage.setItem('userIdeas', JSON.stringify(appState.userIdeas));
         localStorage.setItem('userCTAs', JSON.stringify(appState.userCTAs));
+        localStorage.setItem('userTopics', JSON.stringify(appState.userTopics));
         localStorage.setItem('userHashtags', JSON.stringify(appState.userHashtags));
         localStorage.setItem('customContentTypes', JSON.stringify(appState.customContentTypes));
+        localStorage.setItem('outreachCaptions', JSON.stringify(appState.outreachCaptions));
+        localStorage.setItem('weeklyProductPriority', JSON.stringify(appState.weeklyProductPriority));
+        localStorage.setItem('contentStrategy', JSON.stringify(appState.contentStrategy));
         localStorage.setItem('growthActivities', JSON.stringify(appState.growthActivities));
         localStorage.setItem('contentVault', JSON.stringify(appState.contentVault));
         localStorage.setItem('contentPillars', JSON.stringify(appState.contentPillars));
@@ -4715,67 +6169,48 @@
     }
 
     function exportData() {
-        const data = {
-            weeklyCalendar: appState.weeklyCalendar,
-            postingDays: appState.postingDays,
-            weeklyGoals: appState.weeklyGoals,
-            weeklyPosted: appState.weeklyPosted,
-            userHooks: appState.userHooks,
-            userIdeas: appState.userIdeas,
-            userCTAs: appState.userCTAs,
-            userHashtags: appState.userHashtags,
-            customContentTypes: appState.customContentTypes,
-            growthActivities: appState.growthActivities,
-            contentVault: appState.contentVault,
-            contentPillars: appState.contentPillars,
-            brandRule: appState.brandRule,
-            brandStatement: appState.brandStatement,
-            pastPosts: appState.pastPosts,
-            visualAssets: appState.visualAssets,
-            draftCaptions: appState.draftCaptions,
-            exportDate: new Date().toISOString()
-        };
-        const json = JSON.stringify(data, null, 2);
-        const blob = new Blob([json], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `contenthub-backup-${new Date().toISOString().split('T')[0]}.json`;
-        a.click();
-        showToast('Data exported!');
+        try {
+            const data = {
+                ...appState,
+                exportDate: new Date().toISOString(),
+                exportVersion: 2
+            };
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `contenthub-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            showToast('✅ Full backup exported!');
+        } catch (e) {
+            console.error('Error exporting data:', e);
+            showToast('⚠️ Error exporting data');
+        }
     }
 
     function importData(e) {
         const file = e.target.files[0];
+        if (!file) return;
         const reader = new FileReader();
         reader.onload = (event) => {
             try {
                 const data = JSON.parse(event.target.result);
+                // Merge onto current appState so any fields missing from an older backup
+                // fall back to current defaults instead of disappearing.
                 Object.assign(appState, data);
                 saveState();
-                renderCalendar();
-                renderGoalsForm();
-                renderPostingDaysForm();
-                renderCustomContentTypes();
-                renderContentPillars();
-                renderBrandRules();
-                renderActivityIdeas();
-                renderOutreachTracking();
-                renderPlatformGuidelines();
-                renderDashboard();
-                renderHooks();
-                renderIdeas();
-                renderIdeaTypeDropdown();
-                renderCTAs();
-                renderHashtags();
-                renderToday();
-                showToast('Data imported!');
+                init();
+                showToast('✅ Data imported! Everything restored.');
             } catch (err) {
-                showToast('Error importing', 'error');
+                console.error('Error importing data:', err);
+                showToast('⚠️ Error importing — check the file is a valid backup');
             }
         };
         reader.readAsText(file);
-        document.getElementById('importFile').value = '';
+        const importInput = document.getElementById('importFile');
+        if (importInput) importInput.value = '';
     }
 
     function openModal(id) {
@@ -4813,6 +6248,16 @@
         }
     });
 
+    const libraryTabColors = {
+        hooks: '#8b5cf6',
+        ctas: '#f59e0b',
+        ideas: '#3b82f6',
+        hashtags: '#14B8A6',
+        topics: '#06b6d4',
+        captions: '#ec4899',
+        outreach: '#10b981'
+    };
+
     function switchLibraryTab(tabName) {
         // Hide all tabs
         document.querySelectorAll('.library-tab-content').forEach(tab => {
@@ -4828,17 +6273,20 @@
         // Update all nav buttons - deactivate all, then activate the selected one
         const navButtons = document.querySelectorAll('[id^="nav-"][id$="-btn"]');
         navButtons.forEach(btn => {
-            btn.style.background = 'var(--bg-light-secondary)';
-            btn.style.color = 'var(--text-light)';
-            btn.style.borderColor = 'var(--border-light)';
+            const btnTab = btn.id.replace('nav-', '').replace('-btn', '');
+            const color = libraryTabColors[btnTab] || 'var(--primary)';
+            btn.style.background = 'white';
+            btn.style.color = color;
+            btn.style.borderColor = color;
         });
         
         // Activate selected button
         const selectedBtn = document.getElementById(`nav-${tabName}-btn`);
+        const activeColor = libraryTabColors[tabName] || 'var(--primary)';
         if (selectedBtn) {
-            selectedBtn.style.background = 'var(--primary)';
+            selectedBtn.style.background = activeColor;
             selectedBtn.style.color = 'white';
-            selectedBtn.style.borderColor = 'var(--primary)';
+            selectedBtn.style.borderColor = activeColor;
         }
 
         // Add event listeners for captions tab
@@ -4862,6 +6310,44 @@
             toggle.textContent = '+';
         }
     }
+
+    function jumpToSettingsSection(cardId, sectionId) {
+        try {
+            const section = document.getElementById(sectionId);
+            const toggle = document.getElementById(sectionId.replace('Section', 'Toggle'));
+            // Force the section open (don't toggle closed if already open)
+            if (section && section.style.display === 'none') {
+                section.style.display = 'block';
+                if (toggle) toggle.textContent = '−';
+            }
+            const card = document.getElementById(cardId);
+            if (card) {
+                setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+            }
+        } catch (e) {
+            console.error('Error jumping to settings section:', e);
+        }
+    }
+
+    // Register Service Worker for PWA offline support (optional)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').catch(err => {
+                // Service worker is optional - app works fine without it
+                // Only show errors that aren't 404s
+                if (!err.message.includes('404')) {
+                    console.log('Service Worker note:', err.message);
+                }
+            });
+        });
+    }
+
+    // Handle PWA install prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+    });
 
     window.addEventListener('load', init);
 </script>
