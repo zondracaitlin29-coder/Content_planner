@@ -1069,7 +1069,10 @@
     <div class="sidebar">
         <div style="display: flex; align-items: center; gap: 12px; width: 100%; justify-content: space-between;">
             <div class="logo">📝 ContentHub</div>
-            <button class="hamburger" onclick="toggleMenu()">☰</button>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <button onclick="showPage('settings')" title="Settings" style="background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px 6px; line-height: 1;">⚙️</button>
+                <button class="hamburger" onclick="toggleMenu()">☰</button>
+            </div>
         </div>
         <ul class="nav" id="navMenu">
             <li><a onclick="showPage('dashboard')" id="nav-dashboard">Dashboard</a></li>
@@ -1192,14 +1195,14 @@
                             <input type="hidden" id="hookTypes" value="">
                         </div>
                         <div class="form-group" style="margin-bottom: 12px;">
-                            <label class="form-label">Content Pillar</label>
-                            <select id="hookPillar" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
-                                <option value="">Select pillar...</option>
-                                <option value="Customer Communication">🟢 Customer Communication</option>
-                                <option value="Systems & Digital Products">🔵 Systems & Digital Products</option>
-                                <option value="Practical Business Tips">🟠 Practical Business Tips</option>
-                                <option value="Your Journey">🔵 Your Journey</option>
-                            </select>
+                            <label class="form-label">Content Pillars <span style="font-weight: 400; color: var(--text-light-secondary);">(tap all that apply)</span></label>
+                            <div id="hookPillarTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
+                            <input type="hidden" id="hookPillars" value="">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label">Platforms <span style="font-weight: 400; color: var(--text-light-secondary);">(leave blank = all platforms)</span></label>
+                            <div id="hookPlatformTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
+                            <input type="hidden" id="hookPlatforms" value="">
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <button class="btn btn-primary" onclick="addHook()">Save Hook</button>
@@ -1240,14 +1243,14 @@
                             <input type="hidden" id="ctaTypes" value="">
                         </div>
                         <div class="form-group" style="margin-bottom: 12px;">
-                            <label class="form-label">Content Pillar</label>
-                            <select id="ctaPillar" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
-                                <option value="">Select pillar...</option>
-                                <option value="Customer Communication">🟢 Customer Communication</option>
-                                <option value="Systems & Digital Products">🔵 Systems & Digital Products</option>
-                                <option value="Practical Business Tips">🟠 Practical Business Tips</option>
-                                <option value="Your Journey">🔵 Your Journey</option>
-                            </select>
+                            <label class="form-label">Content Pillars <span style="font-weight: 400; color: var(--text-light-secondary);">(tap all that apply)</span></label>
+                            <div id="ctaPillarTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
+                            <input type="hidden" id="ctaPillars" value="">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label">Platforms <span style="font-weight: 400; color: var(--text-light-secondary);">(leave blank = all platforms)</span></label>
+                            <div id="ctaPlatformTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
+                            <input type="hidden" id="ctaPlatforms" value="">
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <button class="btn btn-primary" onclick="addCTA()">Save CTA</button>
@@ -1292,14 +1295,14 @@
                             <input type="text" id="ideaLinks" placeholder="e.g. blog.com/article, product-link">
                         </div>
                         <div class="form-group" style="margin-bottom: 12px;">
-                            <label class="form-label">Content Pillar</label>
-                            <select id="ideaPillar" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
-                                <option value="">Select pillar...</option>
-                                <option value="Customer Communication">🟢 Customer Communication</option>
-                                <option value="Systems & Digital Products">🔵 Systems & Digital Products</option>
-                                <option value="Practical Business Tips">🟠 Practical Business Tips</option>
-                                <option value="Your Journey">🔵 Your Journey</option>
-                            </select>
+                            <label class="form-label">Content Pillars <span style="font-weight: 400; color: var(--text-light-secondary);">(tap all that apply)</span></label>
+                            <div id="ideaPillarTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
+                            <input type="hidden" id="ideaPillars" value="">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label">Platforms <span style="font-weight: 400; color: var(--text-light-secondary);">(leave blank = all platforms)</span></label>
+                            <div id="ideaPlatformTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
+                            <input type="hidden" id="ideaPlatforms" value="">
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <button class="btn btn-primary" onclick="addIdea()">Save Idea</button>
@@ -1367,14 +1370,14 @@
                             <input type="hidden" id="topicTypes">
                         </div>
                         <div class="form-group" style="margin-bottom: 16px;">
-                            <label class="form-label">Content Pillar</label>
-                            <select id="topicPillar" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
-                                <option value="">Select pillar...</option>
-                                <option value="Customer Communication">🟢 Customer Communication</option>
-                                <option value="Systems & Digital Products">🔵 Systems & Digital Products</option>
-                                <option value="Practical Business Tips">🟠 Practical Business Tips</option>
-                                <option value="Your Journey">🔵 Your Journey</option>
-                            </select>
+                            <label class="form-label">Content Pillars <span style="font-weight: 400; color: var(--text-light-secondary);">(tap all that apply)</span></label>
+                            <div id="topicPillarTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
+                            <input type="hidden" id="topicPillars" value="">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label">Platforms <span style="font-weight: 400; color: var(--text-light-secondary);">(leave blank = all platforms)</span></label>
+                            <div id="topicPlatformTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
+                            <input type="hidden" id="topicPlatforms" value="">
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <button class="btn btn-primary" onclick="addTopic()">Save</button>
@@ -1919,6 +1922,163 @@
         return color ? color.hex : '#9ca3af'; // Gray for untagged
     }
 
+    // PILLAR & PLATFORM TAGGING (multi-select) — used by Hooks, CTAs, Ideas, Topics
+    const PILLAR_ICONS = {
+        'Customer Communication': '🟢',
+        'Systems & Digital Products': '🔵',
+        'Practical Business Tips': '🟠',
+        'Your Journey': '🟣'
+    };
+    const PLATFORM_ICONS = {
+        'Instagram': '📷',
+        'LinkedIn': '💼',
+        'Threads': '🧵',
+        'Facebook': '📘',
+        'Pinterest': '📌'
+    };
+
+    // Renders a row of tappable pillar tags into #{group}PillarTags and keeps #{group}Pillars (hidden input)
+    // in sync. Pass `preselected` (array of pillar names) to pre-check tags, e.g. when editing an existing item.
+    function renderPillarTagOptions(group, preselected) {
+        const container = document.getElementById(`${group}PillarTags`);
+        const hidden = document.getElementById(`${group}Pillars`);
+        if (!container) return;
+        const selectedList = preselected || [];
+        const pillarNames = Object.keys(PILLAR_COLORS);
+        container.innerHTML = pillarNames.map(name => {
+            const isSel = selectedList.includes(name);
+            return `<button type="button" class="pillar-tag-btn" data-group="${group}" data-pillar="${name}" style="padding: 6px 12px; border-radius: 20px; border: 2px solid ${isSel ? 'var(--primary)' : 'var(--border-light)'}; background: ${isSel ? 'var(--primary)' : 'white'}; color: ${isSel ? 'white' : 'var(--text-light)'}; cursor: pointer; font-weight: 500; font-size: 12px; transition: all 0.2s ease;">${PILLAR_ICONS[name] || '⚪'} ${name}</button>`;
+        }).join('');
+        if (hidden) hidden.value = selectedList.join(',');
+        container.querySelectorAll('.pillar-tag-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isSelected = btn.style.background !== 'white' && btn.style.background !== '';
+                if (isSelected) {
+                    btn.style.background = 'white'; btn.style.color = 'var(--text-light)'; btn.style.borderColor = 'var(--border-light)';
+                } else {
+                    btn.style.background = 'var(--primary)'; btn.style.color = 'white'; btn.style.borderColor = 'var(--primary)';
+                }
+                const selected = Array.from(container.querySelectorAll('.pillar-tag-btn')).filter(b => b.style.background !== 'white' && b.style.background !== '').map(b => b.dataset.pillar);
+                const hiddenInput = document.getElementById(`${group}Pillars`);
+                if (hiddenInput) hiddenInput.value = selected.join(',');
+            });
+        });
+    }
+
+    // Same pattern as renderPillarTagOptions, but for platforms (Instagram, LinkedIn, etc.)
+    function renderPlatformTagOptions(group, preselected) {
+        const container = document.getElementById(`${group}PlatformTags`);
+        const hidden = document.getElementById(`${group}Platforms`);
+        if (!container) return;
+        const selectedList = preselected || [];
+        container.innerHTML = PLATFORMS.map(name => {
+            const isSel = selectedList.includes(name);
+            return `<button type="button" class="platform-tag-btn" data-group="${group}" data-platform="${name}" style="padding: 6px 12px; border-radius: 20px; border: 2px solid ${isSel ? 'var(--primary)' : 'var(--border-light)'}; background: ${isSel ? 'var(--primary)' : 'white'}; color: ${isSel ? 'white' : 'var(--text-light)'}; cursor: pointer; font-weight: 500; font-size: 12px; transition: all 0.2s ease;">${PLATFORM_ICONS[name] || ''} ${name}</button>`;
+        }).join('');
+        if (hidden) hidden.value = selectedList.join(',');
+        container.querySelectorAll('.platform-tag-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isSelected = btn.style.background !== 'white' && btn.style.background !== '';
+                if (isSelected) {
+                    btn.style.background = 'white'; btn.style.color = 'var(--text-light)'; btn.style.borderColor = 'var(--border-light)';
+                } else {
+                    btn.style.background = 'var(--primary)'; btn.style.color = 'white'; btn.style.borderColor = 'var(--primary)';
+                }
+                const selected = Array.from(container.querySelectorAll('.platform-tag-btn')).filter(b => b.style.background !== 'white' && b.style.background !== '').map(b => b.dataset.platform);
+                const hiddenInput = document.getElementById(`${group}Platforms`);
+                if (hiddenInput) hiddenInput.value = selected.join(',');
+            });
+        });
+    }
+
+    // Small colored badge row showing an item's tagged pillars + platforms (shown on library cards)
+    function renderTagBadgesHtml(item) {
+        const pillars = Array.isArray(item.pillars) ? item.pillars : (item.pillar ? [item.pillar] : []);
+        const platforms = Array.isArray(item.platforms) ? item.platforms : [];
+        if (pillars.length === 0 && platforms.length === 0) return '';
+        let html = '<div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;">';
+        pillars.forEach(p => {
+            const color = PILLAR_COLORS[p] || '#9ca3af';
+            html += `<span style="font-size: 10px; padding: 2px 8px; border-radius: 10px; background: ${color}20; color: ${color}; font-weight: 600;">${PILLAR_ICONS[p] || '⚪'} ${p}</span>`;
+        });
+        platforms.forEach(p => {
+            html += `<span style="font-size: 10px; padding: 2px 8px; border-radius: 10px; background: #f3f4f6; color: #4b5563; font-weight: 600;">${PLATFORM_ICONS[p] || ''} ${p}</span>`;
+        });
+        html += '</div>';
+        return html;
+    }
+
+    // Inline tag editor panel HTML (pillar + platform pickers) for retagging an EXISTING library item.
+    // The caller must invoke renderPillarTagOptions/renderPlatformTagOptions for `${type}-${item.id}`
+    // right after inserting this HTML, to populate the buttons and wire up the click handlers.
+    function renderTagEditorHtml(type, item) {
+        const group = `${type}-${item.id}`;
+        return `
+            <div style="margin-top: 10px; padding: 10px; background: var(--bg-light-secondary); border-radius: 8px;">
+                <p style="font-size: 11px; font-weight: 600; margin: 0 0 6px 0; color: var(--text-light-secondary);">PILLARS (tap all that apply)</p>
+                <div id="${group}PillarTags" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;"></div>
+                <input type="hidden" id="${group}Pillars" value="">
+                <p style="font-size: 11px; font-weight: 600; margin: 0 0 6px 0; color: var(--text-light-secondary);">PLATFORMS (blank = all platforms)</p>
+                <div id="${group}PlatformTags" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;"></div>
+                <input type="hidden" id="${group}Platforms" value="">
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-primary btn-sm" onclick="saveItemTags('${type}', '${item.id}')" style="padding: 6px 14px; font-size: 12px;">Save Tags</button>
+                    <button class="btn btn-secondary btn-sm" onclick="closeTagEditor()" style="padding: 6px 14px; font-size: 12px;">Cancel</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // Tracks which single library item currently has its tag editor open
+    let editingTagsState = { type: null, id: null };
+
+    function getLibraryArray(type) {
+        if (type === 'hook') return appState.userHooks;
+        if (type === 'cta') return appState.userCTAs;
+        if (type === 'idea') return appState.userIdeas;
+        if (type === 'topic') return appState.userTopics;
+        return [];
+    }
+
+    function openTagEditor(type, id) {
+        editingTagsState = { type, id };
+        renderHooks();
+        renderCTAs();
+        renderIdeas();
+        renderTopics();
+    }
+
+    function closeTagEditor() {
+        editingTagsState = { type: null, id: null };
+        renderHooks();
+        renderCTAs();
+        renderIdeas();
+        renderTopics();
+    }
+
+    function saveItemTags(type, id) {
+        const group = `${type}-${id}`;
+        const pillarsInput = document.getElementById(`${group}Pillars`);
+        const platformsInput = document.getElementById(`${group}Platforms`);
+        const pillarsVal = pillarsInput ? pillarsInput.value : '';
+        const platformsVal = platformsInput ? platformsInput.value : '';
+        const items = getLibraryArray(type);
+        const item = items.find(i => i.id === id);
+        if (item) {
+            item.pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
+            item.platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
+            item.pillar = item.pillars[0] || null; // keep legacy single-pillar field in sync
+            item.lastEdited = Date.now();
+            saveState();
+            showToast('Tags updated! 🏷️');
+        }
+        closeTagEditor();
+        renderDraftPostCard();
+        renderDashboard();
+    }
+
     let appState = {
         weeklyCalendar: {
             'Monday': { intention: 'Teach', platform: 'Threads', pillar: 'Customer Communication' },
@@ -2037,6 +2197,7 @@
         renderCTAs();
         renderIdeas();
         renderHashtags();
+        renderTopics();
     }
 
     function cancelEditing() {
@@ -2046,6 +2207,7 @@
         renderCTAs();
         renderIdeas();
         renderHashtags();
+        renderTopics();
     }
 
     function saveEdit(type, id, newText) {
@@ -2054,6 +2216,7 @@
         else if (type === 'cta') items = appState.userCTAs;
         else if (type === 'idea') items = appState.userIdeas;
         else if (type === 'hashtag') items = appState.userHashtags;
+        else if (type === 'topic') items = appState.userTopics;
 
         const item = items.find(i => i.id === id);
         if (item && newText.trim()) {
@@ -2156,6 +2319,12 @@
         setupIdeaTypeTags();
         setupHookTypeTags();
         setupCTATypeTags();
+
+        // Populate the multi-select Pillar/Platform tag pickers in the Hooks/CTAs/Ideas/Topics add-forms
+        ['hook', 'cta', 'idea', 'topic'].forEach(group => {
+            renderPillarTagOptions(group);
+            renderPlatformTagOptions(group);
+        });
         
         // Safe render calls - add null checks inside each function
         try {
@@ -2199,6 +2368,15 @@
             renderDraftCaptions();
             renderDraftLibraryCards();
             renderVisualAssets();
+
+            // Reopen on the last screen the user was on, instead of always defaulting to Dashboard
+            try {
+                const lastPage = localStorage.getItem('contentHubLastPage');
+                const validPages = ['dashboard', 'today', 'library', 'growth', 'settings'];
+                if (lastPage && validPages.includes(lastPage) && lastPage !== 'dashboard') {
+                    switchPage(lastPage);
+                }
+            } catch (e) {}
         } catch (e) {
             console.error('Init error:', e);
         }
@@ -2215,6 +2393,8 @@
             const navMenu = document.getElementById('navMenu');
             if (navMenu) navMenu.classList.remove('active');
         }
+        // Remember the last screen so the app reopens where you left off
+        try { localStorage.setItem('contentHubLastPage', pageId); } catch (e) {}
     }
 
     function switchPage(pageId) {
@@ -2610,13 +2790,13 @@
             `;
         });
 
-        // Check if batch visuals task needs to show (Monday or Saturday)
+        // Check if batch visuals task needs to show (only on the user's actual configured batch create days)
         const today = getToday();
         const currentWeek = getWeekNumber();
         let batchVisualsHtml = '';
-        const isBatchDay = today === 'Monday' || today === 'Saturday';
+        const isTodayBatchDay = isBatchDay();
         
-        if (isBatchDay && appState.batchVisualsWeek !== currentWeek.toString()) {
+        if (isTodayBatchDay && appState.batchVisualsWeek !== currentWeek.toString()) {
             batchVisualsHtml = `
                 <div style="background: linear-gradient(135deg, #f59e0b, #f97316); color: white; padding: 16px; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);">
                     <div style="display: flex; justify-content: space-between; align-items: start;">
@@ -2700,12 +2880,16 @@
             const todayPlatform = schedule.platform || 'Instagram';
             const todayPillar = schedule.pillar;
 
-            // Helper function to check if item matches today's pillar and intention
+            // Helper function to check if item matches today's pillar, platform and intention.
+            // Items can now be tagged to MULTIPLE pillars/platforms (or none, meaning "applies to all").
             const matchesPillarAndIntention = (item) => {
                 if (!item || typeof item !== 'object') return false;
                 const matchesIntention = item.types && Array.isArray(item.types) && item.types.length > 0 ? item.types.includes(todayIntention) : true;
-                const matchesPillar = todayPillar ? (item.pillar === todayPillar) : true;
-                return matchesIntention && matchesPillar;
+                const itemPillars = Array.isArray(item.pillars) && item.pillars.length > 0 ? item.pillars : (item.pillar ? [item.pillar] : []);
+                const matchesPillar = (!todayPillar || itemPillars.length === 0) ? true : itemPillars.includes(todayPillar);
+                const itemPlatforms = Array.isArray(item.platforms) ? item.platforms : [];
+                const matchesPlatform = itemPlatforms.length === 0 ? true : itemPlatforms.includes(todayPlatform);
+                return matchesIntention && matchesPillar && matchesPlatform;
             };
 
             // Filter by today's pillar and intention, get best match for each type
@@ -3774,7 +3958,10 @@
         const text = document.getElementById('ideaText').value.trim();
         const types = document.getElementById('ideaTypes').value;
         const links = document.getElementById('ideaLinks').value.trim();
-        const pillar = document.getElementById('ideaPillar').value || null;
+        const pillarsVal = document.getElementById('ideaPillars').value;
+        const platformsVal = document.getElementById('ideaPlatforms').value;
+        const pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
+        const platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
         
         if (!text) {
             showToast('Add an idea!');
@@ -3785,7 +3972,9 @@
             id: Date.now().toString(),
             text,
             types: types ? types.split(',') : [],
-            pillar: pillar,
+            pillars: pillars,
+            pillar: pillars[0] || null,
+            platforms: platforms,
             links,
             lastEdited: Date.now()
         });
@@ -3793,7 +3982,6 @@
         document.getElementById('ideaText').value = '';
         document.getElementById('ideaTypes').value = '';
         document.getElementById('ideaLinks').value = '';
-        document.getElementById('ideaPillar').value = '';
         
         // Reset tag selections
         document.querySelectorAll('.idea-type-tag').forEach(tag => {
@@ -3801,6 +3989,8 @@
             tag.style.color = 'var(--text-light)';
             tag.style.borderColor = 'var(--border-light)';
         });
+        renderPillarTagOptions('idea');
+        renderPlatformTagOptions('idea');
         
         document.getElementById('addIdeaForm').style.display = 'none';
         saveState();
@@ -3862,26 +4052,39 @@
                 `;
             }
             
+            const isTagEditing = editingTagsState.type === 'idea' && editingTagsState.id === idea.id;
+
             return `
                 <div class="library-item-card ${typeClass}" style="border-left-color: ${borderColor};">
                     <div class="card-header">
                         <p class="card-text">${idea.text}</p>
                         <div class="card-actions">
                             <button onclick="startEditing('idea', '${idea.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px;">✏️</button>
+                            <button onclick="${isTagEditing ? 'closeTagEditor()' : `openTagEditor('idea', '${idea.id}')`}" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">🏷️</button>
                             <button onclick="copyToClipboard('${idea.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
                             <button onclick="removeIdea('${idea.id}')" style="padding: 6px 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
                         </div>
                     </div>
                     
                     ${typeBadges ? `<div style="display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0;">${typeBadges}</div>` : ''}
+                    ${renderTagBadgesHtml(idea)}
                     
                     ${idea.links ? `<p style="font-size: 12px; color: var(--primary); margin: 8px 0 0 0; word-break: break-all;">🔗 <a href="${idea.links}" target="_blank" style="color: var(--primary); text-decoration: none;">${idea.links}</a></p>` : ''}
+                    ${isTagEditing ? renderTagEditorHtml('idea', idea) : ''}
                 </div>
             `;
         }).join('');
         
         if (ideasListEl) {
             ideasListEl.innerHTML = html || '<p style="color: var(--text-light-secondary); text-align: center; padding: 20px;">No ideas yet. Click [+] to brainstorm!</p>';
+            if (editingTagsState.type === 'idea' && editingTagsState.id) {
+                const editItem = appState.userIdeas.find(i => i.id === editingTagsState.id);
+                if (editItem) {
+                    const group = `idea-${editItem.id}`;
+                    renderPillarTagOptions(group, Array.isArray(editItem.pillars) ? editItem.pillars : (editItem.pillar ? [editItem.pillar] : []));
+                    renderPlatformTagOptions(group, editItem.platforms || []);
+                }
+            }
         }
 
         const browseHtml = sortedIdeas.map(idea => {
@@ -3915,19 +4118,23 @@
     function addHook() {
         const text = document.getElementById('hookText').value.trim();
         const types = document.getElementById('hookTypes').value;
-        const pillar = document.getElementById('hookPillar').value || null;
+        const pillarsVal = document.getElementById('hookPillars').value;
+        const platformsVal = document.getElementById('hookPlatforms').value;
+        const pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
+        const platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
         if (text) {
             appState.userHooks.push({
                 id: Date.now().toString(),
                 text,
                 types: types ? types.split(',') : [],
-                pillar: pillar,
+                pillars: pillars,
+                pillar: pillars[0] || null, // legacy single-pillar field, kept in sync
+                platforms: platforms,
                 intentions: [], // Keep for backward compatibility
                 lastEdited: Date.now()
             });
             document.getElementById('hookText').value = '';
             document.getElementById('hookTypes').value = '';
-            document.getElementById('hookPillar').value = '';
             
             // Reset tag selections
             document.querySelectorAll('.hook-type-tag').forEach(tag => {
@@ -3935,6 +4142,8 @@
                 tag.style.color = 'var(--text-light)';
                 tag.style.borderColor = 'var(--border-light)';
             });
+            renderPillarTagOptions('hook');
+            renderPlatformTagOptions('hook');
             
             document.getElementById('addHookForm').style.display = 'none';
             saveState();
@@ -3986,23 +4195,36 @@
                 `;
             }
             
+            const isTagEditing = editingTagsState.type === 'hook' && editingTagsState.id === hook.id;
+
             return `
                 <div class="library-item-card ${typeClass}" style="border-left-color: ${borderColor};">
                     <div class="card-header">
                         <p class="card-text">"${hook.text}"</p>
                         <div class="card-actions">
                             <button onclick="startEditing('hook', '${hook.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px;">✏️</button>
+                            <button onclick="${isTagEditing ? 'closeTagEditor()' : `openTagEditor('hook', '${hook.id}')`}" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">🏷️</button>
                             <button onclick="copyToClipboard('${hook.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
                             <button onclick="removeHook('${hook.id}')" style="padding: 6px 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
                         </div>
                     </div>
                     ${typeBadges ? `<div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">${typeBadges}</div>` : ''}
+                    ${renderTagBadgesHtml(hook)}
+                    ${isTagEditing ? renderTagEditorHtml('hook', hook) : ''}
                 </div>
             `;
         }).join('');
         
         if (hooksListEl) {
             hooksListEl.innerHTML = html || '<p style="color: var(--text-light-secondary); text-align: center; padding: 20px;">No hooks yet. Click [+] to add one!</p>';
+            if (editingTagsState.type === 'hook' && editingTagsState.id) {
+                const editItem = appState.userHooks.find(h => h.id === editingTagsState.id);
+                if (editItem) {
+                    const group = `hook-${editItem.id}`;
+                    renderPillarTagOptions(group, Array.isArray(editItem.pillars) ? editItem.pillars : (editItem.pillar ? [editItem.pillar] : []));
+                    renderPlatformTagOptions(group, editItem.platforms || []);
+                }
+            }
         }
 
         const browseHtml = sortedHooks.map(hook => {
@@ -4035,18 +4257,22 @@
     function addCTA() {
         const text = document.getElementById('ctaText').value.trim();
         const types = document.getElementById('ctaTypes').value;
-        const pillar = document.getElementById('ctaPillar').value || null;
+        const pillarsVal = document.getElementById('ctaPillars').value;
+        const platformsVal = document.getElementById('ctaPlatforms').value;
+        const pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
+        const platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
         if (text) {
             appState.userCTAs.push({
                 id: Date.now().toString(),
                 text,
                 types: types ? types.split(',') : [],
-                pillar: pillar,
+                pillars: pillars,
+                pillar: pillars[0] || null,
+                platforms: platforms,
                 lastEdited: Date.now()
             });
             document.getElementById('ctaText').value = '';
             document.getElementById('ctaTypes').value = '';
-            document.getElementById('ctaPillar').value = '';
             
             // Reset tag selections
             document.querySelectorAll('.cta-type-tag').forEach(tag => {
@@ -4054,6 +4280,8 @@
                 tag.style.color = 'var(--text-light)';
                 tag.style.borderColor = 'var(--border-light)';
             });
+            renderPillarTagOptions('cta');
+            renderPlatformTagOptions('cta');
             
             document.getElementById('addCTAForm').style.display = 'none';
             saveState();
@@ -4105,23 +4333,36 @@
                 `;
             }
             
+            const isTagEditing = editingTagsState.type === 'cta' && editingTagsState.id === cta.id;
+
             return `
                 <div class="library-item-card ${typeClass}" style="border-left-color: ${borderColor};">
                     <div class="card-header">
                         <p class="card-text">"${cta.text}"</p>
                         <div class="card-actions">
                             <button onclick="startEditing('cta', '${cta.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px;">✏️</button>
+                            <button onclick="${isTagEditing ? 'closeTagEditor()' : `openTagEditor('cta', '${cta.id}')`}" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">🏷️</button>
                             <button onclick="copyToClipboard('${cta.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
                             <button onclick="removeCTA('${cta.id}')" style="padding: 6px 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
                         </div>
                     </div>
                     ${typeBadges ? `<div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">${typeBadges}</div>` : ''}
+                    ${renderTagBadgesHtml(cta)}
+                    ${isTagEditing ? renderTagEditorHtml('cta', cta) : ''}
                 </div>
             `;
         }).join('');
         
         if (ctasListEl) {
             ctasListEl.innerHTML = html || '<p style="color: var(--text-light-secondary); text-align: center; padding: 20px;">No CTAs yet. Click [+] to add one!</p>';
+            if (editingTagsState.type === 'cta' && editingTagsState.id) {
+                const editItem = appState.userCTAs.find(c => c.id === editingTagsState.id);
+                if (editItem) {
+                    const group = `cta-${editItem.id}`;
+                    renderPillarTagOptions(group, Array.isArray(editItem.pillars) ? editItem.pillars : (editItem.pillar ? [editItem.pillar] : []));
+                    renderPlatformTagOptions(group, editItem.platforms || []);
+                }
+            }
         }
 
         const browseHtml = sortedCTAs.map(cta => {
@@ -4264,19 +4505,25 @@
     function addTopic() {
         const text = document.getElementById('topicText').value.trim();
         const types = document.getElementById('topicTypes').value.split(',').filter(t => t);
-        const pillar = document.getElementById('topicPillar').value || null;
+        const pillarsVal = document.getElementById('topicPillars').value;
+        const platformsVal = document.getElementById('topicPlatforms').value;
+        const pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
+        const platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
         
         if (text) {
             appState.userTopics.push({
                 id: Date.now().toString(),
                 text,
                 types: types || [],
-                pillar: pillar,
+                pillars: pillars,
+                pillar: pillars[0] || null,
+                platforms: platforms,
                 lastEdited: Date.now()
             });
             document.getElementById('topicText').value = '';
             document.getElementById('topicTypes').value = '';
-            document.getElementById('topicPillar').value = '';
+            renderPillarTagOptions('topic');
+            renderPlatformTagOptions('topic');
             document.getElementById('addTopicForm').style.display = 'none';
             saveState();
             renderTopics();
@@ -4320,22 +4567,37 @@
                 `;
             }
             
+            const isTagEditing = editingTagsState.type === 'topic' && editingTagsState.id === topic.id;
+
             return `
-                <div style="padding: 12px; background: white; border: 1px solid var(--border-light); border-left: 4px solid ${borderColor}; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: start; gap: 12px; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='none'">
-                    <div style="flex: 1;">
-                        <p style="margin: 0; line-height: 1.4; font-size: 13px;">${topic.text}</p>
-                        ${topic.types.length > 0 ? `<div style="margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap;">${topic.types.map(t => `<span style="display: inline-block; padding: 4px 8px; background: var(--bg-light-secondary); color: var(--text-light); border-radius: 4px; font-size: 11px;">${t}</span>`).join('')}</div>` : ''}
+                <div style="padding: 12px; background: white; border: 1px solid var(--border-light); border-left: 4px solid ${borderColor}; border-radius: 8px; margin-bottom: 8px; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='none'">
+                    <div style="display: flex; justify-content: space-between; align-items: start; gap: 12px;">
+                        <div style="flex: 1;">
+                            <p style="margin: 0; line-height: 1.4; font-size: 13px;">${topic.text}</p>
+                            ${topic.types.length > 0 ? `<div style="margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap;">${topic.types.map(t => `<span style="display: inline-block; padding: 4px 8px; background: var(--bg-light-secondary); color: var(--text-light); border-radius: 4px; font-size: 11px;">${t}</span>`).join('')}</div>` : ''}
+                            ${renderTagBadgesHtml(topic)}
+                        </div>
+                        <div style="display: flex; gap: 6px; flex-shrink: 0;">
+                            <button onclick="startEditing('topic', '${topic.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.border='1px solid var(--primary)'" onmouseout="this.style.background='var(--bg-light-secondary)'; this.style.color='var(--text-light)'; this.style.border='1px solid var(--border-light)'">✏️</button>
+                            <button onclick="${isTagEditing ? 'closeTagEditor()' : `openTagEditor('topic', '${topic.id}')`}" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.border='1px solid var(--primary)'" onmouseout="this.style.background='var(--bg-light-secondary)'; this.style.color='var(--text-light)'; this.style.border='1px solid var(--border-light)'">🏷️</button>
+                            <button onclick="copyToClipboard('${topic.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.border='1px solid var(--primary)'" onmouseout="this.style.background='var(--bg-light-secondary)'; this.style.color='var(--text-light)'; this.style.border='1px solid var(--border-light)'">📋</button>
+                            <button onclick="removeTopic('${topic.id}')" style="padding: 6px 10px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; font-size: 12px; color: #dc2626; transition: all 0.2s ease;" onmouseover="this.style.background='#dc2626'; this.style.color='white'; this.style.border='1px solid #dc2626'" onmouseout="this.style.background='#fee2e2'; this.style.color='#dc2626'; this.style.border='1px solid #fca5a5'">×</button>
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 6px; flex-shrink: 0;">
-                        <button onclick="startEditing('topic', '${topic.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.border='1px solid var(--primary)'" onmouseout="this.style.background='var(--bg-light-secondary)'; this.style.color='var(--text-light)'; this.style.border='1px solid var(--border-light)'">✏️</button>
-                        <button onclick="copyToClipboard('${topic.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.border='1px solid var(--primary)'" onmouseout="this.style.background='var(--bg-light-secondary)'; this.style.color='var(--text-light)'; this.style.border='1px solid var(--border-light)'">📋</button>
-                        <button onclick="removeTopic('${topic.id}')" style="padding: 6px 10px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; font-size: 12px; color: #dc2626; transition: all 0.2s ease;" onmouseover="this.style.background='#dc2626'; this.style.color='white'; this.style.border='1px solid #dc2626'" onmouseout="this.style.background='#fee2e2'; this.style.color='#dc2626'; this.style.border='1px solid #fca5a5'">×</button>
-                    </div>
+                    ${isTagEditing ? renderTagEditorHtml('topic', topic) : ''}
                 </div>
             `;
         }).join('');
         
         topicsList.innerHTML = html;
+        if (editingTagsState.type === 'topic' && editingTagsState.id) {
+            const editItem = appState.userTopics.find(t => t.id === editingTagsState.id);
+            if (editItem) {
+                const group = `topic-${editItem.id}`;
+                renderPillarTagOptions(group, Array.isArray(editItem.pillars) ? editItem.pillars : (editItem.pillar ? [editItem.pillar] : []));
+                renderPlatformTagOptions(group, editItem.platforms || []);
+            }
+        }
     }
 
     // POSTING DAYS
