@@ -1137,6 +1137,9 @@
             <!-- DRAFT YOUR POST CARD (Single consolidated card) -->
             <div id="draftPostCard"></div>
 
+            <!-- GENERATE TODAY'S CONTENT (compiled plan + assets + publish checklist) -->
+            <div id="generateContentSection"></div>
+
             <!-- REPURPOSE SECTION -->
             <div id="repurposeSection"></div>
 
@@ -1498,6 +1501,13 @@
                 <button id="jumpToActivityBtn" class="btn btn-secondary" style="background: rgba(255,255,255,0.25); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">Jump to Activity →</button>
             </div>
 
+            <!-- MY GROWTH ACTIVITIES TRACKER - shows every activity (built-in + custom) with completion status -->
+            <div class="card" id="growthActivitiesTrackerCard">
+                <h3 style="margin: 0 0 4px 0;">📌 My Growth Activities</h3>
+                <p style="font-size: 12px; color: var(--text-light-secondary); margin: 0 0 12px 0;">Everything you've added in Settings shows up here — open a built-in one below, or mark a custom one done.</p>
+                <div id="growthActivitiesTracker"></div>
+            </div>
+
             <div id="growthStats" style="margin-bottom: 20px;"></div>
 
             <div class="card calendar-section" id="growthCard-audit">
@@ -1522,6 +1532,7 @@
                     </div>
                     <div id="auditChecklist" style="margin-bottom: 16px;"></div>
                     <button class="btn btn-primary btn-block" onclick="saveAudit()">Save Audit</button>
+                    <div id="auditResults"></div>
                 </div>
             </div>
 
@@ -1764,6 +1775,19 @@
                             <label class="form-label">Activity Name</label>
                             <input type="text" id="newActivityName" placeholder="e.g. Record Video, Email Outreach" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
                         </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label">Activity Type</label>
+                            <select id="newActivityType" onchange="updateNewActivityTypeFields()" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                                <option value="simple">Simple — just mark it done</option>
+                                <option value="checklist">Checklist — like Platform Audit</option>
+                                <option value="survey">Survey — a few questions to answer</option>
+                                <option value="idea">Idea Capture — jot a quick insight</option>
+                                <option value="reflection">Reflection — a guided prompt</option>
+                                <option value="recording">Recording / Log — note what you did</option>
+                            </select>
+                            <p style="font-size: 11px; color: var(--text-light-secondary); margin: 6px 0 0 0;">This decides what "Open" shows you when you do this activity — so it's more than just a checkbox.</p>
+                        </div>
+                        <div id="newActivityTypeFields"></div>
                         <button class="btn btn-primary btn-sm" onclick="addGrowthActivity()">+ Add Activity</button>
                     </div>
                 </div>
@@ -2109,6 +2133,7 @@
         },
         contentVault: [],
         contentPillars: [],
+        dailyChecklist: {}, // { 'YYYY-MM-DD': { assets: {carousel,reel,threads,pin}, publish: {posted,sharedToStory,repurposedThreads,pinCreated,loggedPerformance} } }
         brandRule: "Does this help someone save time, communicate better, or work smarter?",
         brandStatement: "I build practical systems, digital tools, and communication solutions that help small businesses save time and work smarter.",
         theme: 'light',
@@ -2343,6 +2368,7 @@
             if (document.getElementById('customContentTypesList')) renderCustomContentTypes();
             if (document.getElementById('activityIdeasList')) renderActivityIdeas();
             if (document.getElementById('growthStats')) renderGrowthStats();
+            if (document.getElementById('growthActivitiesTracker')) renderGrowthActivitiesTracker();
             if (document.getElementById('outreachList')) renderOutreachTracking();
             if (document.getElementById('platformGuidelines')) renderPlatformGuidelines();
             if (document.getElementById('todaySubheader')) renderToday();
@@ -2401,6 +2427,7 @@
         showPage(pageId);
         if (pageId === 'growth') {
             generateGrowthDaySuggestion();
+            renderGrowthActivitiesTracker();
         }
     }
 
@@ -2410,6 +2437,276 @@
         'outreach': { card: 'growthCard-outreach', section: 'outreachFormSection' },
         'product-optimization': { card: 'growthCard-product', section: 'productFormSection' }
     };
+
+    // Has this activity already been logged today? Built-ins are considered "done"
+    // once their form has been saved today; custom activities check their own
+    // log entries (whatever type they are) for today's date.
+    function isActivityDoneToday(activity) {
+        try {
+            const todayStr = new Date().toLocaleDateString();
+            const log = appState.growthLog || [];
+            switch (activity.id) {
+                case 'platform-audit':
+                    return log.some(a => a.date === todayStr && (a.type === 'audit' || a.score !== undefined));
+                case 'competitor-audit':
+                    return log.some(a => a.date === todayStr && a.type === 'competitor_audit');
+                case 'outreach':
+                    return log.some(a => a.date === todayStr && a.type === 'outreach');
+                case 'product-optimization':
+                    return log.some(a => a.date === todayStr && a.type === 'product_optimization');
+                default:
+                    return log.some(a => a.date === todayStr && a.activityId === activity.id &&
+                        (a.type === 'custom-activity' || a.type === 'custom-checklist' || a.type === 'custom-survey' || a.type === 'custom-note'));
+            }
+        } catch (e) {
+            console.error('Error checking activity completion:', e);
+            return false;
+        }
+    }
+
+    function toggleCustomActivityDone(activityId) {
+        try {
+            const todayStr = new Date().toLocaleDateString();
+            const activity = (appState.growthActivities || []).find(a => a.id === activityId);
+            if (!activity) return;
+            const existingIdx = appState.growthLog.findIndex(a => a.date === todayStr && a.type === 'custom-activity' && a.activityId === activityId);
+            if (existingIdx > -1) {
+                appState.growthLog.splice(existingIdx, 1);
+                showToast(`Unmarked "${activity.name}"`);
+            } else {
+                appState.growthLog.push({
+                    id: Date.now().toString(),
+                    type: 'custom-activity',
+                    activityId: activityId,
+                    activityName: activity.name,
+                    date: todayStr
+                });
+                showToast(`✓ Marked "${activity.name}" as done today!`);
+            }
+            saveState();
+            renderGrowthActivitiesTracker();
+        } catch (e) {
+            console.error('Error toggling custom activity completion:', e);
+        }
+    }
+
+    // Which custom activity's detail panel is currently expanded on the Growth page
+    let expandedGrowthActivityId = null;
+
+    function toggleActivityExpand(activityId) {
+        expandedGrowthActivityId = (expandedGrowthActivityId === activityId) ? null : activityId;
+        renderGrowthActivitiesTracker();
+        if (expandedGrowthActivityId === activityId) {
+            setTimeout(() => {
+                const panel = document.getElementById(`activityPanel-${activityId}`);
+                if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 50);
+        }
+    }
+
+    function saveCustomChecklistActivity(activityId) {
+        try {
+            const activity = (appState.growthActivities || []).find(a => a.id === activityId);
+            if (!activity) return;
+            const checked = document.querySelectorAll(`#activityPanel-${activityId} input[type="checkbox"]:checked`);
+            const completed = Array.from(checked).map(c => c.value);
+            const allItems = activity.checklistItems || [];
+            const missing = allItems.filter(item => !completed.includes(item));
+            const score = allItems.length ? Math.round((completed.length / allItems.length) * 100) : 0;
+            const noteEl = document.getElementById(`activityNote-${activityId}`);
+            const note = noteEl ? noteEl.value.trim() : '';
+
+            appState.growthLog.push({
+                id: Date.now().toString(),
+                type: 'custom-checklist',
+                activityId,
+                activityName: activity.name,
+                completedItems: completed,
+                missingItems: missing,
+                score,
+                note,
+                date: new Date().toLocaleDateString()
+            });
+
+            saveState();
+            expandedGrowthActivityId = null;
+            renderGrowthActivitiesTracker();
+            showToast(`✓ Saved "${activity.name}" — ${completed.length}/${allItems.length} checked`);
+        } catch (e) {
+            console.error('Error saving custom checklist activity:', e);
+        }
+    }
+
+    function saveCustomSurveyActivity(activityId) {
+        try {
+            const activity = (appState.growthActivities || []).find(a => a.id === activityId);
+            if (!activity) return;
+            const questions = activity.surveyQuestions || [];
+            const answers = questions.map((q, i) => {
+                const el = document.getElementById(`surveyAnswer-${activityId}-${i}`);
+                return { question: q, answer: el ? el.value.trim() : '' };
+            });
+
+            appState.growthLog.push({
+                id: Date.now().toString(),
+                type: 'custom-survey',
+                activityId,
+                activityName: activity.name,
+                answers,
+                date: new Date().toLocaleDateString()
+            });
+
+            saveState();
+            expandedGrowthActivityId = null;
+            renderGrowthActivitiesTracker();
+            showToast(`✓ Saved "${activity.name}"`);
+        } catch (e) {
+            console.error('Error saving custom survey activity:', e);
+        }
+    }
+
+    function saveCustomNoteActivity(activityId) {
+        try {
+            const activity = (appState.growthActivities || []).find(a => a.id === activityId);
+            if (!activity) return;
+            const noteEl = document.getElementById(`activityNote-${activityId}`);
+            const note = noteEl ? noteEl.value.trim() : '';
+            if (!note) {
+                showToast('⚠️ Write something before saving!');
+                return;
+            }
+
+            appState.growthLog.push({
+                id: Date.now().toString(),
+                type: 'custom-note',
+                subtype: activity.activityType,
+                activityId,
+                activityName: activity.name,
+                note,
+                date: new Date().toLocaleDateString()
+            });
+
+            saveState();
+            expandedGrowthActivityId = null;
+            renderGrowthActivitiesTracker();
+            showToast(`✓ Saved "${activity.name}"`);
+        } catch (e) {
+            console.error('Error saving custom note activity:', e);
+        }
+    }
+
+    function escapeHtmlForTracker(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;');
+    }
+
+    // Builds the inline "Open" panel for a custom activity, based on its type
+    function renderActivityDetailPanel(activity) {
+        const esc = escapeHtmlForTracker;
+        const type = activity.activityType;
+
+        if (type === 'checklist') {
+            const items = activity.checklistItems || [];
+            const itemsHtml = items.map(item => `
+                <label style="display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer;">
+                    <input type="checkbox" value="${esc(item)}">
+                    <span>${esc(item)}</span>
+                </label>
+            `).join('');
+            return `
+                <div id="activityPanel-${activity.id}" style="background: var(--bg-light-secondary); border-radius: 8px; padding: 14px; margin-top: 8px;">
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin: 0 0 8px 0;">Check off what's done:</p>
+                    ${itemsHtml}
+                    <label class="form-label" style="margin-top: 10px; display: block;">Anything to improve next time? (optional)</label>
+                    <textarea id="activityNote-${activity.id}" placeholder="Note what you'll do differently for the items you didn't check..." style="width: 100%; min-height: 60px; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px; margin-bottom: 10px;"></textarea>
+                    <button class="btn btn-primary btn-block" onclick="saveCustomChecklistActivity('${activity.id}')">Save</button>
+                </div>
+            `;
+        }
+
+        if (type === 'survey') {
+            const questions = activity.surveyQuestions || [];
+            const questionsHtml = questions.map((q, i) => `
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label class="form-label">${esc(q)}</label>
+                    <textarea id="surveyAnswer-${activity.id}-${i}" style="width: 100%; min-height: 50px; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;"></textarea>
+                </div>
+            `).join('');
+            return `
+                <div id="activityPanel-${activity.id}" style="background: var(--bg-light-secondary); border-radius: 8px; padding: 14px; margin-top: 8px;">
+                    ${questionsHtml}
+                    <button class="btn btn-primary btn-block" onclick="saveCustomSurveyActivity('${activity.id}')">Save</button>
+                </div>
+            `;
+        }
+
+        if (type === 'idea' || type === 'reflection' || type === 'recording') {
+            const prompt = activity.prompt || activityTypeDefaultPrompts[type];
+            return `
+                <div id="activityPanel-${activity.id}" style="background: var(--bg-light-secondary); border-radius: 8px; padding: 14px; margin-top: 8px;">
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin: 0 0 8px 0;">${esc(prompt)}</p>
+                    <textarea id="activityNote-${activity.id}" placeholder="Write here..." style="width: 100%; min-height: 90px; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px; margin-bottom: 10px;"></textarea>
+                    <button class="btn btn-primary btn-block" onclick="saveCustomNoteActivity('${activity.id}')">Save</button>
+                </div>
+            `;
+        }
+
+        return `<div id="activityPanel-${activity.id}"></div>`;
+    }
+
+    function renderGrowthActivitiesTracker() {
+        try {
+            const el = document.getElementById('growthActivitiesTracker');
+            if (!el) return;
+            const activities = appState.growthActivities || [];
+            if (activities.length === 0) {
+                el.innerHTML = '<p style="font-size: 13px; color: var(--text-light-secondary); margin: 0;">No growth activities yet. Add some in Settings → ⚡ Growth.</p>';
+                return;
+            }
+            const esc = escapeHtmlForTracker;
+            let html = '';
+            activities.forEach(activity => {
+                const done = isActivityDoneToday(activity);
+                const mapEntry = growthActivitySectionMap[activity.id];
+                const isSimple = !mapEntry && (!activity.activityType || activity.activityType === 'simple');
+                const isExpandable = !mapEntry && !isSimple;
+                const isExpanded = expandedGrowthActivityId === activity.id;
+                const typeLabel = !mapEntry ? (activityTypeLabels[activity.activityType] || activityTypeLabels['simple']) : '';
+
+                let actionButton;
+                if (mapEntry) {
+                    actionButton = `<button class="btn btn-secondary btn-sm" onclick="jumpToSettingsSection('${mapEntry.card}', '${mapEntry.section}')">Open</button>`;
+                } else if (isExpandable) {
+                    actionButton = `<button class="btn ${isExpanded ? 'btn-secondary' : 'btn-primary'} btn-sm" onclick="toggleActivityExpand('${activity.id}')">${isExpanded ? 'Close' : (done ? 'Open Again' : 'Open')}</button>`;
+                } else {
+                    actionButton = `<button class="btn ${done ? 'btn-secondary' : 'btn-primary'} btn-sm" onclick="toggleCustomActivityDone('${activity.id}')">${done ? 'Undo' : 'Mark Done'}</button>`;
+                }
+
+                html += `
+                    <div style="padding: 10px 0; border-bottom: 1px solid var(--border-light);">
+                        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
+                            <div style="min-width: 0; flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <span>${esc(activity.icon)}</span>
+                                    <span style="word-break: break-word;">${esc(activity.name)}</span>
+                                    ${done ? '<span style="font-size: 11px; color: #22c55e; font-weight: 600; white-space: nowrap;">✓ Done today</span>' : ''}
+                                </div>
+                                ${typeLabel ? `<p style="font-size: 11px; color: var(--text-light-secondary); margin: 2px 0 0 0;">${typeLabel}</p>` : ''}
+                            </div>
+                            <div style="flex-shrink: 0;">
+                                ${actionButton}
+                            </div>
+                        </div>
+                        ${isExpandable && isExpanded ? renderActivityDetailPanel(activity) : ''}
+                    </div>
+                `;
+            });
+            el.innerHTML = html;
+        } catch (e) {
+            console.error('Error rendering growth activities tracker:', e);
+            const el = document.getElementById('growthActivitiesTracker');
+            if (el) el.innerHTML = '';
+        }
+    }
 
     function renderGrowthStats() {
         try {
@@ -2581,6 +2878,11 @@
         renderDashboardOverview();
         renderDraftPostCard();
         try {
+            renderGenerateContentSection();
+        } catch (e) {
+            console.error('Error in renderGenerateContentSection:', e.message);
+        }
+        try {
             renderRepurposeGuides();
         } catch (e) {
             console.error('Error in renderRepurposeGuides:', e.message);
@@ -2617,8 +2919,8 @@
             const schedule = appState.weeklyCalendar[today];
             const isRestDay = !!(schedule && schedule.intention === 'Rest');
             const isBatch = isBatchDay();
-            const hasContentPlan = !!(schedule && schedule.platform && schedule.intention && !isRestDay);
-            const isGrowthDay = !isPostingDay() && !isBatch && !isRestDay && !hasContentPlan;
+            const isGrowthDay = !isPostingDay() && !isBatch && !isRestDay;
+            const hasContentPlan = !!(schedule && schedule.platform && schedule.intention && !isRestDay && !isGrowthDay);
             
             if (dashboardCard) {
                 dashboardCard.classList.toggle('growth-day', isGrowthDay);
@@ -3033,6 +3335,178 @@
             console.error('Error rendering draft post card:', e);
             const el = document.getElementById('draftPostCard');
             if (el) el.innerHTML = '<p>⚠️ Error loading draft section</p>';
+        }
+    }
+
+    // ===================== GENERATE TODAY'S CONTENT =====================
+    // Compiles today's plan (platform, pillar, goal, topic, hook, CTA) into one
+    // copyable block, plus an Assets checklist and a Publish checklist — both
+    // saved per calendar day so they reset automatically on a new day.
+
+    function getDateKey() {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+
+    function getDailyChecklistEntry() {
+        if (!appState.dailyChecklist || typeof appState.dailyChecklist !== 'object') {
+            appState.dailyChecklist = {};
+        }
+        const key = getDateKey();
+        if (!appState.dailyChecklist[key]) {
+            appState.dailyChecklist[key] = {
+                assets: { carousel: false, reel: false, threads: false, pin: false },
+                publish: { posted: false, sharedToStory: false, repurposedThreads: false, pinCreated: false, loggedPerformance: false }
+            };
+        }
+        // Backfill in case of older/partial saved shape
+        if (!appState.dailyChecklist[key].assets) {
+            appState.dailyChecklist[key].assets = { carousel: false, reel: false, threads: false, pin: false };
+        }
+        if (!appState.dailyChecklist[key].publish) {
+            appState.dailyChecklist[key].publish = { posted: false, sharedToStory: false, repurposedThreads: false, pinCreated: false, loggedPerformance: false };
+        }
+        return appState.dailyChecklist[key];
+    }
+
+    function toggleAssetCheck(name) {
+        try {
+            const entry = getDailyChecklistEntry();
+            entry.assets[name] = !entry.assets[name];
+            saveState();
+            renderGenerateContentSection();
+        } catch (e) {
+            console.error('Error toggling asset checklist item:', e);
+        }
+    }
+
+    function togglePublishCheck(name) {
+        try {
+            const entry = getDailyChecklistEntry();
+            entry.publish[name] = !entry.publish[name];
+            saveState();
+            renderGenerateContentSection();
+        } catch (e) {
+            console.error('Error toggling publish checklist item:', e);
+        }
+    }
+
+    function copyGeneratedContent() {
+        try {
+            const el = document.getElementById('generatedContentBlock');
+            if (!el) return;
+            copyToClipboard(el.innerText);
+            showToast('Copied! Paste it wherever you draft.');
+        } catch (e) {
+            console.error('Error copying generated content:', e);
+        }
+    }
+
+    function renderGenerateContentSection() {
+        try {
+            const container = document.getElementById('generateContentSection');
+            if (!container) return;
+
+            const today = getToday();
+            const schedule = appState.weeklyCalendar[today];
+            const isRestDay = !!(schedule && schedule.intention === 'Rest');
+            const isBatch = isBatchDay();
+            const isTruePostingDay = isPostingDay() || isBatch;
+
+            // Only show on days there's actually something to post/create
+            if (isRestDay || !isTruePostingDay || !schedule || typeof schedule !== 'object' || !schedule.intention) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const todayIntention = String(schedule.intention).toLowerCase();
+            const todayPlatform = schedule.platform || 'Instagram';
+            const todayPillar = schedule.pillar;
+
+            const matchesPillarAndIntention = (item) => {
+                if (!item || typeof item !== 'object') return false;
+                const matchesIntention = item.types && Array.isArray(item.types) && item.types.length > 0 ? item.types.includes(todayIntention) : true;
+                const itemPillars = Array.isArray(item.pillars) && item.pillars.length > 0 ? item.pillars : (item.pillar ? [item.pillar] : []);
+                const matchesPillar = (!todayPillar || itemPillars.length === 0) ? true : itemPillars.includes(todayPillar);
+                const itemPlatforms = Array.isArray(item.platforms) ? item.platforms : [];
+                const matchesPlatform = itemPlatforms.length === 0 ? true : itemPlatforms.includes(todayPlatform);
+                return matchesIntention && matchesPillar && matchesPlatform;
+            };
+
+            const bestHook = (appState.userHooks || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
+            const bestCTA = (appState.userCTAs || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
+            const bestTopic = (appState.userTopics || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
+
+            const pillarLabel = todayPillar || '—';
+            const goalLabel = schedule.intention || '—';
+            const topicLabel = (bestTopic && bestTopic.text) ? String(bestTopic.text) : 'Add a topic in your Content Library to see it here';
+            const hookLabel = (bestHook && bestHook.text) ? String(bestHook.text) : 'Add a hook in your Content Library to see it here';
+            const ctaLabel = (bestCTA && bestCTA.text) ? String(bestCTA.text) : 'Add a CTA in your Content Library to see it here';
+
+            const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            const entry = getDailyChecklistEntry();
+            const assets = entry.assets;
+            const publish = entry.publish;
+
+            const assetRow = (key, label) => `
+                <label style="display: flex; align-items: center; gap: 10px; padding: 8px 0; cursor: pointer;">
+                    <input type="checkbox" ${assets[key] ? 'checked' : ''} onchange="toggleAssetCheck('${key}')">
+                    <span style="${assets[key] ? 'text-decoration: line-through; color: var(--text-light-secondary);' : ''}">${label}</span>
+                </label>
+            `;
+
+            const publishRow = (key, label) => `
+                <label style="display: flex; align-items: center; gap: 10px; padding: 8px 0; cursor: pointer;">
+                    <input type="checkbox" ${publish[key] ? 'checked' : ''} onchange="togglePublishCheck('${key}')">
+                    <span style="${publish[key] ? 'text-decoration: line-through; color: var(--text-light-secondary);' : ''}">${label}</span>
+                </label>
+            `;
+
+            container.innerHTML = `
+                <div class="card">
+                    <h3>✨ Generate Today's Content</h3>
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px;">Pulls today's plan together in one place — copy it and go.</p>
+
+                    <div id="generatedContentBlock" style="background: var(--bg-light-secondary); border: 2px solid var(--border-light); border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.8; margin-bottom: 12px; white-space: pre-wrap;">Platform: ${esc(todayPlatform)}
+Content Pillar: ${esc(pillarLabel)}
+Goal: ${esc(goalLabel)}
+Topic: ${esc(topicLabel)}
+
+Hook:
+${esc(hookLabel)}
+
+CTA:
+${esc(ctaLabel)}</div>
+
+                    <button class="btn btn-primary btn-block" onclick="copyGeneratedContent()" style="margin-bottom: 20px;">📋 Copy Today's Content</button>
+
+                    <h4 style="margin-bottom: 4px;">Assets</h4>
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 4px;">Which formats are you creating today?</p>
+                    <div style="display: flex; flex-direction: column;">
+                        ${assetRow('carousel', 'Carousel')}
+                        ${assetRow('reel', 'Reel')}
+                        ${assetRow('threads', 'Threads')}
+                        ${assetRow('pin', 'Pinterest Pin')}
+                    </div>
+
+                    <h4 style="margin-top: 16px; margin-bottom: 4px;">Publish Checklist</h4>
+                    <div style="display: flex; flex-direction: column;">
+                        ${publishRow('posted', 'Posted')}
+                        ${publishRow('sharedToStory', 'Shared to Story')}
+                        ${publishRow('repurposedThreads', 'Repurposed to Threads')}
+                        ${publishRow('pinCreated', 'Pin created')}
+                        ${publishRow('loggedPerformance', 'Logged performance')}
+                    </div>
+                </div>
+            `;
+        } catch (e) {
+            console.error('Error rendering generate content section:', e);
+            const el = document.getElementById('generateContentSection');
+            if (el) el.innerHTML = '';
         }
     }
 
@@ -5201,8 +5675,85 @@
         'WhatsApp Business': ['Business name clear', 'Description complete', 'Category set', 'Response time shown', 'Business phone visible', 'Address listed', 'Website linked', 'Catalog updated']
     };
 
+    // Actionable, specific guidance for each unchecked audit item — so an audit
+    // produces real next steps instead of just a percentage score.
+    const auditGuidance = {
+        'Instagram': {
+            'Clear bio': "State who you help and how, in one line — e.g. 'I help [audience] with [problem] via [solution].'",
+            'Pinned post of services': 'Pin your top offer or services post to the top of your grid.',
+            'Recent posts (last 7 days)': "Post at least once every 7 days — an inactive-looking profile loses trust fast.",
+            'Consistent branding': 'Use the same colors, fonts and tone across your last few posts.',
+            'CTA in bio': "Add a clear call-to-action in your bio, like 'DM me to get started.'",
+            'Story highlights': 'Set up highlights for FAQs, testimonials, or your offer.',
+            'Engagement on posts': 'Reply to every comment and DM within 24 hours.',
+            'Hashtags used': 'Add 3-5 relevant hashtags so new people can discover your posts.'
+        },
+        'Facebook': {
+            'Complete business info': 'Fill in your business category, hours and contact details fully.',
+            'Clear cover photo': 'Use a cover photo that shows what you offer at a glance.',
+            'About section filled': 'Write a short About section explaining who you help and how.',
+            'Recent posts': 'Post at least once in the last week to stay visible in feeds.',
+            'Response time indicated': 'Turn on Page response tracking so visitors see how fast you reply.',
+            'Service/product details': 'List your services or products clearly, with prices if possible.',
+            'Customer reviews visible': 'Ask 2-3 happy customers to leave a review this week.',
+            'Call-to-action button': 'Add a CTA button (Message, Book Now, or Shop Now) to your Page.'
+        },
+        'LinkedIn': {
+            'Professional headline': 'Write a headline that states your role and who you help, not just a job title.',
+            'Complete profile summary': 'Add a summary covering your experience, focus and what you offer.',
+            'Featured content': 'Pin your best post or case study to the Featured section.',
+            'Recent posts': "Post at least once this week to stay in your network's feed.",
+            'Endorsements visible': 'Ask a colleague or client to endorse your top 2-3 skills.',
+            'Recommendations shown': 'Request a written recommendation from a past client or collaborator.',
+            'Clear photo': 'Use a clear, professional headshot as your profile photo.',
+            'Contact information': 'Add your email or booking link to your Contact Info section.'
+        },
+        'TikTok': {
+            'Bio optimization': 'Make your bio state who you help and how, in a few words.',
+            'Profile picture clear': 'Use a clear, recognisable profile photo or logo.',
+            'Verified badge status': "Not essential — skip unless you're eligible.",
+            'Link in bio': 'Add a link to your offer, catalog or WhatsApp in your bio.',
+            'Recent videos posted': 'Post at least 1-2 videos in the last week to stay active.',
+            'Consistent posting': 'Aim for a regular rhythm (e.g. 2-3x a week) so the algorithm favors you.',
+            'Engagement metrics': 'Reply to comments on your videos to boost engagement.',
+            'Hashtags strategy': 'Use 3-5 relevant hashtags mixing broad and niche tags.'
+        },
+        'Pinterest': {
+            'Business account': 'Switch to a Pinterest Business account for analytics and rich pins.',
+            'Complete profile info': 'Fill in your bio, website and location fully.',
+            'Rich pins enabled': 'Enable Rich Pins so your pins show extra product/article info.',
+            'Boards organized': 'Group your pins into clear, keyword-named boards.',
+            'Keyword optimization': 'Use searchable keywords in board titles and pin descriptions.',
+            'Recent pins': 'Pin at least a few times this week to stay active.',
+            'Cover images branded': 'Use consistent, branded cover images for your boards.',
+            'Website linked': 'Link your website or Selar store in your profile.'
+        },
+        'YouTube': {
+            'Channel art complete': 'Add branded channel banner art that shows what you offer.',
+            'Channel description': 'Write a description covering what your channel is about and who it\'s for.',
+            'About section': 'Fill in your About tab with contact info and posting schedule.',
+            'Upload quality': "Check your last video's audio and lighting quality.",
+            'Playlists organized': 'Group your videos into themed playlists.',
+            'Channel keywords': 'Add relevant keywords in your channel settings for search.',
+            'Social links added': 'Link your other platforms and website in your channel details.',
+            'Branding consistent': "Match your thumbnails' colors and fonts across videos."
+        },
+        'WhatsApp Business': {
+            'Business name clear': 'Make sure your display name matches your brand clearly.',
+            'Description complete': 'Write a short description of what you offer.',
+            'Category set': 'Set the correct business category in your profile.',
+            'Response time shown': 'Set your away message and typical response time.',
+            'Business phone visible': 'Confirm your business number is visible and correct.',
+            'Address listed': 'Add your address if you have a physical location.',
+            'Website linked': 'Add your website or Selar link to your profile.',
+            'Catalog updated': 'Update your product/service catalog with current items and prices.'
+        }
+    };
+
     function updateAuditChecklist() {
         const platform = document.getElementById('auditPlatform').value;
+        const resultsEl = document.getElementById('auditResults');
+        if (resultsEl) resultsEl.innerHTML = '';
         if (!platform) {
             document.getElementById('auditChecklist').innerHTML = '';
             return;
@@ -5229,20 +5780,50 @@
         }
         const checked = document.querySelectorAll('#auditChecklist input:checked');
         const completed = Array.from(checked).map(c => c.value);
-        const allItems = auditChecklists[platform].length;
+        const allItemsList = auditChecklists[platform] || [];
+        const allItems = allItemsList.length;
         const score = Math.round((completed.length / allItems) * 100);
+        const missing = allItemsList.filter(item => !completed.includes(item));
 
         appState.growthLog.push({
+            id: Date.now().toString(),
+            type: 'audit',
             platform,
             completedItems: completed,
             score,
             date: new Date().toLocaleDateString(),
             notes: ''
         });
+
+        // Show real, actionable guidance instead of just a score
+        const resultsEl = document.getElementById('auditResults');
+        if (resultsEl) {
+            if (missing.length === 0) {
+                resultsEl.innerHTML = `
+                    <div style="background: rgba(34,197,94,0.08); border-left: 4px solid #22c55e; border-radius: 8px; padding: 14px; margin-top: 12px;">
+                        <p style="margin: 0; font-size: 13px; font-weight: 600;">🎉 Everything's covered on ${platform} — nice work!</p>
+                    </div>
+                `;
+            } else {
+                const tips = missing.map(item => {
+                    const tip = (auditGuidance[platform] && auditGuidance[platform][item]) || `Take a closer look at: ${item}`;
+                    return `<li style="margin-bottom: 8px;"><strong>${item}</strong> — ${tip}</li>`;
+                }).join('');
+                resultsEl.innerHTML = `
+                    <div style="background: var(--bg-light-secondary); border-left: 4px solid var(--primary); border-radius: 8px; padding: 14px; margin-top: 12px;">
+                        <p style="margin: 0 0 8px 0; font-size: 13px; font-weight: 600;">Score: ${score}% — here's what to improve on ${platform}:</p>
+                        <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6;">${tips}</ul>
+                    </div>
+                `;
+            }
+        }
+
         document.getElementById('auditPlatform').value = '';
+        document.getElementById('auditChecklist').innerHTML = '';
         saveState();
         renderActivityIdeas();
         renderGrowthStats();
+        renderGrowthActivitiesTracker();
         showToast(`Audit saved! ${completed.length}/${allItems} items checked`);
     }
 
@@ -5270,6 +5851,7 @@
         saveState();
         renderActivityIdeas();
         renderGrowthStats();
+        renderGrowthActivitiesTracker();
         showToast('Competitor audit saved!');
     }
 
@@ -5298,6 +5880,7 @@
         saveState();
         renderActivityIdeas();
         renderGrowthStats();
+        renderGrowthActivitiesTracker();
         showToast('Outreach saved! Update reply status anytime');
     }
 
@@ -5325,6 +5908,7 @@
         saveState();
         renderActivityIdeas();
         renderGrowthStats();
+        renderGrowthActivitiesTracker();
         showToast('Product optimization saved!');
     }
 
@@ -5955,11 +6539,15 @@
         html += '<div style="display: flex; flex-direction: column; gap: 8px;">';
         
         appState.growthActivities.forEach((activity, idx) => {
+            const typeLabel = activityTypeLabels[activity.activityType] || activityTypeLabels['simple'];
             html += `
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-light-secondary); border-radius: 8px; border-left: 4px solid var(--primary);">
-                    <span style="font-size: 16px; margin-right: 8px;">${activity.icon}</span>
-                    <span style="font-size: 13px; font-weight: 500; flex: 1;">${activity.name}</span>
-                    <button onclick="removeGrowthActivity(${idx})" style="padding: 4px 8px; background: #fee2e2; color: #dc2626; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='#dc2626'; this.style.color='white'" onmouseout="this.style.background='#fee2e2'; this.style.color='#dc2626'">Remove</button>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; padding: 10px; background: var(--bg-light-secondary); border-radius: 8px; border-left: 4px solid var(--primary);">
+                    <span style="font-size: 16px;">${activity.icon}</span>
+                    <div style="flex: 1; min-width: 0;">
+                        <p style="font-size: 13px; font-weight: 500; margin: 0; word-break: break-word;">${activity.name}</p>
+                        <p style="font-size: 11px; color: var(--text-light-secondary); margin: 2px 0 0 0;">${typeLabel}</p>
+                    </div>
+                    <button onclick="removeGrowthActivity(${idx})" style="padding: 4px 8px; background: #fee2e2; color: #dc2626; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0;" onmouseover="this.style.background='#dc2626'; this.style.color='white'" onmouseout="this.style.background='#fee2e2'; this.style.color='#dc2626'">Remove</button>
                 </div>
             `;
         });
@@ -5968,26 +6556,104 @@
         display.innerHTML = html;
     }
 
+    // Labels + default prompts for the different growth activity types a user can create
+    const activityTypeLabels = {
+        simple: 'Simple',
+        checklist: '📋 Checklist',
+        survey: '📝 Survey',
+        idea: '💡 Idea Capture',
+        reflection: '🪞 Reflection',
+        recording: '🎙️ Recording / Log'
+    };
+
+    const activityTypeDefaultPrompts = {
+        idea: 'What idea or insight did this spark? Jot it down so you can turn it into content later.',
+        reflection: "Take a moment to reflect — what went well, what didn't, and what will you do differently?",
+        recording: 'What did you do today? Note the details here.'
+    };
+
+    // Show/hide the right extra fields in the Add Activity form based on the chosen type
+    function updateNewActivityTypeFields() {
+        const typeEl = document.getElementById('newActivityType');
+        const container = document.getElementById('newActivityTypeFields');
+        if (!typeEl || !container) return;
+        const type = typeEl.value;
+
+        if (type === 'checklist') {
+            container.innerHTML = `
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Checklist Items (one per line)</label>
+                    <textarea id="newActivityChecklistItems" placeholder="e.g.\nFilmed the reel\nAdded captions\nUploaded to Instagram" style="width: 100%; min-height: 90px; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;"></textarea>
+                </div>
+            `;
+        } else if (type === 'survey') {
+            container.innerHTML = `
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Questions (one per line)</label>
+                    <textarea id="newActivitySurveyQuestions" placeholder="e.g.\nWhat worked well this week?\nWhat's one thing to try next?" style="width: 100%; min-height: 90px; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;"></textarea>
+                </div>
+            `;
+        } else if (type === 'idea' || type === 'reflection' || type === 'recording') {
+            container.innerHTML = `
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Prompt shown when you open this activity (optional)</label>
+                    <input type="text" id="newActivityPrompt" placeholder="${activityTypeDefaultPrompts[type]}" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                </div>
+            `;
+        } else {
+            container.innerHTML = '';
+        }
+    }
+
     function addGrowthActivity() {
         const icon = document.getElementById('newActivityIcon').value.trim();
         const name = document.getElementById('newActivityName').value.trim();
+        const typeEl = document.getElementById('newActivityType');
+        const activityType = typeEl ? typeEl.value : 'simple';
 
         if (!icon || !name) {
             showToast('⚠️ Add both icon and activity name!');
             return;
         }
 
-        appState.growthActivities.push({
+        const newActivity = {
             icon,
             name,
-            id: `activity-${Date.now()}`
-        });
+            id: `activity-${Date.now()}`,
+            activityType
+        };
+
+        if (activityType === 'checklist') {
+            const raw = (document.getElementById('newActivityChecklistItems') || {}).value || '';
+            const items = raw.split('\n').map(s => s.trim()).filter(Boolean);
+            if (items.length === 0) {
+                showToast('⚠️ Add at least one checklist item!');
+                return;
+            }
+            newActivity.checklistItems = items;
+        } else if (activityType === 'survey') {
+            const raw = (document.getElementById('newActivitySurveyQuestions') || {}).value || '';
+            const questions = raw.split('\n').map(s => s.trim()).filter(Boolean);
+            if (questions.length === 0) {
+                showToast('⚠️ Add at least one question!');
+                return;
+            }
+            newActivity.surveyQuestions = questions;
+        } else if (activityType === 'idea' || activityType === 'reflection' || activityType === 'recording') {
+            const promptInput = (document.getElementById('newActivityPrompt') || {}).value || '';
+            newActivity.prompt = promptInput.trim() || activityTypeDefaultPrompts[activityType];
+        }
+
+        appState.growthActivities.push(newActivity);
 
         document.getElementById('newActivityIcon').value = '';
         document.getElementById('newActivityName').value = '';
+        if (typeEl) typeEl.value = 'simple';
+        updateNewActivityTypeFields();
         
         saveState();
         renderGrowthActivitiesDisplay();
+        renderGrowthActivitiesTracker();
         showToast(`⚡ Added: ${icon} ${name}`);
     }
 
@@ -5996,6 +6662,7 @@
         appState.growthActivities.splice(idx, 1);
         saveState();
         renderGrowthActivitiesDisplay();
+        renderGrowthActivitiesTracker();
         showToast(`Removed: ${activity.icon} ${activity.name}`);
     }
 
@@ -6514,6 +7181,7 @@
             growthLog: JSON.parse(localStorage.getItem('growthLog') || '[]'),
             contentVault: JSON.parse(localStorage.getItem('contentVault') || '[]'),
             contentPillars: JSON.parse(localStorage.getItem('contentPillars') || '[]'),
+            dailyChecklist: JSON.parse(localStorage.getItem('dailyChecklist') || '{}'),
             brandRule: localStorage.getItem('brandRule') || appState.brandRule,
             brandStatement: localStorage.getItem('brandStatement') || appState.brandStatement,
             theme: localStorage.getItem('theme') || 'light',
@@ -6560,6 +7228,7 @@
         localStorage.setItem('growthLog', JSON.stringify(appState.growthLog));
         localStorage.setItem('contentVault', JSON.stringify(appState.contentVault));
         localStorage.setItem('contentPillars', JSON.stringify(appState.contentPillars));
+        localStorage.setItem('dailyChecklist', JSON.stringify(appState.dailyChecklist));
         localStorage.setItem('brandRule', appState.brandRule);
         localStorage.setItem('brandStatement', appState.brandStatement);
         localStorage.setItem('theme', appState.theme);
