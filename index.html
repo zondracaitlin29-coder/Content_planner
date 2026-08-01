@@ -1185,7 +1185,7 @@
                             <textarea id="hookText" placeholder="Did you know...? Here's why...? Have you tried...?" style="min-height: 80px;"></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Content Types</label>
+                            <label class="form-label">Content Types <span style="color: var(--danger); font-weight: 700;">*</span> <span style="font-weight: 400; color: var(--text-light-secondary);">(tag at least one)</span></label>
                             <div id="hookTypesTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;">
                                 <button type="button" class="hook-type-tag" data-type="teach" style="padding: 6px 12px; border-radius: 20px; border: 2px solid var(--border-light); background: white; cursor: pointer; font-weight: 500; font-size: 12px; transition: all 0.3s ease;">📚 Teach</button>
                                 <button type="button" class="hook-type-tag" data-type="trust" style="padding: 6px 12px; border-radius: 20px; border: 2px solid var(--border-light); background: white; cursor: pointer; font-weight: 500; font-size: 12px; transition: all 0.3s ease;">🤝 Trust</button>
@@ -1233,7 +1233,7 @@
                             <textarea id="ctaText" placeholder="e.g. Reply with your thoughts, Click here, Let me know in comments..." style="min-height: 80px;"></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Content Types</label>
+                            <label class="form-label">Content Types <span style="color: var(--danger); font-weight: 700;">*</span> <span style="font-weight: 400; color: var(--text-light-secondary);">(tag at least one)</span></label>
                             <div id="ctaTypesTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;">
                                 <button type="button" class="cta-type-tag" data-type="teach" style="padding: 6px 12px; border-radius: 20px; border: 2px solid var(--border-light); background: white; cursor: pointer; font-weight: 500; font-size: 12px; transition: all 0.3s ease;">📚 Teach</button>
                                 <button type="button" class="cta-type-tag" data-type="trust" style="padding: 6px 12px; border-radius: 20px; border: 2px solid var(--border-light); background: white; cursor: pointer; font-weight: 500; font-size: 12px; transition: all 0.3s ease;">🤝 Trust</button>
@@ -1281,7 +1281,7 @@
                             <textarea id="ideaText" placeholder="Describe your content idea..." style="min-height: 80px;"></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Content Types</label>
+                            <label class="form-label">Content Types <span style="color: var(--danger); font-weight: 700;">*</span> <span style="font-weight: 400; color: var(--text-light-secondary);">(tag at least one)</span></label>
                             <div id="ideaTypesTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;">
                                 <button type="button" class="idea-type-tag" data-type="teach" style="padding: 6px 12px; border-radius: 20px; border: 2px solid var(--border-light); background: white; cursor: pointer; font-weight: 500; font-size: 12px; transition: all 0.3s ease;">📚 Teach</button>
                                 <button type="button" class="idea-type-tag" data-type="trust" style="padding: 6px 12px; border-radius: 20px; border: 2px solid var(--border-light); background: white; cursor: pointer; font-weight: 500; font-size: 12px; transition: all 0.3s ease;">🤝 Trust</button>
@@ -1333,9 +1333,9 @@
                             <textarea id="hashtagText" placeholder="e.g. #ContentCreator #SmallBusiness" style="min-height: 80px;"></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Content Type (optional)</label>
+                            <label class="form-label">Content Type <span style="color: var(--danger); font-weight: 700;">*</span> <span style="font-weight: 400; color: var(--text-light-secondary);">(required)</span></label>
                             <select id="hashtagType" class="content-type-select">
-                                <option value="">Any content type</option>
+                                <option value="">Choose type...</option>
                                 <option value="teach">Teach</option>
                                 <option value="trust">Build Trust</option>
                                 <option value="story">Tell a Story</option>
@@ -1368,7 +1368,7 @@
                             <input type="text" id="topicText" placeholder="What topic do you want to discuss?">
                         </div>
                         <div class="form-group" style="margin-bottom: 16px;">
-                            <label class="form-label">Tag (Intention)</label>
+                            <label class="form-label">Tag (Intention) <span style="color: var(--danger); font-weight: 700;">*</span> <span style="font-weight: 400; color: var(--text-light-secondary);">(required)</span></label>
                             <div id="topicTypesTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;"></div>
                             <input type="hidden" id="topicTypes">
                         </div>
@@ -1524,10 +1524,8 @@
                             <option value="Instagram">Instagram</option>
                             <option value="Facebook">Facebook</option>
                             <option value="LinkedIn">LinkedIn</option>
-                            <option value="TikTok">TikTok</option>
                             <option value="Pinterest">Pinterest</option>
-                            <option value="YouTube">YouTube</option>
-                            <option value="WhatsApp">WhatsApp Business</option>
+                            <option value="WhatsApp Business">WhatsApp Business</option>
                         </select>
                     </div>
                     <div id="auditChecklist" style="margin-bottom: 16px;"></div>
@@ -1720,6 +1718,15 @@
                         <div id="goalsForm"></div>
                         <button class="btn btn-secondary btn-sm btn-block" onclick="saveGoals()" style="margin-top: 12px;">Save Goals</button>
                     </div>
+                    <div style="border-top: 2px solid var(--border-light); padding-top: 16px; margin-bottom: 8px;">
+                        <h4 style="margin-top: 0; color: var(--primary);">📌 Weekly Pin Goal</h4>
+                        <p style="font-size: 13px; color: var(--text-light-secondary); margin-bottom: 12px;">Every piece of content can become a Pin — instead of scheduling Pinterest on specific days, just say how many pins you want to create this week. It'll show up as a suggestion in Today's Plan → Smart Repurpose.</p>
+                        <div class="form-group">
+                            <label class="form-label">Pins per week</label>
+                            <input type="number" id="weeklyPinGoalInput" min="0" max="30" value="0" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                        </div>
+                        <button class="btn btn-secondary btn-sm btn-block" onclick="saveWeeklyPinGoal()">Save Pin Goal</button>
+                    </div>
                     <div style="border-top: 2px solid var(--border-light); padding-top: 16px;">
                         <h4 style="margin-top: 0; color: var(--primary);">📅 Posting Days</h4>
                         <p style="font-size: 13px; color: var(--text-light-secondary); margin-bottom: 12px;">Select which days you want to post (other days show Growth Activities)</p>
@@ -1892,7 +1899,7 @@
 
 <script>
     const INTENTIONS = ['Teach', 'Build Trust', 'Tell a Story', 'Share Progress', 'Celebrate a Win', 'Start a Conversation', 'Promote'];
-    const PLATFORMS = ['Threads', 'LinkedIn', 'Facebook', 'Instagram', 'Pinterest'];
+    const PLATFORMS = ['Threads', 'LinkedIn', 'Facebook', 'Instagram'];
     const PILLAR_COLORS = {
         'Customer Communication': '#10b981',
         'Systems & Digital Products': '#0A66C2',
@@ -1929,6 +1936,14 @@
         'convo': 'Start a Conversation',
         'promote': 'Promote'
     };
+
+    // Reverse lookup: full intention label (as stored in weeklyCalendar) -> short code
+    // (as used as keys in repurposeGuides/smartMappings). Without this, matching by
+    // intention.toLowerCase() alone only ever worked for "teach" and "promote".
+    const intentionLabelToCode = {};
+    Object.entries(typeLabels).forEach(([code, label]) => {
+        intentionLabelToCode[label.toLowerCase()] = code;
+    });
 
     // Color system for content pillars - used in list items
     const intentionColorMap = {
@@ -2109,14 +2124,15 @@
             'Tuesday': { intention: 'Build Trust', platform: 'LinkedIn', pillar: null },
             'Wednesday': { intention: 'Tell a Story', platform: 'Facebook', pillar: 'Systems & Digital Products' },
             'Thursday': { intention: 'Share Progress', platform: 'Instagram', pillar: 'Practical Business Tips' },
-            'Friday': { intention: 'Celebrate a Win', platform: 'Pinterest', pillar: 'Your Journey' },
+            'Friday': { intention: 'Celebrate a Win', platform: 'Instagram', pillar: 'Your Journey' },
             'Saturday': { intention: 'Start a Conversation', platform: 'Threads', pillar: null },
             'Sunday': { intention: 'Promote', platform: 'LinkedIn', pillar: null }
         },
         postingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
         batchCreateDays: ['Monday', 'Saturday'],
-        weeklyGoals: { 'Threads': 5, 'LinkedIn': 3, 'Facebook': 2, 'Instagram': 4, 'Pinterest': 3 },
-        weeklyPosted: { 'Threads': 0, 'LinkedIn': 0, 'Facebook': 0, 'Instagram': 0, 'Pinterest': 0 },
+        weeklyGoals: { 'Threads': 5, 'LinkedIn': 3, 'Facebook': 2, 'Instagram': 4 },
+        weeklyPosted: { 'Threads': 0, 'LinkedIn': 0, 'Facebook': 0, 'Instagram': 0 },
+        weeklyPinGoal: 3, // How many Pinterest pins to create per week — surfaced in Smart Repurpose, not the posting calendar
         userHooks: [],
         userIdeas: [],
         userCTAs: [],
@@ -2363,6 +2379,7 @@
             if (document.getElementById('pillarsDisplay')) renderContentStrategyDisplay();
             if (document.getElementById('growthActivitiesDisplay')) renderGrowthActivitiesDisplay();
             if (document.getElementById('goalsForm')) renderGoalsForm();
+            if (document.getElementById('weeklyPinGoalInput')) document.getElementById('weeklyPinGoalInput').value = appState.weeklyPinGoal || 0;
             if (document.getElementById('postingDaysForm')) renderPostingDaysForm();
             if (document.getElementById('batchCreateDaysForm')) renderBatchCreateDaysForm();
             if (document.getElementById('customContentTypesList')) renderCustomContentTypes();
@@ -2597,6 +2614,23 @@
 
     function escapeHtmlForTracker(s) {
         return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;');
+    }
+
+    // Escapes text for safe use as: onclick="someFn('${escaped}')"
+    // The text sits inside a single-quoted JS string, which itself sits inside a
+    // double-quoted HTML attribute. Both layers need escaping:
+    //   - backslashes and single quotes need JS-level escaping (\\ and \')
+    //   - double quotes need HTML-level escaping (&quot;) so the attribute
+    //     itself doesn't end early
+    // Note: HTML-entity-encoding a single quote (&#39;) does NOT work here —
+    // the browser decodes entities in the attribute value before the JS parser
+    // ever sees it, so the real apostrophe reappears and breaks the string.
+    function escapeForInlineJs(text) {
+        return String(text)
+            .replace(/\\/g, '\\\\')
+            .replace(/'/g, "\\'")
+            .replace(/"/g, '&quot;')
+            .replace(/\r?\n/g, '\\n');
     }
 
     // Builds the inline "Open" panel for a custom activity, based on its type
@@ -3219,7 +3253,7 @@
                 if (bestHook && bestHook.text) {
                     const fullText = String(bestHook.text);
                     const displayText = fullText.substring(0, 45) + (fullText.length > 45 ? '...' : '');
-                    const safeText = fullText.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                    const safeText = escapeForInlineJs(fullText);
                     suggestedContent += `
                         <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${safeText}'); showToast('Hook added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
                             <span>🎣 ${displayText}</span>
@@ -3231,7 +3265,7 @@
                 if (bestCTA && bestCTA.text) {
                     const fullText = String(bestCTA.text);
                     const displayText = fullText.substring(0, 45) + (fullText.length > 45 ? '...' : '');
-                    const safeText = fullText.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                    const safeText = escapeForInlineJs(fullText);
                     suggestedContent += `
                         <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${safeText}'); showToast('CTA added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
                             <span>💬 ${displayText}</span>
@@ -3243,7 +3277,7 @@
                 if (bestIdea && bestIdea.text) {
                     const fullText = String(bestIdea.text);
                     const displayText = fullText.substring(0, 45) + (fullText.length > 45 ? '...' : '');
-                    const safeText = fullText.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                    const safeText = escapeForInlineJs(fullText);
                     suggestedContent += `
                         <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${safeText}'); showToast('Idea added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
                             <span>💡 ${displayText}</span>
@@ -3255,7 +3289,7 @@
                 if (bestTopic && bestTopic.text) {
                     const fullText = String(bestTopic.text);
                     const displayText = fullText.substring(0, 45) + (fullText.length > 45 ? '...' : '');
-                    const safeText = fullText.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                    const safeText = escapeForInlineJs(fullText);
                     suggestedContent += `
                         <div style="padding: 10px; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;" onclick="insertIntoDraft('${safeText}'); showToast('Topic added!');" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
                             <span>💭 ${displayText}</span>
@@ -3294,7 +3328,6 @@
                             <button type="button" onclick="setTodayPlatform('LinkedIn')" id="today-platform-LinkedIn" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'LinkedIn' ? 'var(--platform-linkedin)' : 'white'}; border: 2px solid var(--platform-linkedin); color: ${todayPlatform === 'LinkedIn' ? 'white' : 'var(--platform-linkedin)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">💼 LinkedIn</button>
                             <button type="button" onclick="setTodayPlatform('Threads')" id="today-platform-Threads" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Threads' ? 'var(--platform-threads)' : 'white'}; border: 2px solid var(--platform-threads); color: ${todayPlatform === 'Threads' ? 'white' : 'var(--platform-threads)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">🧵 Threads</button>
                             <button type="button" onclick="setTodayPlatform('Facebook')" id="today-platform-Facebook" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Facebook' ? 'var(--platform-facebook)' : 'white'}; border: 2px solid var(--platform-facebook); color: ${todayPlatform === 'Facebook' ? 'white' : 'var(--platform-facebook)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">f Facebook</button>
-                            <button type="button" onclick="setTodayPlatform('Pinterest')" id="today-platform-Pinterest" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Pinterest' ? 'var(--platform-pinterest)' : 'white'}; border: 2px solid var(--platform-pinterest); color: ${todayPlatform === 'Pinterest' ? 'white' : 'var(--platform-pinterest)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">📌 Pinterest</button>
                         </div>
                         <div id="todayPlatformGuidelines" style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); font-size: 13px; line-height: 1.6; color: var(--text-light); display: none;"></div>
                     </div>
@@ -3389,20 +3422,42 @@
             entry.publish[name] = !entry.publish[name];
             saveState();
             renderGenerateContentSection();
+            try {
+                renderRepurposeGuides();
+            } catch (e) {
+                console.error('Error refreshing repurpose guides:', e.message);
+            }
         } catch (e) {
             console.error('Error toggling publish checklist item:', e);
         }
     }
 
+    // Persisted across re-renders so checking a box doesn't snap this section shut again
+    let assetsPublishExpanded = false;
+    function toggleAssetsPublishSection() {
+        assetsPublishExpanded = !assetsPublishExpanded;
+        renderGenerateContentSection();
+    }
+
     function copyGeneratedContent() {
         try {
             const el = document.getElementById('generatedContentBlock');
-            if (!el) return;
+            if (!el || el.dataset.empty === 'true') return;
             copyToClipboard(el.innerText);
             showToast('Copied! Paste it wherever you draft.');
         } catch (e) {
             console.error('Error copying generated content:', e);
         }
+    }
+
+    // True only if the item is explicitly tagged with this intention code —
+    // no permissive "untagged = matches everything" fallback here, since this
+    // block should only ever show content someone deliberately tagged for today.
+    function itemTaggedForIntention(item, code) {
+        if (!item) return false;
+        if (Array.isArray(item.types)) return item.types.includes(code);
+        if (typeof item.type === 'string') return item.type === code;
+        return false;
     }
 
     function renderGenerateContentSection() {
@@ -3422,31 +3477,50 @@
                 return;
             }
 
-            const todayIntention = String(schedule.intention).toLowerCase();
+            const todayIntentionCode = intentionLabelToCode[String(schedule.intention).toLowerCase()] || String(schedule.intention).toLowerCase();
             const todayPlatform = schedule.platform || 'Instagram';
             const todayPillar = schedule.pillar;
 
-            const matchesPillarAndIntention = (item) => {
-                if (!item || typeof item !== 'object') return false;
-                const matchesIntention = item.types && Array.isArray(item.types) && item.types.length > 0 ? item.types.includes(todayIntention) : true;
+            // Hooks/CTAs also respect pillar + platform tags, on top of the required intention match
+            const matchesHookOrCTA = (item) => {
+                if (!itemTaggedForIntention(item, todayIntentionCode)) return false;
                 const itemPillars = Array.isArray(item.pillars) && item.pillars.length > 0 ? item.pillars : (item.pillar ? [item.pillar] : []);
                 const matchesPillar = (!todayPillar || itemPillars.length === 0) ? true : itemPillars.includes(todayPillar);
                 const itemPlatforms = Array.isArray(item.platforms) ? item.platforms : [];
                 const matchesPlatform = itemPlatforms.length === 0 ? true : itemPlatforms.includes(todayPlatform);
-                return matchesIntention && matchesPillar && matchesPlatform;
+                return matchesPillar && matchesPlatform;
             };
 
-            const bestHook = (appState.userHooks || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
-            const bestCTA = (appState.userCTAs || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
-            const bestTopic = (appState.userTopics || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
+            // Hashtags/captions only carry a single type (and captions a single platform)
+            const matchesHashtagOrCaption = (item) => {
+                if (!itemTaggedForIntention(item, todayIntentionCode)) return false;
+                if (item.platform && item.platform !== todayPlatform) return false;
+                return true;
+            };
 
-            const pillarLabel = todayPillar || '—';
-            const goalLabel = schedule.intention || '—';
-            const topicLabel = (bestTopic && bestTopic.text) ? String(bestTopic.text) : 'Add a topic in your Content Library to see it here';
-            const hookLabel = (bestHook && bestHook.text) ? String(bestHook.text) : 'Add a hook in your Content Library to see it here';
-            const ctaLabel = (bestCTA && bestCTA.text) ? String(bestCTA.text) : 'Add a CTA in your Content Library to see it here';
+            const bestHook = (appState.userHooks || []).filter(matchesHookOrCTA).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
+            const bestCTA = (appState.userCTAs || []).filter(matchesHookOrCTA).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
+            const bestHashtag = (appState.userHashtags || []).filter(matchesHashtagOrCaption).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
+            const bestCaption = (appState.draftCaptions || []).filter(matchesHashtagOrCaption).sort((a, b) => new Date(b.created || 0) - new Date(a.created || 0))[0] || null;
 
             const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Only include sections that actually have a matching, tagged item —
+            // nothing gets a placeholder line if there's no match.
+            const sections = [];
+            if (bestHook && bestHook.text) sections.push({ label: 'Hook', text: bestHook.text });
+            if (bestCTA && bestCTA.text) sections.push({ label: 'CTA', text: bestCTA.text });
+            if (bestHashtag && bestHashtag.text) sections.push({ label: 'Hashtags', text: bestHashtag.text });
+            if (bestCaption && bestCaption.text) sections.push({ label: 'Caption', text: bestCaption.text });
+
+            let generatedBlockHtml;
+            let isEmpty = false;
+            if (sections.length > 0) {
+                generatedBlockHtml = sections.map(s => `${s.label}:\n${esc(s.text)}`).join('\n\n');
+            } else {
+                isEmpty = true;
+                generatedBlockHtml = `Nothing tagged for today's intention (${esc(schedule.intention)}) yet. Tag a hook, CTA, hashtag set, or caption in your Content Library and it'll show up here.`;
+            }
 
             const entry = getDailyChecklistEntry();
             const assets = entry.assets;
@@ -3466,40 +3540,40 @@
                 </label>
             `;
 
+            const assetsDoneCount = Object.values(assets).filter(Boolean).length;
+            const publishDoneCount = Object.values(publish).filter(Boolean).length;
+
             container.innerHTML = `
                 <div class="card">
                     <h3>✨ Generate Today's Content</h3>
-                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px;">Pulls today's plan together in one place — copy it and go.</p>
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px;">Only shows what's actually tagged for today's intention — copy it and go.</p>
 
-                    <div id="generatedContentBlock" style="background: var(--bg-light-secondary); border: 2px solid var(--border-light); border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.8; margin-bottom: 12px; white-space: pre-wrap;">Platform: ${esc(todayPlatform)}
-Content Pillar: ${esc(pillarLabel)}
-Goal: ${esc(goalLabel)}
-Topic: ${esc(topicLabel)}
+                    <div id="generatedContentBlock" data-empty="${isEmpty}" style="background: var(--bg-light-secondary); border: 2px solid var(--border-light); border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.8; margin-bottom: 12px; white-space: pre-wrap; ${isEmpty ? 'color: var(--text-light-secondary); font-style: italic;' : ''}">${generatedBlockHtml}</div>
 
-Hook:
-${esc(hookLabel)}
+                    <button class="btn btn-primary btn-block" onclick="copyGeneratedContent()" style="margin-bottom: 12px;" ${isEmpty ? 'disabled' : ''}>📋 Copy Today's Content</button>
 
-CTA:
-${esc(ctaLabel)}</div>
-
-                    <button class="btn btn-primary btn-block" onclick="copyGeneratedContent()" style="margin-bottom: 20px;">📋 Copy Today's Content</button>
-
-                    <h4 style="margin-bottom: 4px;">Assets</h4>
-                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 4px;">Which formats are you creating today?</p>
-                    <div style="display: flex; flex-direction: column;">
-                        ${assetRow('carousel', 'Carousel')}
-                        ${assetRow('reel', 'Reel')}
-                        ${assetRow('threads', 'Threads')}
-                        ${assetRow('pin', 'Pinterest Pin')}
+                    <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-top: 2px solid var(--border-light); padding-top: 12px;" onclick="toggleAssetsPublishSection()">
+                        <h4 style="margin: 0;">📋 Assets &amp; Publish Checklist <span style="font-weight: 400; font-size: 12px; color: var(--text-light-secondary);">(${assetsDoneCount}/4 · ${publishDoneCount}/5)</span></h4>
+                        <span style="font-size: 20px;">${assetsPublishExpanded ? '−' : '+'}</span>
                     </div>
+                    <div style="display: ${assetsPublishExpanded ? 'block' : 'none'}; margin-top: 12px;">
+                        <h4 style="margin-bottom: 4px;">Assets</h4>
+                        <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 4px;">Which formats are you creating today?</p>
+                        <div style="display: flex; flex-direction: column;">
+                            ${assetRow('carousel', 'Carousel')}
+                            ${assetRow('reel', 'Reel')}
+                            ${assetRow('threads', 'Threads')}
+                            ${assetRow('pin', 'Pinterest Pin')}
+                        </div>
 
-                    <h4 style="margin-top: 16px; margin-bottom: 4px;">Publish Checklist</h4>
-                    <div style="display: flex; flex-direction: column;">
-                        ${publishRow('posted', 'Posted')}
-                        ${publishRow('sharedToStory', 'Shared to Story')}
-                        ${publishRow('repurposedThreads', 'Repurposed to Threads')}
-                        ${publishRow('pinCreated', 'Pin created')}
-                        ${publishRow('loggedPerformance', 'Logged performance')}
+                        <h4 style="margin-top: 16px; margin-bottom: 4px;">Publish Checklist</h4>
+                        <div style="display: flex; flex-direction: column;">
+                            ${publishRow('posted', 'Posted')}
+                            ${publishRow('sharedToStory', 'Shared to Story')}
+                            ${publishRow('repurposedThreads', 'Repurposed to Threads')}
+                            ${publishRow('pinCreated', 'Pin created')}
+                            ${publishRow('loggedPerformance', 'Logged performance')}
+                        </div>
                     </div>
                 </div>
             `;
@@ -3721,16 +3795,6 @@ ${esc(ctaLabel)}</div>
             }
         },
         'promote+instagram': {
-            'Pinterest': {
-                icon: '📌',
-                title: 'Pinterest Pin',
-                guidelines: [
-                    'Create vertical pin design (1000x1500px)',
-                    'Headline as benefit: "Save 10 hours/week with..."',
-                    'Use brand colors—consistency matters for repins',
-                    'Direct link to product/offer landing page'
-                ]
-            },
             'Facebook': {
                 icon: '👥',
                 title: 'Facebook Post',
@@ -3762,41 +3826,141 @@ ${esc(ctaLabel)}</div>
                     'Keep copy punchy: benefit-focused, not feature-focused',
                     'Include price, discount, or special offer info'
                 ]
-            },
-            'Pinterest': {
-                icon: '📌',
-                title: 'Pinterest Pin',
-                guidelines: [
-                    'Design vertical pin (1000x1500px minimum)',
-                    'Headline: outcome-focused ("Get [result] in [timeframe]")',
-                    'Brand it consistently—colors, fonts, logo',
-                    'Link to your sales/landing page, not homepage'
-                ]
             }
         }
     };
+
+    // Pin-specific repurpose tips, by intention code, since "every post can become a pin"
+    // regardless of which platform it was originally written for.
+    const pinterestRepurposeGuidance = {
+        celebrate: ['Design a vertical pin (1000x1500px) using this win as the headline', 'Brand it with your consistent colors and logo', 'Link back to your product or profile'],
+        promote: ['Create a vertical pin (1000x1500px)', 'Headline as a benefit: "Save 10 hours/week with..."', 'Direct link to your product/offer landing page'],
+        teach: ['Turn the tip into a vertical "How to..." pin', 'Keep the headline action-focused', 'Link to the full post or tutorial'],
+        trust: ['Design a pin around the trust-building point you made', 'Use a warm, personal image or quote-style graphic', 'Link to your profile or booking link'],
+        story: ['Turn a key moment from your story into a quote-style pin', 'Keep the headline emotional and specific', 'Link to the full story or post'],
+        progress: ['Create a before/after or milestone-style pin', 'Headline: the result you achieved', 'Link to more detail or your offer'],
+        convo: ['Turn your question into a bold text pin', 'Use a bright, scroll-stopping design', 'Link to the post so people can join in']
+    };
+    const genericPinTips = ['Design a vertical pin (1000x1500px)', 'Use your brand colors and a clear headline', 'Link to the original post or your offer'];
+
+    function getWeekDateKeys() {
+        const d = new Date();
+        const dayOfWeek = d.getDay(); // 0 (Sun) - 6 (Sat)
+        const diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+        const monday = new Date(d);
+        monday.setDate(d.getDate() + diffToMonday);
+        monday.setHours(0, 0, 0, 0);
+
+        const keys = [];
+        for (let i = 0; i < 7; i++) {
+            const day = new Date(monday);
+            day.setDate(monday.getDate() + i);
+            const y = day.getFullYear();
+            const m = String(day.getMonth() + 1).padStart(2, '0');
+            const dd = String(day.getDate()).padStart(2, '0');
+            keys.push(`${y}-${m}-${dd}`);
+        }
+        return keys;
+    }
+
+    function computePinsCreatedThisWeek() {
+        try {
+            const keys = getWeekDateKeys();
+            const checklist = appState.dailyChecklist || {};
+            return keys.reduce((count, key) => {
+                const entry = checklist[key];
+                return count + ((entry && entry.publish && entry.publish.pinCreated) ? 1 : 0);
+            }, 0);
+        } catch (e) {
+            console.error('Error computing pins created this week:', e);
+            return 0;
+        }
+    }
+
+    // Universal Pin-progress card — shown regardless of day type, since pin creation
+    // isn't tied to a specific posting day; it's driven by the weekly pin goal.
+    function renderPinRepurposeCard() {
+        try {
+            const goal = appState.weeklyPinGoal || 0;
+            if (goal <= 0) return ''; // No goal set — don't clutter the page
+
+            const createdCount = computePinsCreatedThisWeek();
+            const todayEntry = getDailyChecklistEntry();
+            const doneToday = !!(todayEntry.publish && todayEntry.publish.pinCreated);
+
+            const today = getToday();
+            const schedule = today && appState.weeklyCalendar[today];
+            const intentionCode = (schedule && schedule.intention && typeof schedule.intention === 'string')
+                ? (intentionLabelToCode[schedule.intention.toLowerCase()] || null)
+                : null;
+            const tips = (intentionCode && pinterestRepurposeGuidance[intentionCode]) || genericPinTips;
+            const tipsHtml = tips.map(t => `<li style="margin-bottom: 6px; font-size: 12px; line-height: 1.4; color: var(--text-light-secondary);">✓ ${t}</li>`).join('');
+            const progressPct = Math.min(100, Math.round((createdCount / goal) * 100));
+
+            return `
+                <div style="border-left: 6px solid #e60023; background: linear-gradient(135deg, rgba(230, 0, 35, 0.04), transparent); padding: 12px; border-radius: 8px; margin-top: 4px;">
+                    <p style="font-weight: 600; margin-bottom: 8px; font-size: 14px;">📌 Turn This Into a Pin</p>
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 8px;">Every piece of content can become a Pin. This week: <strong>${createdCount}/${goal}</strong> created.</p>
+                    <div style="background: var(--border-light); border-radius: 999px; height: 8px; overflow: hidden; margin-bottom: 14px;">
+                        <div style="background: #e60023; height: 100%; width: ${progressPct}%;"></div>
+                    </div>
+                    <ul style="margin: 0 0 14px 0; padding-left: 20px; list-style: none;">
+                        ${tipsHtml}
+                    </ul>
+                    <button class="btn ${doneToday ? 'btn-secondary' : 'btn-primary'} btn-block" onclick="togglePublishCheck('pinCreated')">${doneToday ? '✓ Pin logged today — Undo' : 'Log a Pin Created Today'}</button>
+                </div>
+            `;
+        } catch (e) {
+            console.error('Error rendering pin repurpose card:', e);
+            return '';
+        }
+    }
+
+    // Persisted across re-renders (e.g. logging a pin) so this doesn't snap shut
+    let repurposeExpanded = false;
+    function toggleRepurposeSection() {
+        repurposeExpanded = !repurposeExpanded;
+        renderRepurposeGuides();
+    }
+
+    function wrapRepurposeCollapsible(innerHtml) {
+        if (!innerHtml) return '';
+        return `
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleRepurposeSection()">
+                    <h3 style="margin: 0;">🔄 More Ideas: Repurpose &amp; Pin</h3>
+                    <span style="font-size: 20px;">${repurposeExpanded ? '−' : '+'}</span>
+                </div>
+                <div style="display: ${repurposeExpanded ? 'block' : 'none'}; margin-top: 16px;">
+                    ${innerHtml}
+                </div>
+            </div>
+        `;
+    }
 
     function renderRepurposeGuides() {
         try {
             const repurposeEl = document.getElementById('repurposeSection');
             if (!repurposeEl) return;
 
+            const pinCardHtml = renderPinRepurposeCard();
+
             const isGrowthDay = !isPostingDay() && !isBatchDay();
             if (isGrowthDay) {
-                repurposeEl.innerHTML = '';
+                repurposeEl.innerHTML = wrapRepurposeCollapsible(pinCardHtml);
                 return;
             }
 
             const today = getToday();
             if (!today) {
-                repurposeEl.innerHTML = '';
+                repurposeEl.innerHTML = wrapRepurposeCollapsible(pinCardHtml);
                 return;
             }
 
             const schedule = appState && appState.weeklyCalendar && appState.weeklyCalendar[today];
             
             if (!schedule || typeof schedule !== 'object') {
-                repurposeEl.innerHTML = '';
+                repurposeEl.innerHTML = wrapRepurposeCollapsible(pinCardHtml);
                 return;
             }
             
@@ -3804,57 +3968,51 @@ ${esc(ctaLabel)}</div>
             const intention = schedule.intention;
             
             if (!platform || !intention || typeof platform !== 'string' || typeof intention !== 'string') {
-                repurposeEl.innerHTML = '';
+                repurposeEl.innerHTML = wrapRepurposeCollapsible(pinCardHtml);
                 return;
             }
 
-            const todayIntention = intention.toLowerCase();
+            // Use the short intention code (matches repurposeGuides/smartMappings keys)
+            // instead of the raw lowercase label, which only ever matched "teach"/"promote".
+            const todayIntentionCode = intentionLabelToCode[intention.toLowerCase()] || intention.toLowerCase();
             const todayPlatformLower = platform.toLowerCase();
             
-            if (!todayIntention || !todayPlatformLower) {
-                repurposeEl.innerHTML = '';
-                return;
-            }
-            
-            const guidesKey = `${todayIntention}+${todayPlatformLower}`;
+            const guidesKey = `${todayIntentionCode}+${todayPlatformLower}`;
             let guides = (repurposeGuides && repurposeGuides[guidesKey]) || null;
 
             // If exact combo doesn't exist, suggest relevant platforms
             if (!guides || Object.keys(guides).length === 0) {
-                guides = generateSmartRepurposeSuggestions(todayIntention, platform);
-            }
-
-            if (!guides || Object.keys(guides).length === 0) {
-                repurposeEl.innerHTML = '';
-                return;
+                guides = generateSmartRepurposeSuggestions(todayIntentionCode, platform);
             }
 
             let entriesHtml = '';
-            Object.entries(guides).forEach(([plat, guide]) => {
-                if (guide && guide.icon && guide.title && Array.isArray(guide.guidelines)) {
-                    const guidelineHtml = guide.guidelines.map(g => `<li style="margin-bottom: 6px; font-size: 12px; line-height: 1.4; color: var(--text-light-secondary);">✓ ${g}</li>`).join('');
-                    entriesHtml += `
-                        <div style="background: var(--bg-light-secondary); border-left: 4px solid var(--primary); padding: 12px; border-radius: 6px;">
-                            <p style="font-weight: 600; margin-bottom: 8px; font-size: 14px;">${guide.icon} ${guide.title}</p>
-                            <ul style="margin: 0; padding-left: 20px; list-style: none;">
-                                ${guidelineHtml}
-                            </ul>
-                        </div>
-                    `;
-                }
-            });
+            if (guides && Object.keys(guides).length > 0) {
+                // Show only the platforms that match best, not every possible one
+                Object.entries(guides).slice(0, 2).forEach(([plat, guide]) => {
+                    if (guide && guide.icon && guide.title && Array.isArray(guide.guidelines)) {
+                        const guidelineHtml = guide.guidelines.map(g => `<li style="margin-bottom: 6px; font-size: 12px; line-height: 1.4; color: var(--text-light-secondary);">✓ ${g}</li>`).join('');
+                        entriesHtml += `
+                            <div style="background: var(--bg-light-secondary); border-left: 4px solid var(--primary); padding: 12px; border-radius: 6px;">
+                                <p style="font-weight: 600; margin-bottom: 8px; font-size: 14px;">${guide.icon} ${guide.title}</p>
+                                <ul style="margin: 0; padding-left: 20px; list-style: none;">
+                                    ${guidelineHtml}
+                                </ul>
+                            </div>
+                        `;
+                    }
+                });
+            }
 
-            const repurposeHtml = `
-                <div class="card" style="border-left: 6px solid #8b5cf6; background: linear-gradient(135deg, rgba(139, 92, 246, 0.04), transparent);">
-                    <h3>🔄 Repurpose This Post</h3>
-                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 16px;">Use your ${platform} post about <strong>${todayIntention}</strong> on these platforms with specific tweaks:</p>
+            const repurposeHtml = entriesHtml ? `
+                <div style="border-left: 6px solid #8b5cf6; background: linear-gradient(135deg, rgba(139, 92, 246, 0.04), transparent); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 16px;">Use your ${platform} post about <strong>${intention}</strong> on these platforms with specific tweaks:</p>
                     <div style="display: flex; flex-direction: column; gap: 16px;">
                         ${entriesHtml}
                     </div>
                 </div>
-            `;
+            ` : '';
             
-            repurposeEl.innerHTML = repurposeHtml;
+            repurposeEl.innerHTML = wrapRepurposeCollapsible(repurposeHtml + pinCardHtml);
         } catch (e) {
             console.error('Error rendering repurpose guides:', e.message);
             const el = document.getElementById('repurposeSection');
@@ -3901,16 +4059,6 @@ ${esc(ctaLabel)}</div>
                         'End with "What would you add?"'
                     ]
                 },
-                'Pinterest': {
-                    icon: '📌',
-                    title: 'Pinterest Pin',
-                    guidelines: [
-                        'Create vertical pin (1000x1500px)',
-                        'Headline: action-focused ("How to...")',
-                        'Brand consistent with your style',
-                        'Link to blog post or full tutorial'
-                    ]
-                },
                 'Twitter': {
                     icon: '𝕏',
                     title: 'Twitter/X Thread',
@@ -3918,7 +4066,7 @@ ${esc(ctaLabel)}</div>
                         'First tweet hooks the reader',
                         'Numbered tips (2-5 points)',
                         'Short, punchy sentences',
-                        'End: "Follow for more ideas"'
+                        'Follow for more ideas'
                     ]
                 },
                 'TikTok': {
@@ -3961,16 +4109,6 @@ ${esc(ctaLabel)}</div>
                         'Lead with value, then mention offer',
                         'Share customer success story or testimonial',
                         'End with "DM for details" or link'
-                    ]
-                },
-                'Pinterest': {
-                    icon: '📌',
-                    title: 'Pinterest Pin',
-                    guidelines: [
-                        'Design vertical pin (1000x1500px)',
-                        'Headline: benefit/outcome focused',
-                        'Brand consistently—build pin collection',
-                        'Direct to sales/landing page'
                     ]
                 },
                 'LinkedIn': {
@@ -4302,7 +4440,7 @@ ${esc(ctaLabel)}</div>
                 const isEditing = editingState.type === 'pastPost' && editingState.id === post.id;
                 const pillarColor = post.pillar && pillarColors[post.pillar] ? pillarColors[post.pillar] : '#e5e7eb';
                 const pillarBadge = post.pillar ? `<span class="badge" style="background: ${pillarColor}22; color: ${pillarColor};">${post.pillar}</span>` : '';
-                const safeContent = String(post.content || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                const safeContent = escapeForInlineJs(post.content || '');
 
                 if (isEditing) {
                     return `
@@ -4441,6 +4579,10 @@ ${esc(ctaLabel)}</div>
             showToast('Add an idea!');
             return;
         }
+        if (!types) {
+            showToast('⚠️ Tag at least one content type (Teach, Build Trust, etc.) before saving!');
+            return;
+        }
 
         appState.userIdeas.push({
             id: Date.now().toString(),
@@ -4535,7 +4677,7 @@ ${esc(ctaLabel)}</div>
                         <div class="card-actions">
                             <button onclick="startEditing('idea', '${idea.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px;">✏️</button>
                             <button onclick="${isTagEditing ? 'closeTagEditor()' : `openTagEditor('idea', '${idea.id}')`}" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">🏷️</button>
-                            <button onclick="copyToClipboard('${idea.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
+                            <button onclick="copyToClipboard('${escapeForInlineJs(idea.text)}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
                             <button onclick="removeIdea('${idea.id}')" style="padding: 6px 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
                         </div>
                     </div>
@@ -4596,7 +4738,15 @@ ${esc(ctaLabel)}</div>
         const platformsVal = document.getElementById('hookPlatforms').value;
         const pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
         const platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
-        if (text) {
+        if (!text) {
+            showToast('Add a hook!');
+            return;
+        }
+        if (!types) {
+            showToast('⚠️ Tag at least one content type (Teach, Build Trust, etc.) before saving!');
+            return;
+        }
+        {
             appState.userHooks.push({
                 id: Date.now().toString(),
                 text,
@@ -4626,8 +4776,6 @@ ${esc(ctaLabel)}</div>
             renderToday();
             renderDraftLibraryCards();
             showToast('Hook added! 🎣');
-        } else {
-            showToast('Add a hook!');
         }
     }
 
@@ -4678,7 +4826,7 @@ ${esc(ctaLabel)}</div>
                         <div class="card-actions">
                             <button onclick="startEditing('hook', '${hook.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px;">✏️</button>
                             <button onclick="${isTagEditing ? 'closeTagEditor()' : `openTagEditor('hook', '${hook.id}')`}" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">🏷️</button>
-                            <button onclick="copyToClipboard('${hook.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
+                            <button onclick="copyToClipboard('${escapeForInlineJs(hook.text)}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
                             <button onclick="removeHook('${hook.id}')" style="padding: 6px 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
                         </div>
                     </div>
@@ -4735,7 +4883,15 @@ ${esc(ctaLabel)}</div>
         const platformsVal = document.getElementById('ctaPlatforms').value;
         const pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
         const platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
-        if (text) {
+        if (!text) {
+            showToast('Add a CTA!');
+            return;
+        }
+        if (!types) {
+            showToast('⚠️ Tag at least one content type (Teach, Build Trust, etc.) before saving!');
+            return;
+        }
+        {
             appState.userCTAs.push({
                 id: Date.now().toString(),
                 text,
@@ -4764,8 +4920,6 @@ ${esc(ctaLabel)}</div>
             renderToday();
             renderDraftLibraryCards();
             showToast('CTA added! 💬');
-        } else {
-            showToast('Add a CTA!');
         }
     }
 
@@ -4816,7 +4970,7 @@ ${esc(ctaLabel)}</div>
                         <div class="card-actions">
                             <button onclick="startEditing('cta', '${cta.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px;">✏️</button>
                             <button onclick="${isTagEditing ? 'closeTagEditor()' : `openTagEditor('cta', '${cta.id}')`}" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">🏷️</button>
-                            <button onclick="copyToClipboard('${cta.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
+                            <button onclick="copyToClipboard('${escapeForInlineJs(cta.text)}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
                             <button onclick="removeCTA('${cta.id}')" style="padding: 6px 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
                         </div>
                     </div>
@@ -4868,7 +5022,15 @@ ${esc(ctaLabel)}</div>
     function addHashtag() {
         const text = document.getElementById('hashtagText').value.trim();
         const type = document.getElementById('hashtagType').value.trim();
-        if (text) {
+        if (!text) {
+            showToast('Add a hashtag!');
+            return;
+        }
+        if (!type) {
+            showToast('⚠️ Choose a content type before saving!');
+            return;
+        }
+        {
             appState.userHashtags.push({
                 id: Date.now().toString(),
                 text,
@@ -4921,7 +5083,7 @@ ${esc(ctaLabel)}</div>
                         <p class="card-text">${hashtag.text}</p>
                         <div class="card-actions">
                             <button onclick="startEditing('hashtag', '${hashtag.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px;">✏️</button>
-                            <button onclick="copyToClipboard('${hashtag.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
+                            <button onclick="copyToClipboard('${escapeForInlineJs(hashtag.text)}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px;">📋</button>
                             <button onclick="removeHashtag('${hashtag.id}')" style="padding: 6px 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
                         </div>
                     </div>
@@ -4984,7 +5146,15 @@ ${esc(ctaLabel)}</div>
         const pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
         const platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
         
-        if (text) {
+        if (!text) {
+            showToast('Add a topic!');
+            return;
+        }
+        if (types.length === 0) {
+            showToast('⚠️ Tag at least one intention before saving!');
+            return;
+        }
+        {
             appState.userTopics.push({
                 id: Date.now().toString(),
                 text,
@@ -5054,7 +5224,7 @@ ${esc(ctaLabel)}</div>
                         <div style="display: flex; gap: 6px; flex-shrink: 0;">
                             <button onclick="startEditing('topic', '${topic.id}')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.border='1px solid var(--primary)'" onmouseout="this.style.background='var(--bg-light-secondary)'; this.style.color='var(--text-light)'; this.style.border='1px solid var(--border-light)'">✏️</button>
                             <button onclick="${isTagEditing ? 'closeTagEditor()' : `openTagEditor('topic', '${topic.id}')`}" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.border='1px solid var(--primary)'" onmouseout="this.style.background='var(--bg-light-secondary)'; this.style.color='var(--text-light)'; this.style.border='1px solid var(--border-light)'">🏷️</button>
-                            <button onclick="copyToClipboard('${topic.text.replace(/'/g, "\\'")}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.border='1px solid var(--primary)'" onmouseout="this.style.background='var(--bg-light-secondary)'; this.style.color='var(--text-light)'; this.style.border='1px solid var(--border-light)'">📋</button>
+                            <button onclick="copyToClipboard('${escapeForInlineJs(topic.text)}'); showToast('Copied!')" style="padding: 6px 10px; background: var(--bg-light-secondary); border: 1px solid var(--border-light); border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.border='1px solid var(--primary)'" onmouseout="this.style.background='var(--bg-light-secondary)'; this.style.color='var(--text-light)'; this.style.border='1px solid var(--border-light)'">📋</button>
                             <button onclick="removeTopic('${topic.id}')" style="padding: 6px 10px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; font-size: 12px; color: #dc2626; transition: all 0.2s ease;" onmouseover="this.style.background='#dc2626'; this.style.color='white'; this.style.border='1px solid #dc2626'" onmouseout="this.style.background='#fee2e2'; this.style.color='#dc2626'; this.style.border='1px solid #fca5a5'">×</button>
                         </div>
                     </div>
@@ -5366,7 +5536,7 @@ ${esc(ctaLabel)}</div>
             const itemText = item.text || item.title || '';
             
             return `
-                <div onclick="insertIntoCaption('${itemText.replace(/'/g, "\\'")}'); closeModal('${modalId}')" style="border-left: 6px solid ${types.length > 0 ? getIntentionBorderColor(types[0]) : '#e5e7eb'}; padding: 12px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; background: var(--bg-light-secondary); transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.06);" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)'; this.style.transform='translateY(0)'">
+                <div onclick="insertIntoCaption('${escapeForInlineJs(itemText)}'); closeModal('${modalId}')" style="border-left: 6px solid ${types.length > 0 ? getIntentionBorderColor(types[0]) : '#e5e7eb'}; padding: 12px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; background: var(--bg-light-secondary); transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.06);" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)'; this.style.transform='translateY(0)'">
                     <p style="line-height: 1.5; margin: 0 0 8px 0; font-weight: 500;">${itemText}</p>
                     ${typeBadges ? `<div style="display: flex; flex-wrap: wrap; gap: 6px;">${typeBadges}</div>` : ''}
                 </div>
@@ -5451,13 +5621,13 @@ ${esc(ctaLabel)}</div>
         let html = '';
         
         if (recentHooks.length > 0) {
-            html += '<div style="padding: 8px; background: white; border-radius: 6px; border-left: 4px solid #f59e0b; cursor: pointer;" onclick="insertIntoCaption(\'' + recentHooks[0].text.replace(/'/g, "\\'") + '\'); showToast(\'Added!\');">🎣 ' + recentHooks[0].text.substring(0, 40) + (recentHooks[0].text.length > 40 ? '...' : '') + '</div>';
+            html += '<div style="padding: 8px; background: white; border-radius: 6px; border-left: 4px solid #f59e0b; cursor: pointer;" onclick="insertIntoCaption(\'' + escapeForInlineJs(recentHooks[0].text) + '\'); showToast(\'Added!\');">🎣 ' + recentHooks[0].text.substring(0, 40) + (recentHooks[0].text.length > 40 ? '...' : '') + '</div>';
         }
         if (recentIdeas.length > 0) {
-            html += '<div style="padding: 8px; background: white; border-radius: 6px; border-left: 4px solid #3b82f6; cursor: pointer;" onclick="insertIntoCaption(\'' + recentIdeas[0].text.replace(/'/g, "\\'") + '\'); showToast(\'Added!\');">💡 ' + recentIdeas[0].text.substring(0, 40) + (recentIdeas[0].text.length > 40 ? '...' : '') + '</div>';
+            html += '<div style="padding: 8px; background: white; border-radius: 6px; border-left: 4px solid #3b82f6; cursor: pointer;" onclick="insertIntoCaption(\'' + escapeForInlineJs(recentIdeas[0].text) + '\'); showToast(\'Added!\');">💡 ' + recentIdeas[0].text.substring(0, 40) + (recentIdeas[0].text.length > 40 ? '...' : '') + '</div>';
         }
         if (recentCTAs.length > 0) {
-            html += '<div style="padding: 8px; background: white; border-radius: 6px; border-left: 4px solid #ec4899; cursor: pointer;" onclick="insertIntoCaption(\'' + recentCTAs[0].text.replace(/'/g, "\\'") + '\'); showToast(\'Added!\');">💬 ' + recentCTAs[0].text.substring(0, 40) + (recentCTAs[0].text.length > 40 ? '...' : '') + '</div>';
+            html += '<div style="padding: 8px; background: white; border-radius: 6px; border-left: 4px solid #ec4899; cursor: pointer;" onclick="insertIntoCaption(\'' + escapeForInlineJs(recentCTAs[0].text) + '\'); showToast(\'Added!\');">💬 ' + recentCTAs[0].text.substring(0, 40) + (recentCTAs[0].text.length > 40 ? '...' : '') + '</div>';
         }
 
         container.innerHTML = html || '<p style="font-size: 12px; color: var(--text-light-secondary); margin: 0;">No items in library yet. Add some from the tabs!</p>';
@@ -5669,9 +5839,7 @@ ${esc(ctaLabel)}</div>
         'Instagram': ['Clear bio', 'Pinned post of services', 'Recent posts (last 7 days)', 'Consistent branding', 'CTA in bio', 'Story highlights', 'Engagement on posts', 'Hashtags used'],
         'Facebook': ['Complete business info', 'Clear cover photo', 'About section filled', 'Recent posts', 'Response time indicated', 'Service/product details', 'Customer reviews visible', 'Call-to-action button'],
         'LinkedIn': ['Professional headline', 'Complete profile summary', 'Featured content', 'Recent posts', 'Endorsements visible', 'Recommendations shown', 'Clear photo', 'Contact information'],
-        'TikTok': ['Bio optimization', 'Profile picture clear', 'Verified badge status', 'Link in bio', 'Recent videos posted', 'Consistent posting', 'Engagement metrics', 'Hashtags strategy'],
         'Pinterest': ['Business account', 'Complete profile info', 'Rich pins enabled', 'Boards organized', 'Keyword optimization', 'Recent pins', 'Cover images branded', 'Website linked'],
-        'YouTube': ['Channel art complete', 'Channel description', 'About section', 'Upload quality', 'Playlists organized', 'Channel keywords', 'Social links added', 'Branding consistent'],
         'WhatsApp Business': ['Business name clear', 'Description complete', 'Category set', 'Response time shown', 'Business phone visible', 'Address listed', 'Website linked', 'Catalog updated']
     };
 
@@ -5708,16 +5876,6 @@ ${esc(ctaLabel)}</div>
             'Clear photo': 'Use a clear, professional headshot as your profile photo.',
             'Contact information': 'Add your email or booking link to your Contact Info section.'
         },
-        'TikTok': {
-            'Bio optimization': 'Make your bio state who you help and how, in a few words.',
-            'Profile picture clear': 'Use a clear, recognisable profile photo or logo.',
-            'Verified badge status': "Not essential — skip unless you're eligible.",
-            'Link in bio': 'Add a link to your offer, catalog or WhatsApp in your bio.',
-            'Recent videos posted': 'Post at least 1-2 videos in the last week to stay active.',
-            'Consistent posting': 'Aim for a regular rhythm (e.g. 2-3x a week) so the algorithm favors you.',
-            'Engagement metrics': 'Reply to comments on your videos to boost engagement.',
-            'Hashtags strategy': 'Use 3-5 relevant hashtags mixing broad and niche tags.'
-        },
         'Pinterest': {
             'Business account': 'Switch to a Pinterest Business account for analytics and rich pins.',
             'Complete profile info': 'Fill in your bio, website and location fully.',
@@ -5727,16 +5885,6 @@ ${esc(ctaLabel)}</div>
             'Recent pins': 'Pin at least a few times this week to stay active.',
             'Cover images branded': 'Use consistent, branded cover images for your boards.',
             'Website linked': 'Link your website or Selar store in your profile.'
-        },
-        'YouTube': {
-            'Channel art complete': 'Add branded channel banner art that shows what you offer.',
-            'Channel description': 'Write a description covering what your channel is about and who it\'s for.',
-            'About section': 'Fill in your About tab with contact info and posting schedule.',
-            'Upload quality': "Check your last video's audio and lighting quality.",
-            'Playlists organized': 'Group your videos into themed playlists.',
-            'Channel keywords': 'Add relevant keywords in your channel settings for search.',
-            'Social links added': 'Link your other platforms and website in your channel details.',
-            'Branding consistent': "Match your thumbnails' colors and fonts across videos."
         },
         'WhatsApp Business': {
             'Business name clear': 'Make sure your display name matches your brand clearly.',
@@ -6208,6 +6356,23 @@ ${esc(ctaLabel)}</div>
         }
     }
 
+    function saveWeeklyPinGoal() {
+        try {
+            const input = document.getElementById('weeklyPinGoalInput');
+            appState.weeklyPinGoal = input ? (parseInt(input.value) || 0) : 0;
+            saveState();
+            try {
+                renderRepurposeGuides();
+            } catch (e) {
+                console.error('Error refreshing repurpose guides:', e.message);
+            }
+            showToast(`📌 Weekly pin goal set to ${appState.weeklyPinGoal}!`);
+        } catch (e) {
+            console.error('Error saving weekly pin goal:', e);
+            showToast('⚠️ Error saving pin goal: ' + e.message);
+        }
+    }
+
     function smartAssignPlatforms() {
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         const postingDays = days.filter(day => appState.weeklyCalendar[day].posting !== false);
@@ -6354,7 +6519,7 @@ ${esc(ctaLabel)}</div>
                     <button onclick="this.closest('div').parentElement.remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
                 </div>
                 
-                <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 16px;">Set the default intention for each day. App will auto-generate your weekly calendar based on these preferences + your platform posting goals.</p>
+                <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 16px;">Set the default intention — and optionally a preferred platform — for each day. The app will auto-generate your weekly calendar based on these preferences + your platform posting goals, honoring your platform pick first.</p>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
         `;
@@ -6363,6 +6528,7 @@ ${esc(ctaLabel)}</div>
             const isBatch = prefs[day]?.batchDay;
             const isRest = prefs[day]?.rest;
             const currentIntention = prefs[day]?.preferredIntention || null;
+            const currentPlatform = prefs[day]?.preferredPlatform || '';
             
             html += `
                 <div style="border: 2px solid var(--border-light); border-radius: 8px; padding: 12px;">
@@ -6377,9 +6543,13 @@ ${esc(ctaLabel)}</div>
                             <p style="margin: 0; font-size: 12px; color: #d97706; font-weight: 500;">Batch Day</p>
                         </div>
                     ` : `
-                        <select id="pref-${day}" style="width: 100%; padding: 8px; border: 2px solid var(--border-light); border-radius: 6px; font-size: 12px;">
+                        <select id="pref-${day}" style="width: 100%; padding: 8px; border: 2px solid var(--border-light); border-radius: 6px; font-size: 12px; margin-bottom: 6px;">
                             <option value="">Select intention...</option>
                             ${intentions.map(int => `<option value="${int}" ${currentIntention === int ? 'selected' : ''}>${int}</option>`).join('')}
+                        </select>
+                        <select id="prefPlatform-${day}" style="width: 100%; padding: 8px; border: 2px solid var(--border-light); border-radius: 6px; font-size: 12px;">
+                            <option value="">Auto-assign platform</option>
+                            ${PLATFORMS.map(p => `<option value="${p}" ${currentPlatform === p ? 'selected' : ''}>${p}</option>`).join('')}
                         </select>
                     `}
                 </div>
@@ -6392,9 +6562,9 @@ ${esc(ctaLabel)}</div>
                 <div style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
                     <p style="font-size: 11px; margin: 0; line-height: 1.5; color: var(--text-light-secondary);">
                         <strong>How this works:</strong><br>
-                        1. Set each day's intention above<br>
+                        1. Set each day's intention (and platform, if you have one in mind)<br>
                         2. Click "Auto-Generate Calendar"<br>
-                        3. App distributes platforms based on your posting goals<br>
+                        3. Days with a chosen platform keep it; the rest fill in from your posting goals<br>
                         4. Each day gets: intention + platform to hit weekly targets
                     </p>
                 </div>
@@ -6419,10 +6589,15 @@ ${esc(ctaLabel)}</div>
             
             days.forEach(day => {
                 const select = document.getElementById(`pref-${day}`);
+                const platformSelect = document.getElementById(`prefPlatform-${day}`);
                 if (select) {
                     const value = select.value;
+                    const platformValue = platformSelect ? platformSelect.value : '';
                     if (value) {
-                        appState.contentStrategy.dayPreferences[day] = { preferredIntention: value };
+                        appState.contentStrategy.dayPreferences[day] = {
+                            preferredIntention: value,
+                            preferredPlatform: platformValue || null
+                        };
                     }
                 }
             });
@@ -6454,47 +6629,72 @@ ${esc(ctaLabel)}</div>
                 showToast('⚠️ No posting days configured');
                 return;
             }
-            
-            // Create list of platforms needed based on goals
-            const platformQueue = [];
+
+            // Track how many of each platform still need a home this week
+            const remainingGoals = {};
             Object.entries(goals).forEach(([platform, count]) => {
-                if (platform && count > 0) {
-                    for (let i = 0; i < count; i++) {
-                        platformQueue.push(platform);
-                    }
-                }
+                remainingGoals[platform] = count || 0;
             });
-            
-            if (platformQueue.length === 0) {
+
+            if (Object.values(remainingGoals).reduce((a, b) => a + b, 0) === 0) {
                 showToast('⚠️ Set platform posting goals (all platforms are 0)');
                 return;
             }
-            
-            // Shuffle for variety
+
+            // PASS 1: honor each day's preferred platform first — this is what makes
+            // assignment feel sensible instead of a random shuffle every time.
+            const daysNeedingPlatform = [];
+            postingDays.forEach(day => {
+                if (!day) return; // Skip undefined days
+                const preferredPlatform = prefs[day]?.preferredPlatform;
+                const intention = prefs[day]?.preferredIntention || 'Teach';
+
+                if (preferredPlatform && PLATFORMS.includes(preferredPlatform)) {
+                    appState.weeklyCalendar[day] = {
+                        intention: intention,
+                        platform: preferredPlatform,
+                        pillar: null,
+                        posting: true
+                    };
+                    if (remainingGoals[preferredPlatform] > 0) {
+                        remainingGoals[preferredPlatform]--;
+                    }
+                } else {
+                    daysNeedingPlatform.push(day);
+                }
+            });
+
+            // PASS 2: fill remaining days from whatever goal quota is left, shuffled
+            // for variety among days that have no specific preference.
+            const platformQueue = [];
+            Object.entries(remainingGoals).forEach(([platform, count]) => {
+                for (let i = 0; i < count; i++) {
+                    platformQueue.push(platform);
+                }
+            });
             for (let i = platformQueue.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [platformQueue[i], platformQueue[j]] = [platformQueue[j], platformQueue[i]];
             }
-            
-            // Assign to posting days
+
             let queueIndex = 0;
-            postingDays.forEach(day => {
-                if (!day) return; // Skip undefined days
-                
-                if (queueIndex >= platformQueue.length) queueIndex = 0; // Wrap around if needed
-                
-                const platform = platformQueue[queueIndex];
+            daysNeedingPlatform.forEach(day => {
                 const intention = prefs[day]?.preferredIntention || 'Teach';
-                
-                if (platform) {
-                    appState.weeklyCalendar[day] = {
-                        intention: intention,
-                        platform: platform,
-                        pillar: null,
-                        posting: true
-                    };
+                let platform;
+                if (platformQueue.length > 0) {
+                    if (queueIndex >= platformQueue.length) queueIndex = 0; // Wrap around if needed
+                    platform = platformQueue[queueIndex];
                     queueIndex++;
+                } else {
+                    platform = PLATFORMS[Math.floor(Math.random() * PLATFORMS.length)];
                 }
+
+                appState.weeklyCalendar[day] = {
+                    intention: intention,
+                    platform: platform,
+                    pillar: null,
+                    posting: true
+                };
             });
             
             // Handle batch days (no posting)
@@ -6701,7 +6901,7 @@ ${esc(ctaLabel)}</div>
             captions.forEach((caption, idx) => {
                 if (!caption || !caption.text) return;
                 
-                const safeText = String(caption.text).replace(/`/g, '\\`').replace(/"/g, '&quot;');
+                const safeText = String(caption.text).replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${').replace(/"/g, '&quot;');
                 html += `
                     <div style="background: var(--bg-light-secondary); padding: 10px; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
                         <div style="flex: 1; font-size: 12px; line-height: 1.4;">${caption.text}</div>
@@ -7037,11 +7237,12 @@ ${esc(ctaLabel)}</div>
                 appState.weeklyCalendar[day].isBatchDay = false;
             }
 
-            // Safety net: repair any day (except Rest) that's missing a platform or intention —
-            // e.g. from older saved data — so the dashboard always has a real post idea to show.
+            // Safety net: repair any day (except Rest) that's missing a platform or intention,
+            // or whose saved platform is no longer valid (e.g. "Pinterest" from before it was
+            // removed as a daily posting platform) — so the dashboard never shows a stale platform.
             const repaired = appState.weeklyCalendar[day];
             if (repaired.intention !== 'Rest') {
-                if (!repaired.platform) {
+                if (!repaired.platform || !PLATFORMS.includes(repaired.platform)) {
                     repaired.platform = PLATFORMS[idx % PLATFORMS.length];
                 }
                 if (!repaired.intention) {
@@ -7167,6 +7368,7 @@ ${esc(ctaLabel)}</div>
             postingDays: JSON.parse(localStorage.getItem('postingDays') || JSON.stringify(appState.postingDays)),
             batchCreateDays: JSON.parse(localStorage.getItem('batchCreateDays') || JSON.stringify(appState.batchCreateDays)),
             weeklyGoals: JSON.parse(localStorage.getItem('weeklyGoals') || JSON.stringify(appState.weeklyGoals)),
+            weeklyPinGoal: JSON.parse(localStorage.getItem('weeklyPinGoal') || appState.weeklyPinGoal),
             weeklyPosted: JSON.parse(localStorage.getItem('weeklyPosted') || JSON.stringify(appState.weeklyPosted)),
             userHooks: JSON.parse(localStorage.getItem('userHooks') || '[]'),
             userIdeas: JSON.parse(localStorage.getItem('userIdeas') || '[]'),
@@ -7214,6 +7416,7 @@ ${esc(ctaLabel)}</div>
         localStorage.setItem('postingDays', JSON.stringify(appState.postingDays));
         localStorage.setItem('batchCreateDays', JSON.stringify(appState.batchCreateDays));
         localStorage.setItem('weeklyGoals', JSON.stringify(appState.weeklyGoals));
+        localStorage.setItem('weeklyPinGoal', JSON.stringify(appState.weeklyPinGoal));
         localStorage.setItem('weeklyPosted', JSON.stringify(appState.weeklyPosted));
         localStorage.setItem('userHooks', JSON.stringify(appState.userHooks));
         localStorage.setItem('userIdeas', JSON.stringify(appState.userIdeas));
