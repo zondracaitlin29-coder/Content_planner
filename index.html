@@ -1129,6 +1129,20 @@
                 <p id="todaySubheader">Auto-scheduled based on your weekly plan</p>
             </div>
 
+            <div class="card" style="margin-bottom: 16px;">
+                <p style="font-weight: 600; margin: 0 0 8px 0; font-size: 13px;">👁️ Preview a Day</p>
+                <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0 0 10px 0;">Check any day's plan ahead of time — read-only, nothing is saved or logged.</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="showDayPreview('Monday')">Mon</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="showDayPreview('Tuesday')">Tue</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="showDayPreview('Wednesday')">Wed</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="showDayPreview('Thursday')">Thu</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="showDayPreview('Friday')">Fri</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="showDayPreview('Saturday')">Sat</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="showDayPreview('Sunday')">Sun</button>
+                </div>
+            </div>
+
             <div class="card" id="todayPlanCard">
                 <h3>📋 Your Plan Today</h3>
                 <div id="todayGuidanceDetail"></div>
@@ -1207,6 +1221,12 @@
                             <div id="hookPlatformTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
                             <input type="hidden" id="hookPlatforms" value="">
                         </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label">Product <span style="font-weight: 400; color: var(--text-light-secondary);">(optional — links this to a specific product for Promote days)</span></label>
+                            <select id="hookProduct">
+                                <option value="">No specific product</option>
+                            </select>
+                        </div>
                         <div style="display: flex; gap: 8px;">
                             <button class="btn btn-primary" onclick="addHook()">Save Hook</button>
                             <button class="btn btn-secondary" onclick="toggleAddHookForm()">Cancel</button>
@@ -1254,6 +1274,12 @@
                             <label class="form-label">Platforms <span style="font-weight: 400; color: var(--text-light-secondary);">(leave blank = all platforms)</span></label>
                             <div id="ctaPlatformTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; padding: 12px; background: white; border: 2px solid var(--border-light); border-radius: 8px;"></div>
                             <input type="hidden" id="ctaPlatforms" value="">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label">Product <span style="font-weight: 400; color: var(--text-light-secondary);">(optional — links this to a specific product for Promote days)</span></label>
+                            <select id="ctaProduct">
+                                <option value="">No specific product</option>
+                            </select>
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <button class="btn btn-primary" onclick="addCTA()">Save CTA</button>
@@ -1421,6 +1447,13 @@
                             <option value="celebrate">Celebrate a Win</option>
                             <option value="convo">Start a Conversation</option>
                             <option value="promote">Promote</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label">Product <span style="font-weight: 400; color: var(--text-light-secondary);">(optional — links this to a specific product for Promote days)</span></label>
+                        <select id="captionProduct">
+                            <option value="">No specific product</option>
                         </select>
                     </div>
 
@@ -1720,7 +1753,7 @@
                     </div>
                     <div style="border-top: 2px solid var(--border-light); padding-top: 16px; margin-bottom: 8px;">
                         <h4 style="margin-top: 0; color: var(--primary);">📌 Weekly Pin Goal</h4>
-                        <p style="font-size: 13px; color: var(--text-light-secondary); margin-bottom: 12px;">Every piece of content can become a Pin — instead of scheduling Pinterest on specific days, just say how many pins you want to create this week. It'll show up as a suggestion in Today's Plan → Smart Repurpose.</p>
+                        <p style="font-size: 13px; color: var(--text-light-secondary); margin-bottom: 12px;">Teach posts make the best pins. Instead of scheduling Pinterest on specific days, just say how many pins you want to create this week — it'll show up as a suggestion in Today's Plan → Smart Repurpose on your Teach days.</p>
                         <div class="form-group">
                             <label class="form-label">Pins per week</label>
                             <input type="number" id="weeklyPinGoalInput" min="0" max="30" value="0" style="width: 100%; padding: 10px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px;">
@@ -2379,6 +2412,7 @@
             if (document.getElementById('pillarsDisplay')) renderContentStrategyDisplay();
             if (document.getElementById('growthActivitiesDisplay')) renderGrowthActivitiesDisplay();
             if (document.getElementById('goalsForm')) renderGoalsForm();
+            if (document.getElementById('captionProduct')) populateProductDropdown('captionProduct');
             if (document.getElementById('weeklyPinGoalInput')) document.getElementById('weeklyPinGoalInput').value = appState.weeklyPinGoal || 0;
             if (document.getElementById('postingDaysForm')) renderPostingDaysForm();
             if (document.getElementById('batchCreateDaysForm')) renderBatchCreateDaysForm();
@@ -2820,37 +2854,6 @@
         }
     }
 
-    function setTodayPlatform(platform) {
-        if (!platform || typeof platform !== 'string') return;
-        
-        // Update button styling
-        document.querySelectorAll('[id^="today-platform-"]').forEach(btn => {
-            btn.style.background = 'white';
-            const btnPlatform = btn.id.replace('today-platform-', '');
-            btn.style.color = btnPlatform.toLowerCase() === platform.toLowerCase() ? 'white' : getComputedStyle(document.documentElement).getPropertyValue('--platform-' + btnPlatform.toLowerCase()).trim();
-        });
-        const activeBtn = document.getElementById(`today-platform-${platform}`);
-        if (activeBtn) {
-            activeBtn.style.background = `var(--platform-${platform.toLowerCase()})`;
-            activeBtn.style.color = 'white';
-        }
-        
-        // Show guidelines
-        const guidelinesDiv = document.getElementById('todayPlatformGuidelines');
-        if (guidelinesDiv) {
-            const guidelines = {
-                'Instagram': '📷 Keep it visual & personal. Use 3-5 emojis. Include a call-to-action (link in bio, DM, comment). Aim for 125-150 characters for optimal display.',
-                'LinkedIn': '💼 Be professional but personable. Start with a hook. Share an insight or story. End with a question to encourage engagement. 200-300 characters is ideal.',
-                'Threads': '🧵 Keep it conversational & authentic. Use a compelling hook. Keep under 500 characters. End with a reflective question or call-to-action.',
-                'Facebook': '👥 Be relatable & conversational. Include a strong hook. Use 1-3 emojis sparingly. Aim for 200-250 characters. Encourage shares & comments.',
-                'Pinterest': '📌 Focus on value & inspiration. Use keywords naturally. Create intrigue—make them want to click. Descriptions should be 200-300 characters.'
-            };
-            guidelinesDiv.innerHTML = guidelines[platform] || '';
-            guidelinesDiv.style.display = 'block';
-            guidelinesDiv.style.borderLeftColor = `var(--platform-${platform.toLowerCase()})`;
-        }
-    }
-
     function renderToday() {
         const todaySubheader = document.getElementById('todaySubheader');
         const todayPlanCard = document.getElementById('todayPlanCard');
@@ -3171,6 +3174,189 @@
         overviewSection.innerHTML = overviewHtml;
     }
 
+    // Platform-specific content formats + guidelines for the Draft Post content-type picker
+    const platformContentTypes = {
+        'Instagram': ['Carousel', 'Story', 'Reel', 'Single Post'],
+        'Facebook': ['Post', 'Story'],
+        'LinkedIn': ['Post', 'Article'],
+        'Threads': ['Post']
+    };
+    const contentTypeGuidelines = {
+        'Carousel': ['6-10 slides', 'Hook on slide 1 to stop the scroll', 'One idea per slide', 'Strong CTA on the last slide'],
+        'Story': ['Vertical 9:16 format', 'Use polls or quizzes to boost engagement', 'Keep text minimal and readable', 'Add a link/swipe-up sticker if available'],
+        'Reel': ['Hook in the first 3 seconds', 'Keep it 15-30 seconds for best reach', 'Add captions for silent viewers', 'End with a clear CTA'],
+        'Single Post': ['One strong image or graphic', 'Lead with your hook in the first line', 'Keep the caption scannable', 'CTA in the last line'],
+        'Post': ['Lead with your hook', 'Keep paragraphs short (1-2 lines)', 'End with your CTA'],
+        'Article': ['800-1200 words', 'Use subheadings to break it up', 'Include a personal story or example', 'End with a question to spark comments']
+    };
+
+    // Persisted so the draft tools don't collapse again every time something re-renders
+    let draftToolsExpanded = false;
+    function toggleDraftTools() {
+        draftToolsExpanded = !draftToolsExpanded;
+        renderDraftPostCard();
+    }
+
+    function toggleContentType(typeName) {
+        try {
+            const entry = getDailyChecklistEntry();
+            if (!Array.isArray(entry.contentTypes)) entry.contentTypes = [];
+            const idx = entry.contentTypes.indexOf(typeName);
+            if (idx > -1) {
+                entry.contentTypes.splice(idx, 1);
+            } else {
+                entry.contentTypes.push(typeName);
+            }
+            saveState();
+            renderDraftPostCard();
+        } catch (e) {
+            console.error('Error toggling content type:', e);
+        }
+    }
+
+    // What makes a good promo post — shown on Promote days
+    const promoPostGuidelines = [
+        'Lead with the transformation/benefit, not just the feature',
+        'Include social proof if you have it (a review, result, or testimonial)',
+        'Create urgency only if it\'s real (limited spots, a deadline, etc.)',
+        'End with one clear call-to-action — don\'t make them guess what to do next'
+    ];
+
+    function getWeeklyPriorityProducts() {
+        try {
+            const currentWeek = getISOWeekNumber(new Date());
+            const priority = appState.weeklyProductPriority;
+            if (!priority || priority.week !== currentWeek || !Array.isArray(priority.products) || priority.products.length === 0) {
+                return [];
+            }
+            return priority.products;
+        } catch (e) {
+            console.error('Error getting weekly priority products:', e);
+            return [];
+        }
+    }
+
+    // ===================== PREVIEW A DAY (read-only) =====================
+    // Lets the user check any day's plan ahead of time without waiting for it
+    // to actually be that day, and without writing/logging any real data.
+
+    function getIntentionCodeForDay(dayName) {
+        const schedule = appState.weeklyCalendar[dayName];
+        if (!schedule || !schedule.intention || typeof schedule.intention !== 'string') return null;
+        const lower = schedule.intention.toLowerCase();
+        return intentionLabelToCode[lower] || lower;
+    }
+
+    function countMatchingLibraryItems(dayName) {
+        const code = getIntentionCodeForDay(dayName);
+        if (!code) return { hooks: 0, ctas: 0, hashtags: 0, captions: 0 };
+        const countMatches = (arr) => (arr || []).filter(item => itemTaggedForIntention(item, code)).length;
+        return {
+            hooks: countMatches(appState.userHooks),
+            ctas: countMatches(appState.userCTAs),
+            hashtags: countMatches(appState.userHashtags),
+            captions: countMatches(appState.draftCaptions)
+        };
+    }
+
+    function showDayPreview(dayName) {
+        try {
+            const schedule = appState.weeklyCalendar[dayName];
+            const isRestDay = !!(schedule && schedule.intention === 'Rest');
+            const isPosting = (appState.postingDays || []).includes(dayName);
+            const isBatch = (appState.batchCreateDays || []).includes(dayName);
+            const isGrowth = !isPosting && !isBatch && !isRestDay;
+
+            let bodyHtml = '';
+
+            if (isRestDay) {
+                bodyHtml = `
+                    <div style="padding: 16px; background: #e0e7ff; border-radius: 8px; text-align: center;">
+                        <p style="margin: 0; font-weight: 600; color: #4f46e5;">😴 Rest Day</p>
+                        <p style="margin: 8px 0 0 0; font-size: 13px; color: var(--text-light-secondary);">No posting or growth work planned.</p>
+                    </div>
+                `;
+            } else if (isGrowth) {
+                bodyHtml = `
+                    <div style="padding: 16px; background: #fef3c7; border-radius: 8px;">
+                        <p style="margin: 0; font-weight: 600; color: #d97706;">📊 Growth Day</p>
+                        <p style="margin: 8px 0 0 0; font-size: 13px; color: var(--text-light-secondary);">No posting — this is a business-growth day. Today's Plan would show Growth Activities instead of a Draft Post card.</p>
+                    </div>
+                `;
+            } else if (!schedule || !schedule.platform || !schedule.intention) {
+                bodyHtml = `<p style="color: var(--text-light-secondary); font-size: 13px;">⚠️ No schedule set for ${dayName} yet.</p>`;
+            } else {
+                const platform = schedule.platform;
+                const intention = schedule.intention;
+                const code = intentionLabelToCode[intention.toLowerCase()] || intention.toLowerCase();
+                const isPromote = code === 'promote';
+                const availableTypes = platformContentTypes[platform] || ['Post'];
+                const firstType = availableTypes[0];
+                const firstTypeTips = (contentTypeGuidelines[firstType] || []).map(t => `<li style="margin-bottom: 4px;">✓ ${t}</li>`).join('');
+                const coverage = countMatchingLibraryItems(dayName);
+
+                let promoHtml = '';
+                if (isPromote) {
+                    const products = getWeeklyPriorityProducts();
+                    if (products.length > 0) {
+                        const top = products[0];
+                        promoHtml = `<div style="background: var(--bg-light-secondary); border-left: 4px solid var(--primary); padding: 10px; border-radius: 6px; margin-top: 10px;"><p style="margin: 0; font-size: 13px;"><strong>🎯 Would suggest:</strong> ${top.name} (this week's #1 priority)</p></div>`;
+                    } else {
+                        promoHtml = `<div style="background: var(--bg-light-secondary); border-left: 4px solid var(--primary); padding: 10px; border-radius: 6px; margin-top: 10px;"><p style="margin: 0; font-size: 13px; color: var(--text-light-secondary);">No product priority set for this week — the Promoting Today card would prompt you to set one.</p></div>`;
+                    }
+                }
+
+                bodyHtml = `
+                    <p style="font-size: 13px; color: var(--text-light-secondary); margin-bottom: 12px;">📍 ${platform} • 📌 ${intention}${isBatch ? ' • 🗂️ Batch Day' : ''}</p>
+                    ${promoHtml}
+                    <p style="font-weight: 600; font-size: 13px; margin: 14px 0 6px 0;">Content Type options for ${platform}:</p>
+                    <p style="font-size: 13px; margin-bottom: 8px;">${availableTypes.join(', ')}</p>
+                    <p style="font-weight: 600; font-size: 13px; margin: 10px 0 4px 0;">Example guidelines (${firstType}):</p>
+                    <ul style="margin: 0 0 14px 0; padding-left: 18px; list-style: none; font-size: 13px;">${firstTypeTips}</ul>
+                    <p style="font-weight: 600; font-size: 13px; margin: 10px 0 6px 0;">Content Library coverage for "${intention}":</p>
+                    <ul style="margin: 0; padding-left: 0; list-style: none; font-size: 13px; line-height: 1.8;">
+                        <li>${coverage.hooks > 0 ? '✅' : '⚠️'} Hooks tagged: ${coverage.hooks}</li>
+                        <li>${coverage.ctas > 0 ? '✅' : '⚠️'} CTAs tagged: ${coverage.ctas}</li>
+                        <li>${coverage.hashtags > 0 ? '✅' : '⚠️'} Hashtag sets tagged: ${coverage.hashtags}</li>
+                        <li>${coverage.captions > 0 ? '✅' : '⚠️'} Captions tagged: ${coverage.captions}</li>
+                    </ul>
+                `;
+            }
+
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px;';
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 12px; padding: 20px; max-width: 90vw; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 400px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h2 style="margin: 0; font-size: 18px;">👁️ ${dayName} Preview</h2>
+                        <button onclick="this.closest('div').parentElement.remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0 0 16px 0;">Read-only preview — nothing here is saved or logged.</p>
+                    ${bodyHtml}
+                    <button class="btn btn-secondary btn-block" onclick="this.closest('div').parentElement.remove()" style="margin-top: 16px;">Close</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+        } catch (e) {
+            console.error('Error showing day preview:', e);
+            showToast('⚠️ Error showing preview');
+        }
+    }
+
+    function setPromoProduct(name) {
+        try {
+            const entry = getDailyChecklistEntry();
+            entry.promoProduct = name || null;
+            saveState();
+            renderDraftPostCard();
+        } catch (e) {
+            console.error('Error setting promo product:', e);
+        }
+    }
+
     function renderDraftPostCard() {
         try {
             const draftEl = document.getElementById('draftPostCard');
@@ -3213,14 +3399,19 @@
             }
 
             const todayIntention = intention.toLowerCase();
+            const todayIntentionCode = intentionLabelToCode[todayIntention] || todayIntention;
             const todayPlatform = schedule.platform || 'Instagram';
             const todayPillar = schedule.pillar;
+            const isPromoteDay = todayIntentionCode === 'promote';
+            const dailyEntryForPromo = getDailyChecklistEntry();
+            const weeklyPriorityProducts = isPromoteDay ? getWeeklyPriorityProducts() : [];
+            const selectedPromoProduct = isPromoteDay ? (dailyEntryForPromo.promoProduct || (weeklyPriorityProducts[0] && weeklyPriorityProducts[0].name) || null) : null;
 
             // Helper function to check if item matches today's pillar, platform and intention.
             // Items can now be tagged to MULTIPLE pillars/platforms (or none, meaning "applies to all").
             const matchesPillarAndIntention = (item) => {
                 if (!item || typeof item !== 'object') return false;
-                const matchesIntention = item.types && Array.isArray(item.types) && item.types.length > 0 ? item.types.includes(todayIntention) : true;
+                const matchesIntention = item.types && Array.isArray(item.types) && item.types.length > 0 ? item.types.includes(todayIntentionCode) : true;
                 const itemPillars = Array.isArray(item.pillars) && item.pillars.length > 0 ? item.pillars : (item.pillar ? [item.pillar] : []);
                 const matchesPillar = (!todayPillar || itemPillars.length === 0) ? true : itemPillars.includes(todayPillar);
                 const itemPlatforms = Array.isArray(item.platforms) ? item.platforms : [];
@@ -3228,18 +3419,24 @@
                 return matchesIntention && matchesPillar && matchesPlatform;
             };
 
+            // On Promote days with a product selected, prefer items tagged to that specific
+            // product; fall back to the plain intention/pillar/platform match otherwise.
+            const pickBestMatch = (list) => {
+                const matched = (list || []).filter(matchesPillarAndIntention);
+                if (isPromoteDay && selectedPromoProduct) {
+                    const productMatched = matched.filter(item => item.product && String(item.product).toLowerCase() === selectedPromoProduct.toLowerCase());
+                    if (productMatched.length > 0) {
+                        return productMatched.sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0];
+                    }
+                }
+                return matched.length > 0 ? matched.sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] : null;
+            };
+
             // Filter by today's pillar and intention, get best match for each type
-            const relevantHooks = (appState.userHooks || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
-            const bestHook = relevantHooks.length > 0 ? relevantHooks[0] : null;
-
-            const relevantCTAs = (appState.userCTAs || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
-            const bestCTA = relevantCTAs.length > 0 ? relevantCTAs[0] : null;
-
-            const relevantIdeas = (appState.userIdeas || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
-            const bestIdea = relevantIdeas.length > 0 ? relevantIdeas[0] : null;
-
-            const relevantTopics = (appState.userTopics || []).filter(matchesPillarAndIntention).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0));
-            const bestTopic = relevantTopics.length > 0 ? relevantTopics[0] : null;
+            const bestHook = pickBestMatch(appState.userHooks);
+            const bestCTA = pickBestMatch(appState.userCTAs);
+            const bestIdea = pickBestMatch(appState.userIdeas);
+            const bestTopic = pickBestMatch(appState.userTopics);
 
             let suggestedContent = '';
             
@@ -3315,37 +3512,98 @@
                 </div>
             ` : '';
 
+            const availableContentTypes = platformContentTypes[todayPlatform] || ['Post'];
+            const dailyEntry = getDailyChecklistEntry();
+            const selectedContentTypes = dailyEntry.contentTypes || [];
+
+            const contentTypeButtonsHtml = availableContentTypes.map(type => {
+                const isSelected = selectedContentTypes.includes(type);
+                return `<button type="button" onclick="toggleContentType('${type}')" style="padding: 8px 14px; border-radius: 20px; border: 2px solid ${isSelected ? 'var(--primary)' : 'var(--border-light)'}; background: ${isSelected ? 'var(--primary)' : 'white'}; color: ${isSelected ? 'white' : 'var(--text-light)'}; font-weight: 500; font-size: 12px; cursor: pointer; transition: all 0.2s ease;">${type}</button>`;
+            }).join('');
+
+            let contentTypeGuidelinesHtml = '';
+            if (selectedContentTypes.length > 0) {
+                contentTypeGuidelinesHtml = selectedContentTypes.map(type => {
+                    const tips = contentTypeGuidelines[type] || [];
+                    const tipsHtml = tips.map(t => `<li style="margin-bottom: 4px;">✓ ${t}</li>`).join('');
+                    return `<p style="font-weight: 600; margin: 8px 0 4px 0;">${type}</p><ul style="margin: 0; padding-left: 18px; list-style: none;">${tipsHtml}</ul>`;
+                }).join('');
+            } else {
+                contentTypeGuidelinesHtml = '<p style="margin: 0; color: var(--text-light-secondary);">Pick a content type above to see guidelines.</p>';
+            }
+
+            let promoCardHtml = '';
+            if (isPromoteDay) {
+                const promoTipsHtml = promoPostGuidelines.map(t => `<li style="margin-bottom: 4px;">✓ ${t}</li>`).join('');
+                if (weeklyPriorityProducts.length > 0) {
+                    const productOptionsHtml = weeklyPriorityProducts.map(p => {
+                        const rankEmoji = {1: '🥇', 2: '🥈', 3: '🥉'}[p.rank] || '📌';
+                        const isSelected = selectedPromoProduct === p.name;
+                        return `<option value="${String(p.name).replace(/"/g, '&quot;')}" ${isSelected ? 'selected' : ''}>${rankEmoji} ${p.name}</option>`;
+                    }).join('');
+                    promoCardHtml = `
+                        <div style="background: linear-gradient(135deg, rgba(99,102,241,0.06), transparent); border-left: 6px solid var(--primary); padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+                            <p style="font-weight: 600; margin: 0 0 8px 0;">🎯 Promoting Today</p>
+                            <label class="form-label" style="margin-bottom: 6px;">Which product?</label>
+                            <select onchange="setPromoProduct(this.value)" style="width: 100%; padding: 8px; border: 2px solid var(--border-light); border-radius: 8px; font-size: 13px; margin-bottom: 12px;">
+                                ${productOptionsHtml}
+                            </select>
+                            <p style="font-weight: 600; font-size: 13px; margin: 8px 0 4px 0;">What makes a good promo post:</p>
+                            <ul style="margin: 0; padding-left: 18px; list-style: none; font-size: 13px; line-height: 1.5;">${promoTipsHtml}</ul>
+                        </div>
+                    `;
+                } else {
+                    promoCardHtml = `
+                        <div style="background: linear-gradient(135deg, rgba(99,102,241,0.06), transparent); border-left: 6px solid var(--primary); padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+                            <p style="font-weight: 600; margin: 0 0 8px 0;">🎯 Promoting Today</p>
+                            <p style="font-size: 12px; color: var(--text-light-secondary); margin: 0 0 10px 0;">No product priority set for this week yet.</p>
+                            <button class="btn btn-secondary btn-sm" onclick="showPage('settings'); setTimeout(() => jumpToSettingsSection('settingsCard-priority', 'productPrioritySection'), 100);" style="margin-bottom: 12px;">Set This Week's Priority</button>
+                            <p style="font-weight: 600; font-size: 13px; margin: 8px 0 4px 0;">What makes a good promo post:</p>
+                            <ul style="margin: 0; padding-left: 18px; list-style: none; font-size: 13px; line-height: 1.5;">${promoTipsHtml}</ul>
+                        </div>
+                    `;
+                }
+            }
+
             const draftHtml = `
                 ${batchBanner}
                 <div class="card">
                     <h3>✍️ Draft Your Post</h3>
                     <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px;">📍 ${todayPlatform} • 📌 ${todayIntention}</p>
-                    
+
+                    ${promoCardHtml}
+
                     <div style="margin-bottom: 16px;">
-                        <label class="form-label" style="margin-bottom: 8px;">Platform</label>
+                        <label class="form-label" style="margin-bottom: 8px;">Content Type <span style="font-weight: 400; color: var(--text-light-secondary);">(pick 1 or more)</span></label>
                         <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
-                            <button type="button" onclick="setTodayPlatform('Instagram')" id="today-platform-Instagram" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Instagram' ? 'var(--platform-instagram)' : 'white'}; border: 2px solid var(--platform-instagram); color: ${todayPlatform === 'Instagram' ? 'white' : 'var(--platform-instagram)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">📷 Instagram</button>
-                            <button type="button" onclick="setTodayPlatform('LinkedIn')" id="today-platform-LinkedIn" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'LinkedIn' ? 'var(--platform-linkedin)' : 'white'}; border: 2px solid var(--platform-linkedin); color: ${todayPlatform === 'LinkedIn' ? 'white' : 'var(--platform-linkedin)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">💼 LinkedIn</button>
-                            <button type="button" onclick="setTodayPlatform('Threads')" id="today-platform-Threads" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Threads' ? 'var(--platform-threads)' : 'white'}; border: 2px solid var(--platform-threads); color: ${todayPlatform === 'Threads' ? 'white' : 'var(--platform-threads)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">🧵 Threads</button>
-                            <button type="button" onclick="setTodayPlatform('Facebook')" id="today-platform-Facebook" style="padding: 8px 16px; border-radius: 8px; background: ${todayPlatform === 'Facebook' ? 'var(--platform-facebook)' : 'white'}; border: 2px solid var(--platform-facebook); color: ${todayPlatform === 'Facebook' ? 'white' : 'var(--platform-facebook)'}; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">f Facebook</button>
+                            ${contentTypeButtonsHtml}
                         </div>
-                        <div id="todayPlatformGuidelines" style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); font-size: 13px; line-height: 1.6; color: var(--text-light); display: none;"></div>
+                        <div style="background: var(--bg-light-secondary); padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); font-size: 13px; line-height: 1.6; color: var(--text-light);">
+                            ${contentTypeGuidelinesHtml}
+                        </div>
                     </div>
 
-                    ${suggestedContent}
-                    ${!suggestedContent ? `<p style="color: var(--text-light-secondary); font-size: 12px; margin-bottom: 16px; padding: 12px; background: var(--bg-light-secondary); border-radius: 8px;">📚 No content tagged for <strong>${todayIntention}</strong> yet. Browse your library or create new items to get started!</p>` : ''}
-                    <div class="form-group">
-                        <label class="form-label">Post Content</label>
-                        <textarea id="draftContent" placeholder="Write your post here..."></textarea>
-                        <div class="textarea-counter" id="draftCounter"></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-top: 2px solid var(--border-light); padding-top: 12px; margin-bottom: 12px;" onclick="toggleDraftTools()">
+                        <h4 style="margin: 0;">✏️ Draft Post</h4>
+                        <span style="font-size: 20px;">${draftToolsExpanded ? '−' : '+'}</span>
                     </div>
-                    <div style="margin-bottom: 16px;">
-                        ${browseButtons}
+                    <div style="display: ${draftToolsExpanded ? 'block' : 'none'};">
+                        ${suggestedContent}
+                        ${!suggestedContent ? `<p style="color: var(--text-light-secondary); font-size: 12px; margin-bottom: 16px; padding: 12px; background: var(--bg-light-secondary); border-radius: 8px;">📚 No content tagged for <strong>${todayIntention}</strong> yet. Browse your library or create new items to get started!</p>` : ''}
+                        <div class="form-group">
+                            <label class="form-label">Post Content</label>
+                            <textarea id="draftContent" placeholder="Write your post here..."></textarea>
+                            <div class="textarea-counter" id="draftCounter"></div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            ${browseButtons}
+                        </div>
+                        <label style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px; cursor: pointer;">
+                            <input type="checkbox" id="markAsPostedCheckbox" onchange="markPostAsPosted()">
+                            <span style="font-weight: 500;">Mark as Posted</span>
+                        </label>
+                        <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0 0 16px 28px;">Works with or without a draft above — good for days you post straight from the guidelines.</p>
                     </div>
-                    <label style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; cursor: pointer;">
-                        <input type="checkbox" id="markAsPostedCheckbox" onchange="markPostAsPosted()">
-                        <span style="font-weight: 500;">Mark as Posted</span>
-                    </label>
                 </div>
             `;
             document.getElementById('draftPostCard').innerHTML = draftHtml;
@@ -3355,15 +3613,6 @@
             if (draftContentEl) {
                 draftContentEl.addEventListener('input', () => updateTextareaCounter('draftContent'));
             }
-            
-            // Show platform guidelines for today's platform
-            setTimeout(() => {
-                const today = getToday();
-                const schedule = appState.weeklyCalendar[today];
-                if (schedule && schedule.platform) {
-                    setTodayPlatform(schedule.platform);
-                }
-            }, 100);
         } catch (e) {
             console.error('Error rendering draft post card:', e);
             const el = document.getElementById('draftPostCard');
@@ -3391,29 +3640,22 @@
         const key = getDateKey();
         if (!appState.dailyChecklist[key]) {
             appState.dailyChecklist[key] = {
-                assets: { carousel: false, reel: false, threads: false, pin: false },
-                publish: { posted: false, sharedToStory: false, repurposedThreads: false, pinCreated: false, loggedPerformance: false }
+                publish: { pinCreated: false },
+                contentTypes: [],
+                promoProduct: null
             };
         }
         // Backfill in case of older/partial saved shape
-        if (!appState.dailyChecklist[key].assets) {
-            appState.dailyChecklist[key].assets = { carousel: false, reel: false, threads: false, pin: false };
-        }
         if (!appState.dailyChecklist[key].publish) {
-            appState.dailyChecklist[key].publish = { posted: false, sharedToStory: false, repurposedThreads: false, pinCreated: false, loggedPerformance: false };
+            appState.dailyChecklist[key].publish = { pinCreated: false };
+        }
+        if (!Array.isArray(appState.dailyChecklist[key].contentTypes)) {
+            appState.dailyChecklist[key].contentTypes = [];
+        }
+        if (appState.dailyChecklist[key].promoProduct === undefined) {
+            appState.dailyChecklist[key].promoProduct = null;
         }
         return appState.dailyChecklist[key];
-    }
-
-    function toggleAssetCheck(name) {
-        try {
-            const entry = getDailyChecklistEntry();
-            entry.assets[name] = !entry.assets[name];
-            saveState();
-            renderGenerateContentSection();
-        } catch (e) {
-            console.error('Error toggling asset checklist item:', e);
-        }
     }
 
     function togglePublishCheck(name) {
@@ -3430,13 +3672,6 @@
         } catch (e) {
             console.error('Error toggling publish checklist item:', e);
         }
-    }
-
-    // Persisted across re-renders so checking a box doesn't snap this section shut again
-    let assetsPublishExpanded = false;
-    function toggleAssetsPublishSection() {
-        assetsPublishExpanded = !assetsPublishExpanded;
-        renderGenerateContentSection();
     }
 
     function copyGeneratedContent() {
@@ -3480,6 +3715,8 @@
             const todayIntentionCode = intentionLabelToCode[String(schedule.intention).toLowerCase()] || String(schedule.intention).toLowerCase();
             const todayPlatform = schedule.platform || 'Instagram';
             const todayPillar = schedule.pillar;
+            const isPromoteDay = todayIntentionCode === 'promote';
+            const selectedPromoProduct = isPromoteDay ? (getDailyChecklistEntry().promoProduct || null) : null;
 
             // Hooks/CTAs also respect pillar + platform tags, on top of the required intention match
             const matchesHookOrCTA = (item) => {
@@ -3498,10 +3735,19 @@
                 return true;
             };
 
-            const bestHook = (appState.userHooks || []).filter(matchesHookOrCTA).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
-            const bestCTA = (appState.userCTAs || []).filter(matchesHookOrCTA).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
+            // On Promote days with a product selected, prefer items tagged to that product
+            const preferProduct = (list) => {
+                if (isPromoteDay && selectedPromoProduct) {
+                    const productMatched = list.filter(item => item.product && String(item.product).toLowerCase() === selectedPromoProduct.toLowerCase());
+                    if (productMatched.length > 0) return productMatched;
+                }
+                return list;
+            };
+
+            const bestHook = preferProduct((appState.userHooks || []).filter(matchesHookOrCTA)).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
+            const bestCTA = preferProduct((appState.userCTAs || []).filter(matchesHookOrCTA)).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
             const bestHashtag = (appState.userHashtags || []).filter(matchesHashtagOrCaption).sort((a, b) => (b.lastEdited || 0) - (a.lastEdited || 0))[0] || null;
-            const bestCaption = (appState.draftCaptions || []).filter(matchesHashtagOrCaption).sort((a, b) => new Date(b.created || 0) - new Date(a.created || 0))[0] || null;
+            const bestCaption = preferProduct((appState.draftCaptions || []).filter(matchesHashtagOrCaption)).sort((a, b) => new Date(b.created || 0) - new Date(a.created || 0))[0] || null;
 
             const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -3522,27 +3768,6 @@
                 generatedBlockHtml = `Nothing tagged for today's intention (${esc(schedule.intention)}) yet. Tag a hook, CTA, hashtag set, or caption in your Content Library and it'll show up here.`;
             }
 
-            const entry = getDailyChecklistEntry();
-            const assets = entry.assets;
-            const publish = entry.publish;
-
-            const assetRow = (key, label) => `
-                <label style="display: flex; align-items: center; gap: 10px; padding: 8px 0; cursor: pointer;">
-                    <input type="checkbox" ${assets[key] ? 'checked' : ''} onchange="toggleAssetCheck('${key}')">
-                    <span style="${assets[key] ? 'text-decoration: line-through; color: var(--text-light-secondary);' : ''}">${label}</span>
-                </label>
-            `;
-
-            const publishRow = (key, label) => `
-                <label style="display: flex; align-items: center; gap: 10px; padding: 8px 0; cursor: pointer;">
-                    <input type="checkbox" ${publish[key] ? 'checked' : ''} onchange="togglePublishCheck('${key}')">
-                    <span style="${publish[key] ? 'text-decoration: line-through; color: var(--text-light-secondary);' : ''}">${label}</span>
-                </label>
-            `;
-
-            const assetsDoneCount = Object.values(assets).filter(Boolean).length;
-            const publishDoneCount = Object.values(publish).filter(Boolean).length;
-
             container.innerHTML = `
                 <div class="card">
                     <h3>✨ Generate Today's Content</h3>
@@ -3550,31 +3775,7 @@
 
                     <div id="generatedContentBlock" data-empty="${isEmpty}" style="background: var(--bg-light-secondary); border: 2px solid var(--border-light); border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.8; margin-bottom: 12px; white-space: pre-wrap; ${isEmpty ? 'color: var(--text-light-secondary); font-style: italic;' : ''}">${generatedBlockHtml}</div>
 
-                    <button class="btn btn-primary btn-block" onclick="copyGeneratedContent()" style="margin-bottom: 12px;" ${isEmpty ? 'disabled' : ''}>📋 Copy Today's Content</button>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-top: 2px solid var(--border-light); padding-top: 12px;" onclick="toggleAssetsPublishSection()">
-                        <h4 style="margin: 0;">📋 Assets &amp; Publish Checklist <span style="font-weight: 400; font-size: 12px; color: var(--text-light-secondary);">(${assetsDoneCount}/4 · ${publishDoneCount}/5)</span></h4>
-                        <span style="font-size: 20px;">${assetsPublishExpanded ? '−' : '+'}</span>
-                    </div>
-                    <div style="display: ${assetsPublishExpanded ? 'block' : 'none'}; margin-top: 12px;">
-                        <h4 style="margin-bottom: 4px;">Assets</h4>
-                        <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 4px;">Which formats are you creating today?</p>
-                        <div style="display: flex; flex-direction: column;">
-                            ${assetRow('carousel', 'Carousel')}
-                            ${assetRow('reel', 'Reel')}
-                            ${assetRow('threads', 'Threads')}
-                            ${assetRow('pin', 'Pinterest Pin')}
-                        </div>
-
-                        <h4 style="margin-top: 16px; margin-bottom: 4px;">Publish Checklist</h4>
-                        <div style="display: flex; flex-direction: column;">
-                            ${publishRow('posted', 'Posted')}
-                            ${publishRow('sharedToStory', 'Shared to Story')}
-                            ${publishRow('repurposedThreads', 'Repurposed to Threads')}
-                            ${publishRow('pinCreated', 'Pin created')}
-                            ${publishRow('loggedPerformance', 'Logged performance')}
-                        </div>
-                    </div>
+                    <button class="btn btn-primary btn-block" onclick="copyGeneratedContent()" ${isEmpty ? 'disabled' : ''}>📋 Copy Today's Content</button>
                 </div>
             `;
         } catch (e) {
@@ -3884,23 +4085,28 @@
             const goal = appState.weeklyPinGoal || 0;
             if (goal <= 0) return ''; // No goal set — don't clutter the page
 
-            const createdCount = computePinsCreatedThisWeek();
-            const todayEntry = getDailyChecklistEntry();
-            const doneToday = !!(todayEntry.publish && todayEntry.publish.pinCreated);
-
             const today = getToday();
             const schedule = today && appState.weeklyCalendar[today];
             const intentionCode = (schedule && schedule.intention && typeof schedule.intention === 'string')
                 ? (intentionLabelToCode[schedule.intention.toLowerCase()] || null)
                 : null;
-            const tips = (intentionCode && pinterestRepurposeGuidance[intentionCode]) || genericPinTips;
+
+            // Only surface pin suggestions on Teach days — keeps this valuable/targeted
+            // instead of showing up every day regardless of what today's post is about.
+            if (intentionCode !== 'teach') return '';
+
+            const createdCount = computePinsCreatedThisWeek();
+            const todayEntry = getDailyChecklistEntry();
+            const doneToday = !!(todayEntry.publish && todayEntry.publish.pinCreated);
+
+            const tips = pinterestRepurposeGuidance[intentionCode] || genericPinTips;
             const tipsHtml = tips.map(t => `<li style="margin-bottom: 6px; font-size: 12px; line-height: 1.4; color: var(--text-light-secondary);">✓ ${t}</li>`).join('');
             const progressPct = Math.min(100, Math.round((createdCount / goal) * 100));
 
             return `
                 <div style="border-left: 6px solid #e60023; background: linear-gradient(135deg, rgba(230, 0, 35, 0.04), transparent); padding: 12px; border-radius: 8px; margin-top: 4px;">
                     <p style="font-weight: 600; margin-bottom: 8px; font-size: 14px;">📌 Turn This Into a Pin</p>
-                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 8px;">Every piece of content can become a Pin. This week: <strong>${createdCount}/${goal}</strong> created.</p>
+                    <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 8px;">Teach posts make the best pins. This week: <strong>${createdCount}/${goal}</strong> created.</p>
                     <div style="background: var(--border-light); border-radius: 999px; height: 8px; overflow: hidden; margin-bottom: 14px;">
                         <div style="background: #e60023; height: 100%; width: ${progressPct}%;"></div>
                     </div>
@@ -4470,7 +4676,7 @@
                                 <button onclick="removePastPost('${post.id}')" style="padding: 6px 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
                             </div>
                         </div>
-                        <p style="line-height: 1.6; font-size: 13px; margin-bottom: 0;">${post.content}</p>
+                        <p style="line-height: 1.6; font-size: 13px; margin-bottom: 0; ${post.content ? '' : 'color: var(--text-light-secondary); font-style: italic;'}">${post.content ? post.content : '📌 Posted using the guidelines — no draft saved in-app.'}</p>
                     </div>
                 `;
             }).join('');
@@ -4528,11 +4734,6 @@
         if (!checkbox.checked) return;
 
         const draftContent = document.getElementById('draftContent').value.trim();
-        if (!draftContent) {
-            showToast('Please write your post first!');
-            checkbox.checked = false;
-            return;
-        }
 
         const today = getToday();
         const dateStr = getFormattedDate();
@@ -4545,7 +4746,7 @@
             platform: schedule.platform,
             intention: schedule.intention,
             pillar: schedule.pillar || null,
-            content: draftContent
+            content: draftContent // may be empty — posted straight from guidelines, no in-app draft
         });
 
         appState.weeklyPosted[schedule.platform] = (appState.weeklyPosted[schedule.platform] || 0) + 1;
@@ -4555,7 +4756,7 @@
         saveState();
         renderDashboardOverview();
         renderBrowsePastPosts();
-        showToast('Post saved! Great work! 🎉');
+        showToast(draftContent ? 'Post saved! Great work! 🎉' : 'Marked as posted! Great work! 🎉');
     }
 
     // IDEAS
@@ -4724,10 +4925,28 @@
     }
 
     // HOOKS
+    function populateProductDropdown(selectId) {
+        try {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            const currentValue = select.value;
+            const products = (appState.contentStrategy && appState.contentStrategy.products) || [];
+            let html = '<option value="">No specific product</option>';
+            products.forEach(prod => {
+                if (!prod) return;
+                html += `<option value="${String(prod).replace(/"/g, '&quot;')}" ${currentValue === prod ? 'selected' : ''}>${prod}</option>`;
+            });
+            select.innerHTML = html;
+        } catch (e) {
+            console.error('Error populating product dropdown:', e);
+        }
+    }
+
     function toggleAddHookForm() {
         const form = document.getElementById('addHookForm');
         if (form) {
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') populateProductDropdown('hookProduct');
         }
     }
 
@@ -4736,6 +4955,8 @@
         const types = document.getElementById('hookTypes').value;
         const pillarsVal = document.getElementById('hookPillars').value;
         const platformsVal = document.getElementById('hookPlatforms').value;
+        const productEl = document.getElementById('hookProduct');
+        const product = productEl ? productEl.value : '';
         const pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
         const platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
         if (!text) {
@@ -4754,11 +4975,13 @@
                 pillars: pillars,
                 pillar: pillars[0] || null, // legacy single-pillar field, kept in sync
                 platforms: platforms,
+                product: product || null,
                 intentions: [], // Keep for backward compatibility
                 lastEdited: Date.now()
             });
             document.getElementById('hookText').value = '';
             document.getElementById('hookTypes').value = '';
+            if (productEl) productEl.value = '';
             
             // Reset tag selections
             document.querySelectorAll('.hook-type-tag').forEach(tag => {
@@ -4873,6 +5096,7 @@
         const form = document.getElementById('addCTAForm');
         if (form) {
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') populateProductDropdown('ctaProduct');
         }
     }
 
@@ -4881,6 +5105,8 @@
         const types = document.getElementById('ctaTypes').value;
         const pillarsVal = document.getElementById('ctaPillars').value;
         const platformsVal = document.getElementById('ctaPlatforms').value;
+        const productEl = document.getElementById('ctaProduct');
+        const product = productEl ? productEl.value : '';
         const pillars = pillarsVal ? pillarsVal.split(',').filter(Boolean) : [];
         const platforms = platformsVal ? platformsVal.split(',').filter(Boolean) : [];
         if (!text) {
@@ -4899,10 +5125,12 @@
                 pillars: pillars,
                 pillar: pillars[0] || null,
                 platforms: platforms,
+                product: product || null,
                 lastEdited: Date.now()
             });
             document.getElementById('ctaText').value = '';
             document.getElementById('ctaTypes').value = '';
+            if (productEl) productEl.value = '';
             
             // Reset tag selections
             document.querySelectorAll('.cta-type-tag').forEach(tag => {
@@ -5638,6 +5866,8 @@
         const type = document.getElementById('captionType').value.trim();
         const text = document.getElementById('captionText').value.trim();
         const imageFile = document.getElementById('captionImage').files[0];
+        const productEl = document.getElementById('captionProduct');
+        const product = productEl ? productEl.value : '';
 
         if (!platform || !type || !text) {
             showToast('Please fill in platform, type, and caption text');
@@ -5647,15 +5877,15 @@
         if (imageFile) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                saveCaptionWithImage(platform, type, text, e.target.result, imageFile.name);
+                saveCaptionWithImage(platform, type, text, e.target.result, imageFile.name, product);
             };
             reader.readAsDataURL(imageFile);
         } else {
-            saveCaptionWithImage(platform, type, text, null, null);
+            saveCaptionWithImage(platform, type, text, null, null, product);
         }
     }
 
-    function saveCaptionWithImage(platform, type, text, imageData, imageName) {
+    function saveCaptionWithImage(platform, type, text, imageData, imageName, product) {
         if (!appState.draftCaptions) appState.draftCaptions = [];
 
         appState.draftCaptions.push({
@@ -5663,6 +5893,7 @@
             platform,
             type,
             text,
+            product: product || null,
             imageData,
             imageName,
             created: new Date().toISOString()
@@ -5672,6 +5903,8 @@
         document.getElementById('captionType').value = '';
         document.getElementById('captionText').value = '';
         document.getElementById('captionImage').value = '';
+        const productEl = document.getElementById('captionProduct');
+        if (productEl) productEl.value = '';
         renderDraftCaptions();
         saveState();
         showToast('Caption drafted! ✍️');
@@ -6489,6 +6722,7 @@
             saveState();
             assignPillarsToWeek(); // Re-assign with new product
             renderContentStrategyDisplay();
+            if (document.getElementById('captionProduct')) populateProductDropdown('captionProduct');
             showToast('Product added! 📦');
         }
     }
@@ -6497,6 +6731,7 @@
         appState.contentStrategy.products.splice(idx, 1);
         saveState();
         renderContentStrategyDisplay();
+        if (document.getElementById('captionProduct')) populateProductDropdown('captionProduct');
         showToast('Product removed');
     }
 
