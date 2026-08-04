@@ -3565,11 +3565,21 @@
                 }
             }
 
+            const noContentNoticeHtml = !suggestedContent ? `<p style="color: var(--text-light-secondary); font-size: 12px; margin-bottom: 16px; padding: 12px; background: var(--bg-light-secondary); border-radius: 8px;">📚 No content tagged for <strong>${todayIntention}</strong> yet. Browse your library or create new items to get started!</p>` : '';
+
             const draftHtml = `
-                ${batchBanner}
                 <div class="card">
                     <h3>✍️ Draft Your Post</h3>
                     <p style="font-size: 12px; color: var(--text-light-secondary); margin-bottom: 12px;">📍 ${todayPlatform} • 📌 ${todayIntention}</p>
+
+                    ${isBatch ? `
+                        ${batchBanner}
+                        ${suggestedContent}
+                        ${noContentNoticeHtml}
+                        <div style="margin-bottom: 16px;">
+                            ${browseButtons}
+                        </div>
+                    ` : ''}
 
                     ${promoCardHtml}
 
@@ -3583,26 +3593,29 @@
                         </div>
                     </div>
 
+                    <label style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px; cursor: pointer;">
+                        <input type="checkbox" id="markAsPostedCheckbox" onchange="markPostAsPosted()">
+                        <span style="font-weight: 500;">Mark as Posted</span>
+                    </label>
+                    <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0 0 16px 28px;">Works with or without a draft below — good for days you post straight from the guidelines.</p>
+
                     <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-top: 2px solid var(--border-light); padding-top: 12px; margin-bottom: 12px;" onclick="toggleDraftTools()">
                         <h4 style="margin: 0;">✏️ Draft Post</h4>
                         <span style="font-size: 20px;">${draftToolsExpanded ? '−' : '+'}</span>
                     </div>
                     <div style="display: ${draftToolsExpanded ? 'block' : 'none'};">
-                        ${suggestedContent}
-                        ${!suggestedContent ? `<p style="color: var(--text-light-secondary); font-size: 12px; margin-bottom: 16px; padding: 12px; background: var(--bg-light-secondary); border-radius: 8px;">📚 No content tagged for <strong>${todayIntention}</strong> yet. Browse your library or create new items to get started!</p>` : ''}
+                        ${!isBatch ? `
+                            ${suggestedContent}
+                            ${noContentNoticeHtml}
+                            <div style="margin-bottom: 16px;">
+                                ${browseButtons}
+                            </div>
+                        ` : ''}
                         <div class="form-group">
                             <label class="form-label">Post Content</label>
                             <textarea id="draftContent" placeholder="Write your post here..."></textarea>
                             <div class="textarea-counter" id="draftCounter"></div>
                         </div>
-                        <div style="margin-bottom: 16px;">
-                            ${browseButtons}
-                        </div>
-                        <label style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px; cursor: pointer;">
-                            <input type="checkbox" id="markAsPostedCheckbox" onchange="markPostAsPosted()">
-                            <span style="font-weight: 500;">Mark as Posted</span>
-                        </label>
-                        <p style="font-size: 11px; color: var(--text-light-secondary); margin: 0 0 16px 28px;">Works with or without a draft above — good for days you post straight from the guidelines.</p>
                     </div>
                 </div>
             `;
@@ -5496,6 +5509,13 @@
             return;
         }
         saveState();
+        try {
+            assignFromDayPreferences();
+            renderToday();
+            renderDashboard();
+        } catch (e) {
+            console.error('Error refreshing after posting days change:', e.message);
+        }
         showToast('Posting days saved!');
     }
 
@@ -5523,7 +5543,17 @@
         const checked = document.querySelectorAll('input[name="batchCreateDay"]:checked');
         appState.batchCreateDays = Array.from(checked).map(c => c.value);
         saveState();
-        showToast('Batch create days saved!');
+        try {
+            assignFromDayPreferences();
+            renderDraftPostCard();
+        } catch (e) {
+            console.error('Error refreshing after batch days change:', e.message);
+        }
+        if (appState.batchCreateDays.length >= 5) {
+            showToast('⚠️ That\'s ' + appState.batchCreateDays.length + ' batch days — usually just 1-2 works best. Saved anyway.');
+        } else {
+            showToast('Batch create days saved!');
+        }
     }
 
     function isBatchCreateDay() {
@@ -7455,8 +7485,6 @@
             // Apply day preference
             if (pref.rest) {
                 appState.weeklyCalendar[day].intention = 'Rest';
-                appState.weeklyCalendar[day].posting = false;
-                appState.weeklyCalendar[day].isBatchDay = false;
             } else if (isBatchPref) {
                 // Batch days keep a REAL content intention/plan — never overwrite with a placeholder.
                 // If no intention exists yet, assign one so library matching & suggestions still work.
@@ -7464,12 +7492,8 @@
                 if (!existing || existing === 'Batch Day') {
                     appState.weeklyCalendar[day].intention = pref.preferredIntention || rotationIntentions[idx % rotationIntentions.length];
                 }
-                appState.weeklyCalendar[day].isBatchDay = true;
-                appState.weeklyCalendar[day].posting = false; // not a single-post day, but content plan stays intact
             } else if (pref.preferredIntention) {
                 appState.weeklyCalendar[day].intention = pref.preferredIntention;
-                appState.weeklyCalendar[day].posting = true;
-                appState.weeklyCalendar[day].isBatchDay = false;
             }
 
             // Safety net: repair any day (except Rest) that's missing a platform or intention,
@@ -7484,6 +7508,13 @@
                     repaired.intention = pref.preferredIntention || rotationIntentions[idx % rotationIntentions.length];
                 }
             }
+
+            // NOTE: whether a day is a posting day, batch day, or growth day is decided live,
+            // everywhere in the app, by isPostingDay()/isBatchDay() checking appState.postingDays /
+            // appState.batchCreateDays directly. We deliberately do NOT cache that as a per-day flag
+            // on the schedule object anymore — a cached flag here could get left stale (never reset)
+            // for any day that didn't match one of the branches above on a later run, which is what
+            // previously caused batch/posting status to "stick" on days it no longer applied to.
         });
         
         assignPillarsToWeek(); // Then assign pillars based on intentions
@@ -7491,8 +7522,7 @@
 
     function isBatchDay() {
         const today = getToday();
-        const schedule = appState.weeklyCalendar[today];
-        return !!(schedule && schedule.isBatchDay) || appState.batchCreateDays.includes(today);
+        return (appState.batchCreateDays || []).includes(today);
     }
 
     // SMART PILLAR ASSIGNMENT
